@@ -352,6 +352,22 @@
           "image": "uploads/products/yes-il-1--1793017912-c62217.jpg"
         }
       ]
+    },
+    {
+      "id": "prod-1793017956932",
+      "categoryId": "cat-gomlek",
+      "code": "gmlkekk",
+      "subtitle": "Sweatshirt Kazak",
+      "thumbnail": "uploads/thumbnails/si-yah-1793017944-0d5b73.jpg",
+      "order": 10,
+      "colors": [
+        {
+          "id": "c-1793017934078",
+          "name": "antrasit",
+          "hex": "#696858",
+          "image": "uploads/products/antrasit-1793017952-a95a8d.png"
+        }
+      ]
     }
   ]
 }
