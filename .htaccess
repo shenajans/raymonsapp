@@ -1,0 +1,22 @@
+# Raymons.life - Apache / LiteSpeed Sunucu Yapılandırması
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # /admin adresine girildiğinde /admin/index.html açılır
+    RewriteRule ^admin/?$ admin/index.html [L]
+</IfModule>
+
+# JSON veri dosyalarının önbelleğe alınmasını engelle (Anlık katalog güncellemesi için)
+<IfModule mod_headers.c>
+    <FilesMatch "\.(json)$">
+        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+        Header set Pragma "no-cache"
+    </FilesMatch>
+</IfModule>
+
+# Yükleme limitlerini artır (Yüksek çözünürlüklü katalog fotoğrafları için)
+<IfModule mod_php.c>
+    php_value upload_max_filesize 20M
+    php_value post_max_size 25M
+</IfModule>
