@@ -1,0 +1,12 @@
+{
+  "name": "raymons-interactive-catalog",
+  "version": "1.0.0",
+  "description": "Raymons.life Mobil Öncelikli İnteraktif Ürün Kataloğu ve Yönetim Paneli",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
