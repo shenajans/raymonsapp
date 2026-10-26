@@ -91,24 +91,31 @@
     {
       "id": "prod-m1011",
       "categoryId": "cat-mont",
-      "code": "M1011",
-      "subtitle": "Kaşe Kışlık Mont",
-      "thumbnail": "uploads/thumbnails/s2011-thumb.png",
+      "code": "M9012",
+      "subtitle": "Mont",
+      "thumbnail": "uploads/thumbnails/m9012-tas--i-maj-1793022230-5eba8a.png",
       "order": 1,
       "colors": [
         {
           "id": "c-701",
-          "name": "Antrasit",
-          "hex": "#4A4D50",
-          "image": "uploads/products/s2011-antrasit.png"
+          "name": "Taş",
+          "hex": "#cdc8c5",
+          "image": "uploads/products/m9012-tas--model-o-n-1793022289-64cedb.png"
         },
         {
           "id": "c-702",
-          "name": "Haki",
-          "hex": "#5E6B52",
-          "image": "uploads/products/s2011-haki.png"
+          "name": "Lacivert",
+          "hex": "#2a3141",
+          "image": "uploads/products/laci-vert-1793022334-8f869b.png"
+        },
+        {
+          "id": "c-1793022313206-gkv",
+          "name": "Siyah",
+          "hex": "#211f22",
+          "image": "uploads/products/si-yah-1793022344-f551ac.png"
         }
-      ]
+      ],
+      "outOfStock": false
     },
     {
       "id": "prod-c3011",
