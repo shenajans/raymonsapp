@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>raymons.life | İnteraktif Ürün Kataloğu</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Montserrat / Plus Jakarta Sans (Tasarım görseliyle birebir geometrik sans-serif uyum) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif']
+                    },
+                    colors: {
+                        raymons: {
+                            olive: '#696858',
+                            oliveDark: '#535244',
+                            previewBg: '#E6E7E8',
+                            gridBg: '#F0F0EE',
+                            textDark: '#57564B'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+            height: 100dvh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #DCDCD8;
+            color: #57564B;
+        }
+        /* İnce ve zarif kaydırma çubuğu (Orta kaydırılabilir alan için) */
+        .catalog-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .catalog-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .catalog-scroll::-webkit-scrollbar-thumb {
+            background: rgba(105, 104, 88, 0.28);
+            border-radius: 9999px;
+        }
+        /* Yumuşak görsel geçiş animasyonu */
+        .preview-img-transition {
+            transition: opacity 0.26s cubic-bezier(0.4, 0, 0.2, 1), transform 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .preview-fade-out {
+            opacity: 0.15;
+            transform: scale(0.985);
+        }
+        .preview-fade-in {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center w-full h-full select-none">
+
+    <!-- Mobil Öncelikli Ana Kapsayıcı (100dvh, 3 Ana Bölüm: Sabit Üst, Kaydırılabilir Orta, Sabit Alt) -->
+    <div id="app-shell" class="w-full max-w-[480px] h-full bg-white flex flex-col justify-between shadow-2xl overflow-hidden relative">
+
+        <!-- =========================================================================
+             1. SABİT ÜST ALAN (FIXED TOP SECTION: HEADER + ANA ÜRÜN GÖRSELİ)
+             Sayfa aşağı kaydırılsa dahi bu alan asla kaybolmaz, üstte sabit kalır.
+        ========================================================================== -->
+        <div class="shrink-0 flex flex-col w-full z-20 bg-white">
+            <!-- Üst Marka Header -->
+            <header class="w-full h-[46px] sm:h-[52px] bg-white flex items-center justify-center px-4 border-b border-black/[0.04] relative">
+                <a href="#" onclick="window.scrollTo(0,0); return false;" class="flex items-center justify-center">
+                    <img id="brand-header-logo" src="assets/logo-header.png" alt="raymons.life" class="h-[26px] sm:h-[30px] w-auto object-contain" />
+                </a>
+            </header>
+
+            <!-- Ana Ürün Görseli (Preview Area - Dikey Dikdörtgen Format) -->
+            <section class="w-full bg-raymons-previewBg flex items-center justify-center py-2.5 sm:py-3 px-4 relative overflow-hidden" style="height: 44dvh; min-height: 250px; max-height: 440px;">
+                <div class="relative h-full aspect-[9/16] flex items-center justify-center overflow-hidden shadow-sm bg-[#dcdad7]">
+                    <img
+                        id="main-preview-image"
+                        src="uploads/products/s2011-default.png"
+                        alt="Ürün Önizleme"
+                        class="w-full h-full object-cover preview-img-transition preview-fade-in cursor-zoom-in"
+                        onclick="openLightbox()"
+                    />
+                    <!-- Sağ üstte tam ekran büyüteç ipucu (isteğe bağlı dokunuş) -->
+                    <button
+                        type="button"
+                        onclick="openLightbox()"
+                        title="Görseli Büyüt"
+                        class="absolute bottom-2 right-2 bg-black/35 hover:bg-black/55 text-white rounded-full p-1.5 backdrop-blur-sm transition opacity-80"
+                    >
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105.25 5.25a7.5 7.5 0 0011.4 11.4zM10.5 7.5v6m3-3h-6" />
+                        </svg>
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- =========================================================================
+             2. KAYDIRILABİLİR ORTA ALAN (SCROLLABLE CONTENT SECTION)
+             Kategoriler + 3 Sütunlu Ürün Kartları + Renk Seçenekleri
+        ========================================================================== -->
+        <main id="scrollable-middle" class="flex-1 overflow-y-auto catalog-scroll flex flex-col bg-white">
+
+            <!-- 2.A. KATEGORİ BUTONLARI ALANI -->
+            <section class="w-full bg-white px-3.5 pt-2.5 pb-2.5 shrink-0">
+                <div id="category-grid" class="grid grid-cols-5 gap-1.5 sm:gap-2">
+                    <!-- JS ile dinamik doldurulur -->
+                </div>
+            </section>
+
+            <!-- 2.B. ÜRÜN KODLARI / KARTLARI LİSTESİ (3 Sütunlu Grid, #F0F0EE Zemin) -->
+            <section class="w-full bg-raymons-gridBg px-3.5 py-2.5 shrink-0">
+                <div id="product-grid" class="grid grid-cols-3 gap-2">
+                    <!-- JS ile dinamik doldurulur -->
+                </div>
+            </section>
+
+            <!-- 2.C. RENK SEÇENEKLERİ ALANI -->
+            <section class="w-full bg-white px-3.5 pt-2.5 pb-3 flex-1">
+                <div class="mb-2">
+                    <h2 class="text-[13px] sm:text-[14px] font-bold text-[#696858] leading-tight">
+                        Renk Seçenekleri
+                    </h2>
+                    <p class="text-[10.5px] sm:text-[11px] font-normal text-[#7A796B] leading-tight mt-0.5">
+                        Renge tıklayınca görsel güncellenecektir.
+                    </p>
+                </div>
+
+                <!-- 6 Sütunlu (Çok dar ekranlarda 4/6 uyumlu) Hap (Pill) Renk Butonları Grid -->
+                <div id="color-grid" class="grid grid-cols-6 gap-1.5">
+                    <!-- JS ile dinamik doldurulur -->
+                </div>
+            </section>
+        </main>
+
+        <!-- =========================================================================
+             3. SABİT ALT ALAN (FIXED BOTTOM FOOTER)
+             Sol: Marka ikonu & web adresi | Orta: Instagram | Sağ: QR Kod & Linktree
+        ========================================================================== -->
+        <footer class="shrink-0 w-full bg-white px-3.5 pt-1 pb-2 z-20">
+            <!-- Tasarımdaki ince üst çizgi -->
+            <div class="w-full h-[1px] bg-[#9E9D90]/60 mb-1.5"></div>
+
+            <div class="flex items-center justify-between gap-1 text-[#696858]">
+                <!-- Sol: Marka İkonu + www.raymonslife.com -->
+                <a id="footer-website-link" href="https://www.raymonslife.com" target="_blank" rel="noopener" class="flex items-center gap-1.5 hover:opacity-80 transition min-w-0">
+                    <img id="brand-footer-logo" src="assets/logo-footer.png" alt="Raymons" class="h-[19px] sm:h-[22px] w-auto object-contain shrink-0" />
+                    <span id="footer-website-text" class="text-[8.5px] sm:text-[9.5px] font-medium tracking-tight truncate">www.raymonslife.com</span>
+                </a>
+
+                <!-- Orta: Instagram İkonu + / raymons.officiall -->
+                <a id="footer-instagram-link" href="https://www.instagram.com/raymons.officiall" target="_blank" rel="noopener" class="flex items-center gap-1 hover:opacity-80 transition shrink-0">
+                    <svg class="w-[14px] h-[14px] sm:w-[15px] sm:h-[15px] text-[#696858] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                    <span id="footer-instagram-text" class="text-[8.5px] sm:text-[9.5px] font-medium tracking-tight">/ raymons.officiall</span>
+                </a>
+
+                <!-- Sağ: QR Kod + www.linktr.ee/raymonsofficial -->
+                <a id="footer-linktree-link" href="https://linktr.ee/raymonsofficial" target="_blank" rel="noopener" class="flex items-center gap-1 hover:opacity-80 transition min-w-0">
+                    <img id="brand-qr-code" src="assets/qr-code.png" alt="QR Code" class="h-[22px] w-[22px] sm:h-[25px] sm:w-[25px] object-contain shrink-0" />
+                    <span id="footer-linktree-text" class="text-[8px] sm:text-[9px] font-medium tracking-tight truncate">www.linktr.ee/raymonsofficial</span>
+                </a>
+            </div>
+        </footer>
+
+        <!-- Büyük Görsel İnceleme (Lightbox Modal) -->
+        <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/90 hidden items-center justify-center p-4 backdrop-blur-sm" onclick="closeLightbox()">
+            <button type="button" class="absolute top-4 right-4 text-white/90 hover:text-white bg-white/10 rounded-full p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div class="max-w-full max-h-full flex flex-col items-center" onclick="event.stopPropagation()">
+                <img id="lightbox-image" src="" alt="Tam Ekran Ürün" class="max-h-[82dvh] w-auto object-contain rounded shadow-2xl" />
+                <div id="lightbox-caption" class="mt-3 text-white text-sm font-medium tracking-wide bg-white/10 px-4 py-1.5 rounded-full"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         VANILLA JAVASCRIPT DURUM (STATE) VE ETKİLEŞİM YÖNETİMİ
+    ========================================================================== -->
+    <script>
+        const state = {
+            catalog: {
+                brand: {},
+                categories: [],
+                products: []
+            },
+            activeCategoryId: null,
+            activeProductId: null,
+            activeColorId: null
+        };
+
+        /**
+         * Veriyi sunucudan (PHP API, Node API veya doğrudan data/data.json) yükler.
+         * Ayrıca Admin panelinde aynı tarayıcıda yapılan anlık localStorage önizleme verisi varsa senkronize eder.
+         */
+        async function loadCatalogData() {
+            const cacheBuster = '?t=' + Date.now();
+            let loadedData = null;
+
+            // 1. Önce API üzerinden deneme (PHP veya Node.js aktifse)
+            try {
+                const apiRes = await fetch('api/index.php?action=get_data&t=' + Date.now(), { cache: 'no-store' });
+                if (apiRes.ok) {
+                    const contentType = apiRes.headers.get('content-type') || '';
+                    if (contentType.includes('application/json')) {
+                        const json = await apiRes.json();
+                        if (json && json.success && json.data) {
+                            loadedData = json.data;
+                        }
+                    }
+                }
+            } catch (err) {
+                // Statik sunucuda çalışıyorsa doğrudan data/data.json'a geç
+            }
+
+            // 2. Doğrudan JSON dosyasından okuma (GitHub Pages / Statik Test / Python HTTP vb. için)
+            if (!loadedData) {
+                try {
+                    const jsonRes = await fetch('data/data.json' + cacheBuster, { cache: 'no-store' });
+                    if (jsonRes.ok) {
+                        loadedData = await jsonRes.json();
+                    }
+                } catch (err) {
+                    console.error('Veri okuma hatası:', err);
+                }
+            }
+
+            // 3. Eğer sunucusuz ortamda Admin panelden localStorage'a kaydedilmiş güncel bir test verisi varsa onu kullan
+            const localOverride = localStorage.getItem('raymons_catalog_override');
+            if (localOverride) {
+                try {
+                    const parsedOverride = JSON.parse(localOverride);
+                    if (parsedOverride && Array.isArray(parsedOverride.categories) && Array.isArray(parsedOverride.products)) {
+                        loadedData = parsedOverride;
+                    }
+                } catch (e) {}
+            }
+
+            if (loadedData) {
+                state.catalog = loadedData;
+                // Sıralamaları uygula
+                state.catalog.categories.sort((a, b) => (a.order || 0) - (b.order || 0));
+                state.catalog.products.sort((a, b) => (a.order || 0) - (b.order || 0));
+                applyBrandInfo();
+                initializeSelection();
+                renderAll();
+            }
+        }
+
+        function applyBrandInfo() {
+            const b = state.catalog.brand || {};
+            if (b.headerLogo) document.getElementById('brand-header-logo').src = b.headerLogo;
+            if (b.footerLogo) document.getElementById('brand-footer-logo').src = b.footerLogo;
+            if (b.qrCode) document.getElementById('brand-qr-code').src = b.qrCode;
+            if (b.website) document.getElementById('footer-website-text').textContent = b.website;
+            if (b.websiteUrl) document.getElementById('footer-website-link').href = b.websiteUrl;
+            if (b.instagram) document.getElementById('footer-instagram-text').textContent = b.instagram;
+            if (b.instagramUrl) document.getElementById('footer-instagram-link').href = b.instagramUrl;
+            if (b.linktree) document.getElementById('footer-linktree-text').textContent = b.linktree;
+            if (b.linktreeUrl) document.getElementById('footer-linktree-link').href = b.linktreeUrl;
+        }
+
+        function initializeSelection() {
+            const categories = state.catalog.categories || [];
+            if (categories.length > 0) {
+                state.activeCategoryId = categories[0].id;
+                selectFirstProductOfCategory(state.activeCategoryId);
+            }
+        }
+
+        function selectFirstProductOfCategory(categoryId) {
+            const productsInCat = (state.catalog.products || []).filter(p => p.categoryId === categoryId);
+            if (productsInCat.length > 0) {
+                const firstProd = productsInCat[0];
+                state.activeProductId = firstProd.id;
+                const firstColor = (firstProd.colors && firstProd.colors.length > 0) ? firstProd.colors[0] : null;
+                state.activeColorId = firstColor ? firstColor.id : null;
+                updateMainPreviewImage(firstColor ? firstColor.image : firstProd.thumbnail);
+            } else {
+                state.activeProductId = null;
+                state.activeColorId = null;
+            }
+        }
+
+        /**
+         * Adım 1: Kategori Seçimi
+         */
+        function selectCategory(categoryId) {
+            if (state.activeCategoryId === categoryId) return;
+            state.activeCategoryId = categoryId;
+            selectFirstProductOfCategory(categoryId);
+            renderAll();
+        }
+
+        /**
+         * Adım 2: Ürün Seçimi
+         */
+        function selectProduct(productId) {
+            const prod = (state.catalog.products || []).find(p => p.id === productId);
+            if (!prod) return;
+            state.activeProductId = prod.id;
+            const firstColor = (prod.colors && prod.colors.length > 0) ? prod.colors[0] : null;
+            state.activeColorId = firstColor ? firstColor.id : null;
+            updateMainPreviewImage(firstColor ? firstColor.image : prod.thumbnail);
+            renderProducts();
+            renderColors();
+        }
+
+        /**
+         * Adım 3: Renk Seçimi
+         */
+        function selectColor(colorId) {
+            const prod = getActiveProduct();
+            if (!prod || !prod.colors) return;
+            const colorObj = prod.colors.find(c => c.id === colorId);
+            if (!colorObj) return;
+            state.activeColorId = colorObj.id;
+            updateMainPreviewImage(colorObj.image || prod.thumbnail);
+            renderColors();
+        }
+
+        function getActiveProduct() {
+            return (state.catalog.products || []).find(p => p.id === state.activeProductId) || null;
+        }
+
+        function getActiveColor() {
+            const prod = getActiveProduct();
+            if (!prod || !prod.colors) return null;
+            return prod.colors.find(c => c.id === state.activeColorId) || prod.colors[0] || null;
+        }
+
+        /**
+         * Üstteki sabit görsel alanını yumuşak geçişle (cross-fade) günceller
+         */
+        let imageTransitionTimer = null;
+        function updateMainPreviewImage(imageSrc) {
+            if (!imageSrc) return;
+            const imgEl = document.getElementById('main-preview-image');
+            if (!imgEl) return;
+
+            // Aynı görselse tekrar animasyon yapma
+            if (imgEl.getAttribute('data-current-src') === imageSrc) return;
+            imgEl.setAttribute('data-current-src', imageSrc);
+
+            if (imageTransitionTimer) clearTimeout(imageTransitionTimer);
+            imgEl.classList.remove('preview-fade-in');
+            imgEl.classList.add('preview-fade-out');
+
+            const preload = new Image();
+            preload.onload = () => {
+                imageTransitionTimer = setTimeout(() => {
+                    imgEl.src = imageSrc;
+                    imgEl.classList.remove('preview-fade-out');
+                    imgEl.classList.add('preview-fade-in');
+                }, 90);
+            };
+            preload.onerror = () => {
+                imgEl.src = imageSrc;
+                imgEl.classList.remove('preview-fade-out');
+                imgEl.classList.add('preview-fade-in');
+            };
+            preload.src = imageSrc;
+        }
+
+        function renderAll() {
+            renderCategories();
+            renderProducts();
+            renderColors();
+        }
+
+        /**
+         * Kategori Butonlarını Render Eder (5 sütunlu 2 satırlı tasarım görünümü)
+         */
+        function renderCategories() {
+            const container = document.getElementById('category-grid');
+            const categories = state.catalog.categories || [];
+
+            container.innerHTML = categories.map(cat => {
+                const isActive = cat.id === state.activeCategoryId;
+                const btnClasses = isActive
+                    ? 'bg-[#696858] text-white border-[#696858] font-medium shadow-sm'
+                    : 'bg-white text-[#57564B] border-[#7D7C6E] hover:border-[#696858] font-normal';
+
+                return `
+                    <button
+                        type="button"
+                        onclick="selectCategory('${cat.id}')"
+                        class="h-[28px] sm:h-[31px] px-1 rounded-[7px] border text-[10.5px] sm:text-[11.5px] tracking-tight truncate transition-all duration-150 flex items-center justify-center ${btnClasses}"
+                    >
+                        ${escapeHtml(cat.name)}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Seçili Kategorinin Ürün Kartlarını 3 Sütunlu Grid Olarak Render Eder
+         */
+        function renderProducts() {
+            const container = document.getElementById('product-grid');
+            const products = (state.catalog.products || []).filter(p => p.categoryId === state.activeCategoryId);
+
+            if (products.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-3 py-6 text-center text-xs text-[#696858]/80">
+                        Bu kategoride henüz ürün bulunmuyor.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = products.map(prod => {
+                const isActive = prod.id === state.activeProductId;
+                const cardClasses = isActive
+                    ? 'bg-[#696858] text-white border-[#696858] shadow-sm'
+                    : 'bg-[#F0F0EE] text-[#696858] border-[#7D7C6E] hover:border-[#696858]';
+
+                const subtitleColor = isActive ? 'text-white/90' : 'text-[#696858]';
+                const chevronColor = isActive ? 'text-white' : 'text-[#696858]';
+                const thumbSrc = prod.thumbnail || (prod.colors && prod.colors[0] ? prod.colors[0].image : 'uploads/products/s2011-default.png');
+
+                return `
+                    <button
+                        type="button"
+                        onclick="selectProduct('${prod.id}')"
+                        class="group relative w-full rounded-[9px] border p-1.5 flex items-center gap-1.5 text-left transition-all duration-150 ${cardClasses}"
+                    >
+                        <!-- Sol Küçük Ürün Önizleme Görseli (Thumbnail) -->
+                        <div class="w-[27px] h-[44px] sm:w-[30px] sm:h-[48px] rounded-[5px] overflow-hidden shrink-0 bg-black/10">
+                            <img
+                                src="${escapeHtml(thumbSrc)}"
+                                alt="${escapeHtml(prod.code)}"
+                                class="w-full h-full object-cover"
+                                loading="lazy"
+                            />
+                        </div>
+
+                        <!-- Sağ Ürün Kodu ve Alt Başlık -->
+                        <div class="flex-1 min-w-0 pr-3">
+                            <div class="text-[13.5px] sm:text-[15px] font-extrabold leading-none tracking-tight truncate">
+                                ${escapeHtml(prod.code)}
+                            </div>
+                            <div class="text-[8.5px] sm:text-[9.5px] font-normal leading-[1.12] mt-1 line-clamp-2 ${subtitleColor}">
+                                ${escapeHtml(prod.subtitle || '')}
+                            </div>
+                        </div>
+
+                        <!-- Sağ Alt Köşe >> İkonu -->
+                        <div class="absolute bottom-1.5 right-1.5 ${chevronColor}">
+                            <svg class="w-[10px] h-[10px] sm:w-[11px] sm:h-[11px]" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 3 8 8 3 13"></polyline>
+                                <polyline points="8 3 13 8 8 13"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Seçili Ürünün Renk Seçeneklerini Hap (Pill) Butonlar Halinde Render Eder
+         */
+        function renderColors() {
+            const container = document.getElementById('color-grid');
+            const activeProd = getActiveProduct();
+
+            if (!activeProd || !activeProd.colors || activeProd.colors.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-6 py-3 text-xs text-[#696858]/70">
+                        Bu ürüne ait renk seçeneği tanımlanmamış.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = activeProd.colors.map(color => {
+                const isActive = color.id === state.activeColorId;
+                const pillClasses = isActive
+                    ? 'border-[#696858] bg-[#F4F4F2] ring-1 ring-[#696858]'
+                    : 'border-[#7D7C6E] bg-white hover:bg-[#F8F8F7]';
+
+                // Renk adını tasarımdaki gibi iki satırlı gösterebilmek için boşluktan bölme desteği
+                const words = (color.name || '').trim().split(/\s+/);
+                const line1 = words[0] || '';
+                const line2 = words.slice(1).join(' ');
+
+                return `
+                    <button
+                        type="button"
+                        onclick="selectColor('${color.id}')"
+                        title="${escapeHtml(color.name)}"
+                        class="w-full rounded-[6px] border px-1 py-1 flex items-center gap-1 text-left transition-all duration-150 ${pillClasses}"
+                    >
+                        <!-- Sol Yuvarlak Hex Renk İkonu -->
+                        <span
+                            class="w-[10px] h-[10px] sm:w-[11px] sm:h-[11px] rounded-full shrink-0 border border-black/15"
+                            style="background-color: ${escapeHtml(color.hex || '#696858')};"
+                        ></span>
+
+                        <!-- Sağ Renk Adı -->
+                        <span class="flex flex-col min-w-0 leading-[1.05] text-[7.2px] sm:text-[8px] font-medium text-[#57564B] truncate">
+                            <span class="truncate">${escapeHtml(line1)}</span>
+                            ${line2 ? `<span class="truncate">${escapeHtml(line2)}</span>` : ''}
+                        </span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function openLightbox() {
+            const prod = getActiveProduct();
+            const color = getActiveColor();
+            const imgEl = document.getElementById('main-preview-image');
+            const modal = document.getElementById('lightbox-modal');
+            const modalImg = document.getElementById('lightbox-image');
+            const caption = document.getElementById('lightbox-caption');
+
+            modalImg.src = imgEl.src;
+            caption.textContent = prod
+                ? `${prod.code} - ${prod.subtitle || ''} ${color ? '(' + color.name + ')' : ''}`
+                : 'raymons.life';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function escapeHtml(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Sayfa yüklendiğinde kataloğu başlat
+        window.addEventListener('DOMContentLoaded', loadCatalogData);
+    </script>
+</body>
+</html>
