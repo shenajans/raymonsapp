@@ -24,7 +24,7 @@
     },
     {
       "id": "cat-kazak",
-      "name": "Kazak",
+      "name": "Sweatshirt",
       "order": 3
     },
     {
@@ -62,28 +62,34 @@
     {
       "id": "prod-s2011",
       "categoryId": "cat-ceket",
-      "code": "Volkan",
-      "subtitle": "Sweatshirt Kazak",
-      "thumbnail": "uploads/thumbnails/si-yah-1793019359-184a01.png",
+      "code": "C8012",
+      "subtitle": "Ceket",
+      "thumbnail": "uploads/thumbnails/c8012-vi-zon-i-maj-1793023229-426e66.png",
       "order": 1,
       "colors": [
         {
           "id": "c-1",
-          "name": "Lacivert",
-          "hex": "#0e1030",
-          "image": "uploads/products/laci-vert-1793019365-b564f5.png"
+          "name": "Antrasit",
+          "hex": "#625a66",
+          "image": "uploads/products/c8012-antrasit-1.png"
         },
         {
           "id": "c-2",
-          "name": "Tarçın",
-          "hex": "#7f2d12",
-          "image": "uploads/products/tarc-in-1793019389-3b945c.png"
+          "name": "Vizon",
+          "hex": "#a48e8e",
+          "image": "uploads/products/c8012-vizon-2.png"
         },
         {
           "id": "c-3",
-          "name": "Taş",
-          "hex": "#a89c94",
-          "image": "uploads/products/tas--1793019423-44fd90.png"
+          "name": "Lacivert",
+          "hex": "#525d79",
+          "image": "uploads/products/c8012-lacivert-3.png"
+        },
+        {
+          "id": "c-1793023252140-qsf",
+          "name": "Siyah",
+          "hex": "#696858",
+          "image": "uploads/products/c8012-siyah-4.png"
         }
       ],
       "outOfStock": false
@@ -120,170 +126,55 @@
     {
       "id": "prod-s2012",
       "categoryId": "cat-kazak",
-      "code": "S2012",
-      "subtitle": "Sweatshirt Kazak",
-      "thumbnail": "uploads/thumbnails/p1060-kahve-model-arka-1793017180-ad38e9.png",
+      "code": "S2011",
+      "subtitle": "Sweatshirt / Kazak",
+      "thumbnail": "uploads/thumbnails/s2011-bej-i-maj-1793023727-61e175.png",
       "order": 2,
       "colors": [
         {
           "id": "c-201",
-          "name": "Haki Melanj",
-          "hex": "#5E6B52",
-          "image": "uploads/products/s2011-haki.png"
+          "name": "Bej",
+          "hex": "#afa9a0",
+          "image": "uploads/products/s2011-bej-model-o-n-1793023863-f9b6cd.png"
         },
         {
           "id": "c-202",
-          "name": "Bej Melanj",
-          "hex": "#696858",
-          "image": "uploads/products/s2011-default.png"
+          "name": "Ekru",
+          "hex": "#f2eeea",
+          "image": "uploads/products/ekru-1793023879-2daa03.png"
         },
         {
           "id": "c-203",
-          "name": "Kiremit Melanj",
-          "hex": "#8B5A42",
-          "image": "uploads/products/s2011-terracotta.png"
+          "name": "Haki",
+          "hex": "#4f4742",
+          "image": "uploads/products/haki--1793023891-c71c22.png"
         },
         {
           "id": "c-204",
-          "name": "Antrasit",
-          "hex": "#4A4D50",
-          "image": "uploads/products/s2011-antrasit.png"
-        }
-      ]
-    },
-    {
-      "id": "prod-s2013",
-      "categoryId": "cat-kazak",
-      "code": "S2013",
-      "subtitle": "Sweatshirt Kazak",
-      "thumbnail": "uploads/thumbnails/s2011-thumb.png",
-      "order": 3,
-      "colors": [
-        {
-          "id": "c-301",
-          "name": "Kiremit Melanj",
-          "hex": "#8B5A42",
-          "image": "uploads/products/s2011-terracotta.png"
+          "name": "Kahve",
+          "hex": "#534042",
+          "image": "uploads/products/kahve-1793023901-c71f27.png"
         },
         {
-          "id": "c-302",
-          "name": "Taş Bej",
-          "hex": "#696858",
-          "image": "uploads/products/s2011-default.png"
+          "id": "c-1793023773789-53z",
+          "name": "K.Bordo",
+          "hex": "#562e36",
+          "image": "uploads/products/k-bordo-1793023913-ea41c1.png"
         },
         {
-          "id": "c-303",
+          "id": "c-1793023779903-99s",
           "name": "Lacivert",
-          "hex": "#34435E",
-          "image": "uploads/products/s2011-lacivert.png"
+          "hex": "#2b2c3d",
+          "image": "uploads/products/laci-vert-1793023923-3c6774.png"
+        },
+        {
+          "id": "c-1793023788287-vp2",
+          "name": "Siyah",
+          "hex": "#282327",
+          "image": "uploads/products/si-yah-1793023935-db008d.png"
         }
-      ]
-    },
-    {
-      "id": "prod-s2014",
-      "categoryId": "cat-kazak",
-      "code": "S2014",
-      "subtitle": "Sweatshirt Kazak",
-      "thumbnail": "uploads/thumbnails/s2011-thumb.png",
-      "order": 4,
-      "colors": [
-        {
-          "id": "c-401",
-          "name": "Antrasit Melanj",
-          "hex": "#4A4D50",
-          "image": "uploads/products/s2011-antrasit.png"
-        },
-        {
-          "id": "c-402",
-          "name": "Kiremit Melanj",
-          "hex": "#696858",
-          "image": "uploads/products/s2011-default.png"
-        },
-        {
-          "id": "c-403",
-          "name": "Bordo Melanj",
-          "hex": "#72363B",
-          "image": "uploads/products/s2011-bordo.png"
-        }
-      ]
-    },
-    {
-      "id": "prod-s2015",
-      "categoryId": "cat-kazak",
-      "code": "S2015",
-      "subtitle": "Sweatshirt Kazak",
-      "thumbnail": "uploads/thumbnails/s2011-thumb.png",
-      "order": 5,
-      "colors": [
-        {
-          "id": "c-501",
-          "name": "Lacivert Melanj",
-          "hex": "#34435E",
-          "image": "uploads/products/s2011-lacivert.png"
-        },
-        {
-          "id": "c-502",
-          "name": "Kiremit Melanj",
-          "hex": "#696858",
-          "image": "uploads/products/s2011-default.png"
-        },
-        {
-          "id": "c-503",
-          "name": "Haki Melanj",
-          "hex": "#5E6B52",
-          "image": "uploads/products/s2011-haki.png"
-        }
-      ]
-    },
-    {
-      "id": "prod-s2016",
-      "categoryId": "cat-kazak",
-      "code": "S2016",
-      "subtitle": "Sweatshirt Kazak",
-      "thumbnail": "uploads/thumbnails/s2011-thumb.png",
-      "order": 6,
-      "colors": [
-        {
-          "id": "c-601",
-          "name": "Bordo Melanj",
-          "hex": "#72363B",
-          "image": "uploads/products/s2011-bordo.png"
-        },
-        {
-          "id": "c-602",
-          "name": "Kiremit Melanj",
-          "hex": "#696858",
-          "image": "uploads/products/s2011-default.png"
-        },
-        {
-          "id": "c-603",
-          "name": "Antrasit",
-          "hex": "#4A4D50",
-          "image": "uploads/products/s2011-antrasit.png"
-        }
-      ]
-    },
-    {
-      "id": "prod-1793016941497",
-      "categoryId": "cat-kazak",
-      "code": "S3434",
-      "subtitle": "Sweatshirt Kazak",
-      "thumbnail": "uploads/thumbnails/p1060-kahve-model-o-n-1793016926-007e82.png",
-      "order": 9,
-      "colors": [
-        {
-          "id": "c-1793016907436",
-          "name": "Kiremit Melanj",
-          "hex": "#696858",
-          "image": "uploads/products/p1060-kahve-ghost-o-n-1793016931-cf7337.png"
-        },
-        {
-          "id": "c-1793017901482-f01",
-          "name": "sarı",
-          "hex": "#696858",
-          "image": "uploads/products/yes-il-1--1793017912-c62217.jpg"
-        }
-      ]
+      ],
+      "outOfStock": false
     },
     {
       "id": "prod-1793017956932",
