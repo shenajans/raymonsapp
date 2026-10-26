@@ -322,6 +322,35 @@
           "image": "uploads/products/antrasit-1793017952-a95a8d.png"
         }
       ]
+    },
+    {
+      "id": "prod-1793022616194",
+      "categoryId": "cat-mont",
+      "code": "M9013",
+      "subtitle": "Mont",
+      "outOfStock": false,
+      "thumbnail": "uploads/thumbnails/m9013-laci-vert-i-maj-1793022476-b219cd.png",
+      "order": 11,
+      "colors": [
+        {
+          "id": "c-1793022443950",
+          "name": "Taş",
+          "hex": "#b0a39f",
+          "image": "uploads/products/tas--1793022578-3d87d8.png"
+        },
+        {
+          "id": "c-1793022533059-d6q",
+          "name": "Lacivert",
+          "hex": "#3b4053",
+          "image": "uploads/products/m9013-laci-vert-model-o-n-1793022592-595632.png"
+        },
+        {
+          "id": "c-1793022537925-x5o",
+          "name": "Siyah",
+          "hex": "#322d2e",
+          "image": "uploads/products/si-yah-1793022605-0d8cbd.png"
+        }
+      ]
     }
   ]
 }
