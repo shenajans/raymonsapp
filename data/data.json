@@ -380,6 +380,47 @@
           "image": "uploads/products/m9014-si-yah-model-o-n-1793022788-5931c2.png"
         }
       ]
+    },
+    {
+      "id": "prod-1793023026342",
+      "categoryId": "cat-mont",
+      "code": "M9015",
+      "subtitle": "Mont",
+      "outOfStock": false,
+      "thumbnail": "uploads/thumbnails/m9015-laci-vert-i-maj-1793022932-ec5698.png",
+      "order": 13,
+      "colors": [
+        {
+          "id": "c-1793022898543",
+          "name": "Beyaz",
+          "hex": "#f6f5f9",
+          "image": "uploads/products/beyaz-1793022969-69d882.png"
+        },
+        {
+          "id": "c-1793022941676-87p",
+          "name": "Gri",
+          "hex": "#aba9aa",
+          "image": "uploads/products/gri--1793022978-f16e9b.png"
+        },
+        {
+          "id": "c-1793022946508-bdf",
+          "name": "Haki",
+          "hex": "#5c4641",
+          "image": "uploads/products/haki--1793022987-1b46eb.png"
+        },
+        {
+          "id": "c-1793022953193-jji",
+          "name": "Lacivert",
+          "hex": "#393a4a",
+          "image": "uploads/products/m9015-laci-vert-model-o-n-1793023003-4159f6.png"
+        },
+        {
+          "id": "c-1793022959342-8gl",
+          "name": "Siyah",
+          "hex": "#3c383b",
+          "image": "uploads/products/si-yah-1793023016-26e805.png"
+        }
+      ]
     }
   ]
 }
