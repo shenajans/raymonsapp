@@ -18,13 +18,13 @@
       "order": 1
     },
     {
-      "id": "cat-kazak",
-      "name": "Kazak",
+      "id": "cat-ceket",
+      "name": "Ceket",
       "order": 2
     },
     {
-      "id": "cat-ceket",
-      "name": "Ceket",
+      "id": "cat-kazak",
+      "name": "Kazak",
       "order": 3
     },
     {
@@ -61,85 +61,32 @@
   "products": [
     {
       "id": "prod-s2011",
-      "categoryId": "cat-kazak",
+      "categoryId": "cat-ceket",
       "code": "Volkan",
       "subtitle": "Sweatshirt Kazak",
-      "thumbnail": "uploads/thumbnails/s2011-thumb.png",
+      "thumbnail": "uploads/thumbnails/si-yah-1793019359-184a01.png",
       "order": 1,
       "colors": [
         {
           "id": "c-1",
-          "name": "Sarıkırmızı",
-          "hex": "#696858",
-          "image": "uploads/products/siyah-1793016826-34f822.png"
+          "name": "Lacivert",
+          "hex": "#0e1030",
+          "image": "uploads/products/laci-vert-1793019365-b564f5.png"
         },
         {
           "id": "c-2",
-          "name": "Kiremit Melanj",
-          "hex": "#8B5A42",
-          "image": "uploads/products/s2011-terracotta.png"
+          "name": "Tarçın",
+          "hex": "#7f2d12",
+          "image": "uploads/products/tarc-in-1793019389-3b945c.png"
         },
         {
           "id": "c-3",
-          "name": "Kiremit Melanj",
-          "hex": "#5E6B52",
-          "image": "uploads/products/s2011-haki.png"
-        },
-        {
-          "id": "c-4",
-          "name": "Kiremit Melanj",
-          "hex": "#4A4D50",
-          "image": "uploads/products/s2011-antrasit.png"
-        },
-        {
-          "id": "c-5",
-          "name": "Kiremit Melanj",
-          "hex": "#34435E",
-          "image": "uploads/products/s2011-lacivert.png"
-        },
-        {
-          "id": "c-6",
-          "name": "Kiremit Melanj",
-          "hex": "#72363B",
-          "image": "uploads/products/s2011-bordo.png"
-        },
-        {
-          "id": "c-7",
-          "name": "Kiremit Melanj",
-          "hex": "#696858",
-          "image": "uploads/products/s2011-default.png"
-        },
-        {
-          "id": "c-8",
-          "name": "Kiremit Melanj",
-          "hex": "#8B5A42",
-          "image": "uploads/products/s2011-terracotta.png"
-        },
-        {
-          "id": "c-9",
-          "name": "Kiremit Melanj",
-          "hex": "#5E6B52",
-          "image": "uploads/products/s2011-haki.png"
-        },
-        {
-          "id": "c-10",
-          "name": "Kiremit Melanj",
-          "hex": "#4A4D50",
-          "image": "uploads/products/s2011-antrasit.png"
-        },
-        {
-          "id": "c-11",
-          "name": "Kiremit Melanj",
-          "hex": "#34435E",
-          "image": "uploads/products/s2011-lacivert.png"
-        },
-        {
-          "id": "c-12",
-          "name": "Kiremit Melanj",
-          "hex": "#72363B",
-          "image": "uploads/products/s2011-bordo.png"
+          "name": "Taş",
+          "hex": "#a89c94",
+          "image": "uploads/products/tas--1793019423-44fd90.png"
         }
-      ]
+      ],
+      "outOfStock": false
     },
     {
       "id": "prod-m1011",
