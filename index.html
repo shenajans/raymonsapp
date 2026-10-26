@@ -96,6 +96,12 @@
                         class="w-full h-full object-cover preview-img-transition preview-fade-in cursor-zoom-in"
                         onclick="openLightbox()"
                     />
+                    <!-- Stok Tükendi Üst Uyarı Rozeti -->
+                    <div id="preview-outofstock-badge" class="hidden absolute inset-x-0 top-3 flex justify-center pointer-events-none z-10">
+                        <span class="bg-rose-600/95 text-white text-[11px] font-bold tracking-wider uppercase px-3.5 py-1 rounded-full shadow-md backdrop-blur-sm">
+                            STOK BİTTİ
+                        </span>
+                    </div>
                     <!-- Sağ üstte tam ekran büyüteç ipucu (isteğe bağlı dokunuş) -->
                     <button
                         type="button"
@@ -142,8 +148,8 @@
                     </p>
                 </div>
 
-                <!-- 6 Sütunlu (Çok dar ekranlarda 4/6 uyumlu) Hap (Pill) Renk Butonları Grid -->
-                <div id="color-grid" class="grid grid-cols-6 gap-1.5">
+                <!-- Daha Büyük ve Okunaklı Hap (Pill) Renk Butonları Grid -->
+                <div id="color-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-2">
                     <!-- JS ile dinamik doldurulur -->
                 </div>
             </section>
@@ -194,6 +200,28 @@
                 <div id="lightbox-caption" class="mt-3 text-white text-sm font-medium tracking-wide bg-white/10 px-4 py-1.5 rounded-full"></div>
             </div>
         </div>
+
+        <!-- Stok Bitti Uyarı Modalı -->
+        <div id="out-of-stock-modal" class="fixed inset-0 z-50 bg-black/60 hidden items-center justify-center p-5 backdrop-blur-xs" onclick="closeOutOfStockModal()">
+            <div class="bg-white rounded-2xl max-w-[340px] w-full p-5 shadow-2xl border border-stone-200 text-center" onclick="event.stopPropagation()">
+                <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0 3.75h.008v.008H12v-.008zm9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h-14.71c-1.73 0-2.813-1.874-1.948-3.374L10.051 3.378c.866-1.5 3.032-1.5 3.898 0L21.303 16.126z" />
+                    </svg>
+                </div>
+                <h3 id="out-of-stock-title" class="text-base font-extrabold text-[#57564B] mb-1">Stok Bitti</h3>
+                <p id="out-of-stock-message" class="text-xs text-[#696858] leading-relaxed mb-4">
+                    Bu ürünün stoğu tükenmiştir. Lütfen diğer ürünlerimizi inceleyiniz.
+                </p>
+                <button
+                    type="button"
+                    onclick="closeOutOfStockModal()"
+                    class="w-full py-2.5 rounded-xl bg-[#696858] hover:bg-[#535244] text-white font-semibold text-xs transition shadow-sm"
+                >
+                    Tamam
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- =========================================================================
@@ -213,13 +241,25 @@
 
         /**
          * Veriyi sunucudan (PHP API, Node API veya doğrudan data/data.json) yükler.
-         * Ayrıca Admin panelinde aynı tarayıcıda yapılan anlık localStorage önizleme verisi varsa senkronize eder.
+         * Hem ana domain (/) hem de GitHub Pages alt klasörü (/raymonsapp/) ile tam uyumludur.
          */
-        async function loadCatalogData() {
+        async function loadCatalogData(preserveSelection = false) {
             const cacheBuster = '?t=' + Date.now();
             let loadedData = null;
+            let loadedFromServerApi = false;
 
-            // 1. Önce API üzerinden deneme (PHP veya Node.js aktifse)
+            // 1. Önce aynı tarayıcıda Admin panelinden anlık kaydedilmiş canlı veri var mı kontrol et
+            const localOverride = localStorage.getItem('raymons_catalog_override');
+            if (localOverride) {
+                try {
+                    const parsedOverride = JSON.parse(localOverride);
+                    if (parsedOverride && Array.isArray(parsedOverride.categories) && Array.isArray(parsedOverride.products)) {
+                        loadedData = parsedOverride;
+                    }
+                } catch (e) {}
+            }
+
+            // 2. Sunucu API üzerinden güncel veriyi çek (PHP / Node.js / Local Server aktifse)
             try {
                 const apiRes = await fetch('api/index.php?action=get_data&t=' + Date.now(), { cache: 'no-store' });
                 if (apiRes.ok) {
@@ -228,14 +268,13 @@
                         const json = await apiRes.json();
                         if (json && json.success && json.data) {
                             loadedData = json.data;
+                            loadedFromServerApi = true;
                         }
                     }
                 }
-            } catch (err) {
-                // Statik sunucuda çalışıyorsa doğrudan data/data.json'a geç
-            }
+            } catch (err) {}
 
-            // 2. Doğrudan JSON dosyasından okuma (GitHub Pages / Statik Test / Python HTTP vb. için)
+            // 3. Statik sunucuda çalışıyorsa ve henüz veri yüklenmediyse data/data.json'dan oku
             if (!loadedData) {
                 try {
                     const jsonRes = await fetch('data/data.json' + cacheBuster, { cache: 'no-store' });
@@ -247,24 +286,35 @@
                 }
             }
 
-            // 3. Eğer sunucusuz ortamda Admin panelden localStorage'a kaydedilmiş güncel bir test verisi varsa onu kullan
-            const localOverride = localStorage.getItem('raymons_catalog_override');
-            if (localOverride) {
-                try {
-                    const parsedOverride = JSON.parse(localOverride);
-                    if (parsedOverride && Array.isArray(parsedOverride.categories) && Array.isArray(parsedOverride.products)) {
-                        loadedData = parsedOverride;
-                    }
-                } catch (e) {}
-            }
-
             if (loadedData) {
+                const prevCatId = state.activeCategoryId;
+                const prevProdId = state.activeProductId;
+                const prevColorId = state.activeColorId;
+
                 state.catalog = loadedData;
-                // Sıralamaları uygula
                 state.catalog.categories.sort((a, b) => (a.order || 0) - (b.order || 0));
                 state.catalog.products.sort((a, b) => (a.order || 0) - (b.order || 0));
                 applyBrandInfo();
-                initializeSelection();
+
+                if (preserveSelection && prevCatId && state.catalog.categories.some(c => c.id === prevCatId)) {
+                    state.activeCategoryId = prevCatId;
+                    const prodsInCat = state.catalog.products.filter(p => p.categoryId === prevCatId);
+                    const sameProd = prodsInCat.find(p => p.id === prevProdId) || prodsInCat.find(p => !p.outOfStock) || prodsInCat[0] || null;
+                    if (sameProd) {
+                        state.activeProductId = sameProd.id;
+                        const sameColor = prevColorId ? ((sameProd.colors || []).find(c => c.id === prevColorId) || null) : null;
+                        state.activeColorId = sameColor ? sameColor.id : null;
+                        const coverOrColorImg = sameColor
+                            ? (sameColor.image || sameProd.thumbnail)
+                            : (sameProd.thumbnail || (sameProd.colors && sameProd.colors[0] ? sameProd.colors[0].image : 'uploads/products/s2011-default.png'));
+                        updateMainPreviewImage(coverOrColorImg, true);
+                        updateOutOfStockPreviewBadge(sameProd);
+                    } else {
+                        selectFirstProductOfCategory(prevCatId);
+                    }
+                } else {
+                    initializeSelection();
+                }
                 renderAll();
             }
         }
@@ -293,14 +343,17 @@
         function selectFirstProductOfCategory(categoryId) {
             const productsInCat = (state.catalog.products || []).filter(p => p.categoryId === categoryId);
             if (productsInCat.length > 0) {
-                const firstProd = productsInCat[0];
+                const firstProd = productsInCat.find(p => !p.outOfStock) || productsInCat[0];
                 state.activeProductId = firstProd.id;
-                const firstColor = (firstProd.colors && firstProd.colors.length > 0) ? firstProd.colors[0] : null;
-                state.activeColorId = firstColor ? firstColor.id : null;
-                updateMainPreviewImage(firstColor ? firstColor.image : firstProd.thumbnail);
+                // Ürün seçildiğinde önce ürünün kendi Kapak (Thumbnail) görseli gösterilir; renk seçilince renk görseline geçer
+                state.activeColorId = null;
+                const coverImg = firstProd.thumbnail || (firstProd.colors && firstProd.colors[0] ? firstProd.colors[0].image : 'uploads/products/s2011-default.png');
+                updateMainPreviewImage(coverImg);
+                updateOutOfStockPreviewBadge(firstProd);
             } else {
                 state.activeProductId = null;
                 state.activeColorId = null;
+                updateOutOfStockPreviewBadge(null);
             }
         }
 
@@ -316,14 +369,23 @@
 
         /**
          * Adım 2: Ürün Seçimi
+         * Ürüne tıklandığında büyük önizleme alanında ürünün kendi Kapak (Thumbnail) görseli açılır.
+         * Eğer ürün stokta yoksa müşteriye "Stok Bitti" uyarısı gösterilir.
          */
         function selectProduct(productId) {
             const prod = (state.catalog.products || []).find(p => p.id === productId);
             if (!prod) return;
+
+            if (prod.outOfStock) {
+                openOutOfStockModal(prod);
+                return;
+            }
+
             state.activeProductId = prod.id;
-            const firstColor = (prod.colors && prod.colors.length > 0) ? prod.colors[0] : null;
-            state.activeColorId = firstColor ? firstColor.id : null;
-            updateMainPreviewImage(firstColor ? firstColor.image : prod.thumbnail);
+            state.activeColorId = null;
+            const coverImg = prod.thumbnail || (prod.colors && prod.colors[0] ? prod.colors[0].image : 'uploads/products/s2011-default.png');
+            updateMainPreviewImage(coverImg);
+            updateOutOfStockPreviewBadge(prod);
             renderProducts();
             renderColors();
         }
@@ -334,6 +396,10 @@
         function selectColor(colorId) {
             const prod = getActiveProduct();
             if (!prod || !prod.colors) return;
+            if (prod.outOfStock) {
+                openOutOfStockModal(prod);
+                return;
+            }
             const colorObj = prod.colors.find(c => c.id === colorId);
             if (!colorObj) return;
             state.activeColorId = colorObj.id;
@@ -347,21 +413,55 @@
 
         function getActiveColor() {
             const prod = getActiveProduct();
-            if (!prod || !prod.colors) return null;
-            return prod.colors.find(c => c.id === state.activeColorId) || prod.colors[0] || null;
+            if (!prod || !prod.colors || !state.activeColorId) return null;
+            return prod.colors.find(c => c.id === state.activeColorId) || null;
+        }
+
+        function updateOutOfStockPreviewBadge(prod) {
+            const badge = document.getElementById('preview-outofstock-badge');
+            if (!badge) return;
+            if (prod && prod.outOfStock) {
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function openOutOfStockModal(prod) {
+            const modal = document.getElementById('out-of-stock-modal');
+            const titleEl = document.getElementById('out-of-stock-title');
+            const msgEl = document.getElementById('out-of-stock-message');
+            if (titleEl) {
+                titleEl.textContent = `${prod.code} - Stok Bitti`;
+            }
+            if (msgEl) {
+                msgEl.textContent = `${prod.code}${prod.subtitle ? ' (' + prod.subtitle + ')' : ''} ürünümüzün stoğu tükenmiştir. Lütfen diğer ürünlerimizi inceleyiniz.`;
+            }
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeOutOfStockModal() {
+            const modal = document.getElementById('out-of-stock-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
         }
 
         /**
          * Üstteki sabit görsel alanını yumuşak geçişle (cross-fade) günceller
          */
         let imageTransitionTimer = null;
-        function updateMainPreviewImage(imageSrc) {
+        function updateMainPreviewImage(imageSrc, forceUpdate = false) {
             if (!imageSrc) return;
             const imgEl = document.getElementById('main-preview-image');
             if (!imgEl) return;
 
-            // Aynı görselse tekrar animasyon yapma
-            if (imgEl.getAttribute('data-current-src') === imageSrc) return;
+            // Aynı görselse tekrar animasyon yapma (forceUpdate değilse)
+            if (!forceUpdate && imgEl.getAttribute('data-current-src') === imageSrc) return;
             imgEl.setAttribute('data-current-src', imageSrc);
 
             if (imageTransitionTimer) clearTimeout(imageTransitionTimer);
@@ -432,14 +532,18 @@
             }
 
             container.innerHTML = products.map(prod => {
-                const isActive = prod.id === state.activeProductId;
-                const cardClasses = isActive
-                    ? 'bg-[#696858] text-white border-[#696858] shadow-sm'
-                    : 'bg-[#F0F0EE] text-[#696858] border-[#7D7C6E] hover:border-[#696858]';
+                const isOut = Boolean(prod.outOfStock);
+                const isActive = prod.id === state.activeProductId && !isOut;
+                const cardClasses = isOut
+                    ? 'bg-[#EAEAE6] text-[#8C8B7E] border-[#C5C4B8] opacity-80'
+                    : (isActive
+                        ? 'bg-[#696858] text-white border-[#696858] shadow-sm'
+                        : 'bg-[#F0F0EE] text-[#696858] border-[#7D7C6E] hover:border-[#696858]');
 
                 const subtitleColor = isActive ? 'text-white/90' : 'text-[#696858]';
                 const chevronColor = isActive ? 'text-white' : 'text-[#696858]';
                 const thumbSrc = prod.thumbnail || (prod.colors && prod.colors[0] ? prod.colors[0].image : 'uploads/products/s2011-default.png');
+                const hasSubtitle = Boolean((prod.subtitle || '').trim());
 
                 return `
                     <button
@@ -448,11 +552,11 @@
                         class="group relative w-full rounded-[9px] border p-1.5 flex items-center gap-1.5 text-left transition-all duration-150 ${cardClasses}"
                     >
                         <!-- Sol Küçük Ürün Önizleme Görseli (Thumbnail) -->
-                        <div class="w-[27px] h-[44px] sm:w-[30px] sm:h-[48px] rounded-[5px] overflow-hidden shrink-0 bg-black/10">
+                        <div class="relative w-[27px] h-[44px] sm:w-[30px] sm:h-[48px] rounded-[5px] overflow-hidden shrink-0 bg-black/10">
                             <img
                                 src="${escapeHtml(thumbSrc)}"
                                 alt="${escapeHtml(prod.code)}"
-                                class="w-full h-full object-cover"
+                                class="w-full h-full object-cover ${isOut ? 'grayscale' : ''}"
                                 loading="lazy"
                             />
                         </div>
@@ -462,9 +566,12 @@
                             <div class="text-[13.5px] sm:text-[15px] font-extrabold leading-none tracking-tight truncate">
                                 ${escapeHtml(prod.code)}
                             </div>
-                            <div class="text-[8.5px] sm:text-[9.5px] font-normal leading-[1.12] mt-1 line-clamp-2 ${subtitleColor}">
-                                ${escapeHtml(prod.subtitle || '')}
-                            </div>
+                            ${isOut
+                                ? `<div class="inline-block text-[8px] sm:text-[8.5px] font-bold text-rose-600 bg-rose-100 px-1.5 py-0.5 rounded mt-1 leading-none">STOK BİTTİ</div>`
+                                : (hasSubtitle
+                                    ? `<div class="text-[8.5px] sm:text-[9.5px] font-normal leading-[1.12] mt-1 line-clamp-2 ${subtitleColor}">${escapeHtml(prod.subtitle)}</div>`
+                                    : '')
+                            }
                         </div>
 
                         <!-- Sağ Alt Köşe >> İkonu -->
@@ -488,7 +595,7 @@
 
             if (!activeProd || !activeProd.colors || activeProd.colors.length === 0) {
                 container.innerHTML = `
-                    <div class="col-span-6 py-3 text-xs text-[#696858]/70">
+                    <div class="col-span-3 sm:col-span-4 py-3 text-xs text-[#696858]/70">
                         Bu ürüne ait renk seçeneği tanımlanmamış.
                     </div>
                 `;
@@ -498,31 +605,25 @@
             container.innerHTML = activeProd.colors.map(color => {
                 const isActive = color.id === state.activeColorId;
                 const pillClasses = isActive
-                    ? 'border-[#696858] bg-[#F4F4F2] ring-1 ring-[#696858]'
+                    ? 'border-[#696858] bg-[#ECECE8] ring-1 ring-[#696858] shadow-xs'
                     : 'border-[#7D7C6E] bg-white hover:bg-[#F8F8F7]';
-
-                // Renk adını tasarımdaki gibi iki satırlı gösterebilmek için boşluktan bölme desteği
-                const words = (color.name || '').trim().split(/\s+/);
-                const line1 = words[0] || '';
-                const line2 = words.slice(1).join(' ');
 
                 return `
                     <button
                         type="button"
                         onclick="selectColor('${color.id}')"
                         title="${escapeHtml(color.name)}"
-                        class="w-full rounded-[6px] border px-1 py-1 flex items-center gap-1 text-left transition-all duration-150 ${pillClasses}"
+                        class="w-full rounded-[8px] border px-2.5 py-2 flex items-center gap-2 text-left transition-all duration-150 ${pillClasses}"
                     >
-                        <!-- Sol Yuvarlak Hex Renk İkonu -->
+                        <!-- Sol Yuvarlak Hex Renk İkonu (Büyütülmüş) -->
                         <span
-                            class="w-[10px] h-[10px] sm:w-[11px] sm:h-[11px] rounded-full shrink-0 border border-black/15"
+                            class="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] rounded-full shrink-0 border border-black/15 shadow-inner"
                             style="background-color: ${escapeHtml(color.hex || '#696858')};"
                         ></span>
 
-                        <!-- Sağ Renk Adı -->
-                        <span class="flex flex-col min-w-0 leading-[1.05] text-[7.2px] sm:text-[8px] font-medium text-[#57564B] truncate">
-                            <span class="truncate">${escapeHtml(line1)}</span>
-                            ${line2 ? `<span class="truncate">${escapeHtml(line2)}</span>` : ''}
+                        <!-- Sağ Renk Adı (Büyütülmüş ve Okunaklı) -->
+                        <span class="flex-1 min-w-0 leading-[1.15] text-[10.5px] sm:text-[11.5px] font-semibold text-[#57564B] line-clamp-2">
+                            ${escapeHtml(color.name)}
                         </span>
                     </button>
                 `;
@@ -561,7 +662,22 @@
         }
 
         // Sayfa yüklendiğinde kataloğu başlat
-        window.addEventListener('DOMContentLoaded', loadCatalogData);
+        window.addEventListener('DOMContentLoaded', () => loadCatalogData(false));
+
+        // Admin panelinde başka sekmede değişiklik yapıldığında veya sekmeye geri dönüldüğünde sayfa yenilemeden anında güncelle!
+        window.addEventListener('storage', (e) => {
+            if (!e.key || e.key.startsWith('raymons_')) {
+                loadCatalogData(true);
+            }
+        });
+        window.addEventListener('focus', () => loadCatalogData(true));
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) loadCatalogData(true);
+        });
+        try {
+            const bc = new BroadcastChannel('raymons_catalog_sync');
+            bc.onmessage = () => loadCatalogData(true);
+        } catch (e) {}
     </script>
 </body>
 </html>
