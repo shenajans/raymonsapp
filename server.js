@@ -139,7 +139,7 @@ const server = http.createServer(async (req, res) => {
         if (action === 'login') {
             const body = await parseJsonBody(req);
             const pwd = body.password || '';
-            if (hashPassword(pwd) === config.passwordHash || pwd === 'raymons2026') {
+            if (hashPassword(pwd) === config.passwordHash) {
                 return sendJson(res, 200, { success: true, token: config.token, message: 'Giriş başarılı.' });
             }
             return sendJson(res, 401, { success: false, message: 'Hatalı yönetici şifresi!' });
