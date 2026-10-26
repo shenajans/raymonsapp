@@ -351,6 +351,35 @@
           "image": "uploads/products/si-yah-1793022605-0d8cbd.png"
         }
       ]
+    },
+    {
+      "id": "prod-1793022798160",
+      "categoryId": "cat-mont",
+      "code": "M9014",
+      "subtitle": "Mont",
+      "outOfStock": false,
+      "thumbnail": "uploads/thumbnails/m9014-si-yah-i-maj-1793022673-094709.png",
+      "order": 12,
+      "colors": [
+        {
+          "id": "c-1793022630526",
+          "name": "Taş",
+          "hex": "#d6ccc4",
+          "image": "uploads/products/tas--1793022758-0816cf.png"
+        },
+        {
+          "id": "c-1793022682642-9jq",
+          "name": "Lacivert",
+          "hex": "#3b3c4d",
+          "image": "uploads/products/laci-vert-1793022770-fde31a.png"
+        },
+        {
+          "id": "c-1793022688692-mg9",
+          "name": "Siyah",
+          "hex": "#303030",
+          "image": "uploads/products/m9014-si-yah-model-o-n-1793022788-5931c2.png"
+        }
+      ]
     }
   ]
 }
