@@ -330,6 +330,22 @@
           "image": "uploads/products/s2011-antrasit.png"
         }
       ]
+    },
+    {
+      "id": "prod-1793016941497",
+      "categoryId": "cat-kazak",
+      "code": "S3434",
+      "subtitle": "Sweatshirt Kazak",
+      "thumbnail": "uploads/thumbnails/p1060-kahve-model-o-n-1793016926-007e82.png",
+      "order": 9,
+      "colors": [
+        {
+          "id": "c-1793016907436",
+          "name": "Kiremit Melanj",
+          "hex": "#696858",
+          "image": "uploads/products/p1060-kahve-ghost-o-n-1793016931-cf7337.png"
+        }
+      ]
     }
   ]
 }
