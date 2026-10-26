@@ -12,37 +12,133 @@
     "qrCode": "assets/qr-code.png"
   },
   "categories": [
-    { "id": "cat-kazak", "name": "Kazak", "order": 1 },
-    { "id": "cat-mont", "name": "Mont", "order": 2 },
-    { "id": "cat-ceket", "name": "Ceket", "order": 3 },
-    { "id": "cat-kot", "name": "Kot/Jeans", "order": 4 },
-    { "id": "cat-pantolon", "name": "Pantolon", "order": 5 },
-    { "id": "cat-gomlek", "name": "Gömlek", "order": 6 },
-    { "id": "cat-takim", "name": "Takım", "order": 7 },
-    { "id": "cat-esofman", "name": "Eşofman", "order": 8 },
-    { "id": "cat-yelek", "name": "Yelek", "order": 9 }
+    {
+      "id": "cat-kazak",
+      "name": "Kazak",
+      "order": 1
+    },
+    {
+      "id": "cat-mont",
+      "name": "Mont",
+      "order": 2
+    },
+    {
+      "id": "cat-ceket",
+      "name": "Ceket",
+      "order": 3
+    },
+    {
+      "id": "cat-kot",
+      "name": "Kot/Jeans",
+      "order": 4
+    },
+    {
+      "id": "cat-pantolon",
+      "name": "Pantolon",
+      "order": 5
+    },
+    {
+      "id": "cat-gomlek",
+      "name": "Gömlek",
+      "order": 6
+    },
+    {
+      "id": "cat-takim",
+      "name": "Takım",
+      "order": 7
+    },
+    {
+      "id": "cat-esofman",
+      "name": "Eşofman",
+      "order": 8
+    },
+    {
+      "id": "cat-yelek",
+      "name": "Yelek",
+      "order": 9
+    }
   ],
   "products": [
     {
       "id": "prod-s2011",
       "categoryId": "cat-kazak",
       "code": "S2011",
-      "subtitle": "Sweatshirt Kazak",
+      "subtitle": "TEST_SUBTITLE_123",
       "thumbnail": "uploads/thumbnails/s2011-thumb.png",
       "order": 1,
       "colors": [
-        { "id": "c-1", "name": "Kiremit Melanj", "hex": "#696858", "image": "uploads/products/s2011-default.png" },
-        { "id": "c-2", "name": "Kiremit Melanj", "hex": "#8B5A42", "image": "uploads/products/s2011-terracotta.png" },
-        { "id": "c-3", "name": "Kiremit Melanj", "hex": "#5E6B52", "image": "uploads/products/s2011-haki.png" },
-        { "id": "c-4", "name": "Kiremit Melanj", "hex": "#4A4D50", "image": "uploads/products/s2011-antrasit.png" },
-        { "id": "c-5", "name": "Kiremit Melanj", "hex": "#34435E", "image": "uploads/products/s2011-lacivert.png" },
-        { "id": "c-6", "name": "Kiremit Melanj", "hex": "#72363B", "image": "uploads/products/s2011-bordo.png" },
-        { "id": "c-7", "name": "Kiremit Melanj", "hex": "#696858", "image": "uploads/products/s2011-default.png" },
-        { "id": "c-8", "name": "Kiremit Melanj", "hex": "#8B5A42", "image": "uploads/products/s2011-terracotta.png" },
-        { "id": "c-9", "name": "Kiremit Melanj", "hex": "#5E6B52", "image": "uploads/products/s2011-haki.png" },
-        { "id": "c-10", "name": "Kiremit Melanj", "hex": "#4A4D50", "image": "uploads/products/s2011-antrasit.png" },
-        { "id": "c-11", "name": "Kiremit Melanj", "hex": "#34435E", "image": "uploads/products/s2011-lacivert.png" },
-        { "id": "c-12", "name": "Kiremit Melanj", "hex": "#72363B", "image": "uploads/products/s2011-bordo.png" }
+        {
+          "id": "c-1",
+          "name": "Kiremit Melanj",
+          "hex": "#696858",
+          "image": "uploads/products/s2011-default.png"
+        },
+        {
+          "id": "c-2",
+          "name": "Kiremit Melanj",
+          "hex": "#8B5A42",
+          "image": "uploads/products/s2011-terracotta.png"
+        },
+        {
+          "id": "c-3",
+          "name": "Kiremit Melanj",
+          "hex": "#5E6B52",
+          "image": "uploads/products/s2011-haki.png"
+        },
+        {
+          "id": "c-4",
+          "name": "Kiremit Melanj",
+          "hex": "#4A4D50",
+          "image": "uploads/products/s2011-antrasit.png"
+        },
+        {
+          "id": "c-5",
+          "name": "Kiremit Melanj",
+          "hex": "#34435E",
+          "image": "uploads/products/s2011-lacivert.png"
+        },
+        {
+          "id": "c-6",
+          "name": "Kiremit Melanj",
+          "hex": "#72363B",
+          "image": "uploads/products/s2011-bordo.png"
+        },
+        {
+          "id": "c-7",
+          "name": "Kiremit Melanj",
+          "hex": "#696858",
+          "image": "uploads/products/s2011-default.png"
+        },
+        {
+          "id": "c-8",
+          "name": "Kiremit Melanj",
+          "hex": "#8B5A42",
+          "image": "uploads/products/s2011-terracotta.png"
+        },
+        {
+          "id": "c-9",
+          "name": "Kiremit Melanj",
+          "hex": "#5E6B52",
+          "image": "uploads/products/s2011-haki.png"
+        },
+        {
+          "id": "c-10",
+          "name": "Kiremit Melanj",
+          "hex": "#4A4D50",
+          "image": "uploads/products/s2011-antrasit.png"
+        },
+        {
+          "id": "c-11",
+          "name": "Kiremit Melanj",
+          "hex": "#34435E",
+          "image": "uploads/products/s2011-lacivert.png"
+        },
+        {
+          "id": "c-12",
+          "name": "Kiremit Melanj",
+          "hex": "#72363B",
+          "image": "uploads/products/s2011-bordo.png"
+        }
       ]
     },
     {
@@ -53,10 +149,30 @@
       "thumbnail": "uploads/thumbnails/s2011-thumb.png",
       "order": 2,
       "colors": [
-        { "id": "c-201", "name": "Haki Melanj", "hex": "#5E6B52", "image": "uploads/products/s2011-haki.png" },
-        { "id": "c-202", "name": "Bej Melanj", "hex": "#696858", "image": "uploads/products/s2011-default.png" },
-        { "id": "c-203", "name": "Kiremit Melanj", "hex": "#8B5A42", "image": "uploads/products/s2011-terracotta.png" },
-        { "id": "c-204", "name": "Antrasit", "hex": "#4A4D50", "image": "uploads/products/s2011-antrasit.png" }
+        {
+          "id": "c-201",
+          "name": "Haki Melanj",
+          "hex": "#5E6B52",
+          "image": "uploads/products/s2011-haki.png"
+        },
+        {
+          "id": "c-202",
+          "name": "Bej Melanj",
+          "hex": "#696858",
+          "image": "uploads/products/s2011-default.png"
+        },
+        {
+          "id": "c-203",
+          "name": "Kiremit Melanj",
+          "hex": "#8B5A42",
+          "image": "uploads/products/s2011-terracotta.png"
+        },
+        {
+          "id": "c-204",
+          "name": "Antrasit",
+          "hex": "#4A4D50",
+          "image": "uploads/products/s2011-antrasit.png"
+        }
       ]
     },
     {
@@ -67,9 +183,24 @@
       "thumbnail": "uploads/thumbnails/s2011-thumb.png",
       "order": 3,
       "colors": [
-        { "id": "c-301", "name": "Kiremit Melanj", "hex": "#8B5A42", "image": "uploads/products/s2011-terracotta.png" },
-        { "id": "c-302", "name": "Taş Bej", "hex": "#696858", "image": "uploads/products/s2011-default.png" },
-        { "id": "c-303", "name": "Lacivert", "hex": "#34435E", "image": "uploads/products/s2011-lacivert.png" }
+        {
+          "id": "c-301",
+          "name": "Kiremit Melanj",
+          "hex": "#8B5A42",
+          "image": "uploads/products/s2011-terracotta.png"
+        },
+        {
+          "id": "c-302",
+          "name": "Taş Bej",
+          "hex": "#696858",
+          "image": "uploads/products/s2011-default.png"
+        },
+        {
+          "id": "c-303",
+          "name": "Lacivert",
+          "hex": "#34435E",
+          "image": "uploads/products/s2011-lacivert.png"
+        }
       ]
     },
     {
@@ -80,9 +211,24 @@
       "thumbnail": "uploads/thumbnails/s2011-thumb.png",
       "order": 4,
       "colors": [
-        { "id": "c-401", "name": "Antrasit Melanj", "hex": "#4A4D50", "image": "uploads/products/s2011-antrasit.png" },
-        { "id": "c-402", "name": "Kiremit Melanj", "hex": "#696858", "image": "uploads/products/s2011-default.png" },
-        { "id": "c-403", "name": "Bordo Melanj", "hex": "#72363B", "image": "uploads/products/s2011-bordo.png" }
+        {
+          "id": "c-401",
+          "name": "Antrasit Melanj",
+          "hex": "#4A4D50",
+          "image": "uploads/products/s2011-antrasit.png"
+        },
+        {
+          "id": "c-402",
+          "name": "Kiremit Melanj",
+          "hex": "#696858",
+          "image": "uploads/products/s2011-default.png"
+        },
+        {
+          "id": "c-403",
+          "name": "Bordo Melanj",
+          "hex": "#72363B",
+          "image": "uploads/products/s2011-bordo.png"
+        }
       ]
     },
     {
@@ -93,9 +239,24 @@
       "thumbnail": "uploads/thumbnails/s2011-thumb.png",
       "order": 5,
       "colors": [
-        { "id": "c-501", "name": "Lacivert Melanj", "hex": "#34435E", "image": "uploads/products/s2011-lacivert.png" },
-        { "id": "c-502", "name": "Kiremit Melanj", "hex": "#696858", "image": "uploads/products/s2011-default.png" },
-        { "id": "c-503", "name": "Haki Melanj", "hex": "#5E6B52", "image": "uploads/products/s2011-haki.png" }
+        {
+          "id": "c-501",
+          "name": "Lacivert Melanj",
+          "hex": "#34435E",
+          "image": "uploads/products/s2011-lacivert.png"
+        },
+        {
+          "id": "c-502",
+          "name": "Kiremit Melanj",
+          "hex": "#696858",
+          "image": "uploads/products/s2011-default.png"
+        },
+        {
+          "id": "c-503",
+          "name": "Haki Melanj",
+          "hex": "#5E6B52",
+          "image": "uploads/products/s2011-haki.png"
+        }
       ]
     },
     {
@@ -106,9 +267,24 @@
       "thumbnail": "uploads/thumbnails/s2011-thumb.png",
       "order": 6,
       "colors": [
-        { "id": "c-601", "name": "Bordo Melanj", "hex": "#72363B", "image": "uploads/products/s2011-bordo.png" },
-        { "id": "c-602", "name": "Kiremit Melanj", "hex": "#696858", "image": "uploads/products/s2011-default.png" },
-        { "id": "c-603", "name": "Antrasit", "hex": "#4A4D50", "image": "uploads/products/s2011-antrasit.png" }
+        {
+          "id": "c-601",
+          "name": "Bordo Melanj",
+          "hex": "#72363B",
+          "image": "uploads/products/s2011-bordo.png"
+        },
+        {
+          "id": "c-602",
+          "name": "Kiremit Melanj",
+          "hex": "#696858",
+          "image": "uploads/products/s2011-default.png"
+        },
+        {
+          "id": "c-603",
+          "name": "Antrasit",
+          "hex": "#4A4D50",
+          "image": "uploads/products/s2011-antrasit.png"
+        }
       ]
     },
     {
@@ -119,8 +295,18 @@
       "thumbnail": "uploads/thumbnails/s2011-thumb.png",
       "order": 1,
       "colors": [
-        { "id": "c-701", "name": "Antrasit", "hex": "#4A4D50", "image": "uploads/products/s2011-antrasit.png" },
-        { "id": "c-702", "name": "Haki", "hex": "#5E6B52", "image": "uploads/products/s2011-haki.png" }
+        {
+          "id": "c-701",
+          "name": "Antrasit",
+          "hex": "#4A4D50",
+          "image": "uploads/products/s2011-antrasit.png"
+        },
+        {
+          "id": "c-702",
+          "name": "Haki",
+          "hex": "#5E6B52",
+          "image": "uploads/products/s2011-haki.png"
+        }
       ]
     },
     {
@@ -131,8 +317,18 @@
       "thumbnail": "uploads/thumbnails/s2011-thumb.png",
       "order": 1,
       "colors": [
-        { "id": "c-801", "name": "Lacivert", "hex": "#34435E", "image": "uploads/products/s2011-lacivert.png" },
-        { "id": "c-802", "name": "Taş Bej", "hex": "#696858", "image": "uploads/products/s2011-default.png" }
+        {
+          "id": "c-801",
+          "name": "Lacivert",
+          "hex": "#34435E",
+          "image": "uploads/products/s2011-lacivert.png"
+        },
+        {
+          "id": "c-802",
+          "name": "Taş Bej",
+          "hex": "#696858",
+          "image": "uploads/products/s2011-default.png"
+        }
       ]
     }
   ]
