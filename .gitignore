@@ -7,3 +7,4 @@ npm-debug.log*
 # Yönetici şifre hash dosyaları (Sunucuda ilk çalışmada otomatik oluşur, GitHub'da şifreniz açık kalmaz)
 data/config.json
 data/config-node.json
+data/github_token.txt
