@@ -118,28 +118,6 @@
       "outOfStock": false
     },
     {
-      "id": "prod-c3011",
-      "categoryId": "cat-ceket",
-      "code": "C3011",
-      "subtitle": "Slim Fit Ceket",
-      "thumbnail": "uploads/thumbnails/s2011-thumb.png",
-      "order": 1,
-      "colors": [
-        {
-          "id": "c-801",
-          "name": "Lacivert",
-          "hex": "#34435E",
-          "image": "uploads/products/s2011-lacivert.png"
-        },
-        {
-          "id": "c-802",
-          "name": "Taş Bej",
-          "hex": "#696858",
-          "image": "uploads/products/s2011-default.png"
-        }
-      ]
-    },
-    {
       "id": "prod-s2012",
       "categoryId": "cat-kazak",
       "code": "S2012",
