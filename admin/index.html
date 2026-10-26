@@ -48,7 +48,7 @@
     <div id="login-screen" class="fixed inset-0 z-40 bg-[#EAEAE6] flex items-center justify-center p-4">
         <div class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-stone-200 p-8">
             <div class="flex flex-col items-center text-center mb-6">
-                <img src="../assets/logo-header.png" alt="raymons.life" class="h-9 object-contain mb-4" />
+                <img id="login-logo-img" src="../assets/logo-header.png" alt="raymons.life" class="h-9 object-contain mb-4" />
                 <h1 class="text-xl font-bold text-[#57564B]">Katalog Yönetim Paneli</h1>
                 <p class="text-xs text-stone-500 mt-1">Kategorileri, ürünleri ve renk varyasyonlarını yönetmek için giriş yapın.</p>
             </div>
@@ -78,7 +78,7 @@
             </form>
 
             <div class="mt-6 pt-5 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
-                <a href="../index.html" class="hover:text-[#696858] font-medium flex items-center gap-1">
+                <a id="login-back-link" href="../index.html" class="hover:text-[#696858] font-medium flex items-center gap-1">
                     ← Katalog Önyüzüne Dön
                 </a>
                 <span>v1.0 • raymons.life</span>
@@ -95,7 +95,7 @@
         <header class="bg-white border-b border-stone-200 sticky top-0 z-30">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                    <img src="../assets/logo-header.png" alt="raymons.life" class="h-7 w-auto object-contain" />
+                    <img id="header-logo-img" src="../assets/logo-header.png" alt="raymons.life" class="h-7 w-auto object-contain" />
                     <span class="hidden sm:inline-block h-5 w-[1px] bg-stone-200"></span>
                     <div class="hidden sm:flex items-center gap-2">
                         <span class="text-sm font-bold text-[#696858]">Admin Paneli</span>
@@ -107,6 +107,7 @@
 
                 <div class="flex items-center gap-2 sm:gap-3">
                     <a
+                        id="header-catalog-link"
                         href="../index.html"
                         target="_blank"
                         class="px-3.5 py-2 rounded-xl border border-stone-300 hover:border-[#696858] text-xs font-semibold text-[#57564B] flex items-center gap-1.5 transition"
@@ -307,21 +308,35 @@
                                 />
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-stone-700 mb-1">Ürün Alt Başlığı * <span class="font-normal text-stone-400">(Örn: Sweatshirt Kazak)</span></label>
+                                <label class="block text-xs font-bold text-stone-700 mb-1">Ürün Alt Başlığı <span class="font-normal text-stone-400">(İsteğe Bağlı)</span></label>
                                 <input
                                     type="text"
                                     id="modal-product-subtitle"
-                                    placeholder="Sweatshirt Kazak"
-                                    required
+                                    placeholder="Örn: Sweatshirt Kazak (Boş bırakılabilir)"
                                     class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-[#696858] outline-none text-sm"
                                 />
                             </div>
                         </div>
+
+                        <!-- Stok Durumu (Aktif / Stok Tükendi Deaktif Seçeneği) -->
+                        <div class="pt-1">
+                            <label class="flex items-center justify-between p-3 rounded-xl border border-stone-200 bg-stone-50 cursor-pointer hover:border-[#696858] transition">
+                                <div>
+                                    <span class="block text-xs font-bold text-stone-700">Stok Durumu (Stokta Yok / Tükendi Olarak İşaretle)</span>
+                                    <span class="block text-[11px] text-stone-500 mt-0.5">İşaretlendiğinde ürün pasif görünür ve tıklayan müşteriye "Stok Tükendi" uyarısı gösterilir.</span>
+                                </div>
+                                <input
+                                    type="checkbox"
+                                    id="modal-product-outofstock"
+                                    class="w-5 h-5 accent-rose-600 rounded cursor-pointer shrink-0 ml-3"
+                                />
+                            </label>
+                        </div>
                     </div>
 
-                    <!-- Ürün Kapak (Thumbnail) Görseli Yükleme Alanı -->
+                    <!-- Ürün Kapak (Thumbnail & Varsayılan Ana Görsel) Yükleme Alanı -->
                     <div>
-                        <label class="block text-xs font-bold text-stone-700 mb-1">Ürün Kapak (Thumbnail) Görseli</label>
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Ürün Kapak & Ana Görseli</label>
                         <div
                             id="thumb-dropzone"
                             class="relative h-36 rounded-xl border-2 border-dashed border-stone-300 hover:border-[#696858] bg-stone-50 flex flex-col items-center justify-center p-2 text-center cursor-pointer transition overflow-hidden"
@@ -390,6 +405,24 @@
          ADMİN PANELİ JAVASCRIPT MANTIĞI
     ========================================================================== -->
     <script>
+        // URL eğer /admin olarak (sonunda / olmadan) açıldıysa, göreceli yollar şaşmasın diye otomatik kök yolu hesapla
+        const APP_ROOT = (function() {
+            const p = window.location.pathname;
+            const idx = p.lastIndexOf('/admin');
+            if (idx !== -1) {
+                return p.substring(0, idx) + '/';
+            }
+            return '/';
+        })();
+
+        function getApiUrl(actionQuery) {
+            return APP_ROOT + 'api/index.php?' + actionQuery;
+        }
+
+        function getDataJsonUrl() {
+            return APP_ROOT + 'data/data.json?t=' + Date.now();
+        }
+
         let adminState = {
             token: sessionStorage.getItem('raymons_admin_token') || '',
             serverAvailable: false,
@@ -400,6 +433,18 @@
             },
             editingColors: []
         };
+
+        let syncChannel = null;
+        try {
+            syncChannel = new BroadcastChannel('raymons_catalog_sync');
+        } catch (e) {}
+
+        function notifyFrontendTabs() {
+            try {
+                localStorage.setItem('raymons_last_update_ts', String(Date.now()));
+                if (syncChannel) syncChannel.postMessage({ updated: Date.now() });
+            } catch (e) {}
+        }
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
@@ -415,11 +460,12 @@
         }
 
         function resolveAssetUrl(relPath) {
-            if (!relPath) return '../uploads/products/s2011-default.png';
-            if (relPath.startsWith('data:') || relPath.startsWith('http://') || relPath.startsWith('https://') || relPath.startsWith('../')) {
+            if (!relPath) return APP_ROOT + 'uploads/products/s2011-default.png';
+            if (relPath.startsWith('data:') || relPath.startsWith('http://') || relPath.startsWith('https://')) {
                 return relPath;
             }
-            return '../' + relPath.replace(/^\/+/, '');
+            const clean = relPath.replace(/^(\.\.\/)+/, '').replace(/^\/+/, '');
+            return APP_ROOT + clean;
         }
 
         async function handleLogin(e) {
@@ -428,7 +474,7 @@
 
             // 1. Önce sunucu API üzerinden giriş dene
             try {
-                const res = await fetch('../api/index.php?action=login', {
+                const res = await fetch(getApiUrl('action=login'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ password: pwd })
@@ -453,20 +499,20 @@
 
             // 2. Statik test ortamı için şifre kontrolü
             const savedLocalPwd = localStorage.getItem('raymons_admin_pwd') || 'raymons2026';
-            if (pwd === savedLocalPwd || pwd === 'raymons2026') {
+            if (pwd === savedLocalPwd) {
                 adminState.token = 'local-preview-token';
                 adminState.serverAvailable = false;
                 sessionStorage.setItem('raymons_admin_token', adminState.token);
                 unlockDashboard();
             } else {
-                showToast('Hatalı yönetici şifresi! (Varsayılan: raymons2026)', 'error');
+                showToast('Hatalı yönetici şifresi!', 'error');
             }
         }
 
         function handleLogout() {
             sessionStorage.removeItem('raymons_admin_token');
             adminState.token = '';
-            fetch('../api/index.php?action=logout').catch(() => {});
+            fetch(getApiUrl('action=logout')).catch(() => {});
             document.getElementById('admin-dashboard').classList.add('hidden');
             document.getElementById('login-screen').classList.remove('hidden');
         }
@@ -480,8 +526,9 @@
         async function loadAdminCatalogData() {
             let loaded = null;
 
+            // 1. Sunucu API kontrolü
             try {
-                const apiRes = await fetch('../api/index.php?action=get_data&t=' + Date.now(), { cache: 'no-store' });
+                const apiRes = await fetch(getApiUrl('action=get_data&t=' + Date.now()), { cache: 'no-store' });
                 const ct = apiRes.headers.get('content-type') || '';
                 if (apiRes.ok && ct.includes('application/json')) {
                     const json = await apiRes.json();
@@ -492,19 +539,24 @@
                 }
             } catch (e) {}
 
+            // 2. Doğrudan JSON dosyasından okuma
             if (!loaded) {
                 try {
-                    const res = await fetch('../data/data.json?t=' + Date.now(), { cache: 'no-store' });
+                    const res = await fetch(getDataJsonUrl(), { cache: 'no-store' });
                     if (res.ok) {
                         loaded = await res.json();
                     }
                 } catch (e) {}
             }
 
+            // 3. Eğer tarayıcıda daha önce kaydedilmiş yerel değişiklik varsa ve sunucu kapalıysa onu yükle
             const localOverride = localStorage.getItem('raymons_catalog_override');
             if (!adminState.serverAvailable && localOverride) {
                 try {
-                    loaded = JSON.parse(localOverride);
+                    const parsed = JSON.parse(localOverride);
+                    if (parsed && Array.isArray(parsed.categories) && Array.isArray(parsed.products)) {
+                        loaded = parsed;
+                    }
                 } catch (e) {}
             }
 
@@ -652,18 +704,22 @@
                 const catName = catObj ? catObj.name : 'Kategorisiz';
                 const thumbUrl = resolveAssetUrl(prod.thumbnail || (prod.colors && prod.colors[0] ? prod.colors[0].image : ''));
                 const colors = prod.colors || [];
+                const isOut = Boolean(prod.outOfStock);
 
                 return `
-                    <div class="bg-white rounded-2xl border border-stone-200 shadow-xs hover:shadow-md transition p-4 flex flex-col justify-between gap-4">
+                    <div class="bg-white rounded-2xl border ${isOut ? 'border-rose-300 bg-rose-50/20' : 'border-stone-200'} shadow-xs hover:shadow-md transition p-4 flex flex-col justify-between gap-4">
                         <div class="flex items-start gap-3.5">
-                            <img src="${escapeHtml(thumbUrl)}" alt="${escapeHtml(prod.code)}" class="w-16 h-24 object-cover rounded-xl border border-stone-200 bg-stone-100 shrink-0" />
+                            <div class="relative shrink-0">
+                                <img src="${escapeHtml(thumbUrl)}" alt="${escapeHtml(prod.code)}" class="w-16 h-24 object-cover rounded-xl border border-stone-200 bg-stone-100 ${isOut ? 'opacity-60 grayscale' : ''}" />
+                                ${isOut ? `<span class="absolute inset-x-0 bottom-1 mx-1 bg-rose-600 text-white text-[9px] font-bold text-center py-0.5 rounded">TÜKENDİ</span>` : ''}
+                            </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between gap-2">
                                     <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-stone-100 text-[#696858]">${escapeHtml(catName)}</span>
                                     <span class="text-[11px] text-stone-400">${colors.length} Renk</span>
                                 </div>
                                 <h3 class="text-base font-extrabold text-[#57564B] mt-1 truncate">${escapeHtml(prod.code)}</h3>
-                                <p class="text-xs text-stone-500 truncate">${escapeHtml(prod.subtitle || '')}</p>
+                                <p class="text-xs text-stone-500 truncate">${escapeHtml(prod.subtitle || '—')}</p>
 
                                 <!-- Renk Yuvarlakları Önizleme -->
                                 <div class="flex flex-wrap items-center gap-1 mt-2.5">
@@ -679,18 +735,26 @@
                             </div>
                         </div>
 
-                        <div class="pt-3 border-t border-stone-100 flex items-center justify-between gap-2">
+                        <div class="pt-3 border-t border-stone-100 flex items-center justify-between gap-1.5">
+                            <button
+                                type="button"
+                                onclick="toggleProductStock('${prod.id}')"
+                                class="py-2 px-2.5 rounded-xl border text-[11px] font-bold transition ${isOut ? 'bg-rose-600 text-white border-rose-600 hover:bg-rose-700' : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'}"
+                                title="Stok Durumunu Değiştir"
+                            >
+                                ${isOut ? 'Stok Bitti (Pasif)' : 'Stokta (Aktif)'}
+                            </button>
                             <button
                                 type="button"
                                 onclick="openProductModal('${prod.id}')"
-                                class="flex-1 py-2 px-3 rounded-xl bg-stone-100 hover:bg-[#696858] hover:text-white text-[#57564B] text-xs font-semibold transition"
+                                class="flex-1 py-2 px-2.5 rounded-xl bg-stone-100 hover:bg-[#696858] hover:text-white text-[#57564B] text-xs font-semibold transition"
                             >
-                                Düzenle / Renkler
+                                Düzenle
                             </button>
                             <button
                                 type="button"
                                 onclick="handleDeleteProduct('${prod.id}')"
-                                class="py-2 px-3 rounded-xl border border-stone-200 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 text-stone-500 text-xs font-semibold transition"
+                                class="py-2 px-2.5 rounded-xl border border-stone-200 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 text-stone-500 text-xs font-semibold transition"
                             >
                                 Sil
                             </button>
@@ -698,6 +762,14 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function toggleProductStock(productId) {
+            const prod = adminState.catalog.products.find(p => p.id === productId);
+            if (!prod) return;
+            prod.outOfStock = !prod.outOfStock;
+            renderAdminAll();
+            persistCatalogChanges(`"${prod.code}" stok durumu: ${prod.outOfStock ? 'Stok Tükendi (Deaktif)' : 'Stokta (Aktif)'}`);
         }
 
         async function handleDeleteProduct(productId) {
@@ -709,7 +781,7 @@
 
             if (adminState.serverAvailable) {
                 try {
-                    const res = await fetch('../api/index.php?action=delete_product', {
+                    const res = await fetch(getApiUrl('action=delete_product'), {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -720,6 +792,10 @@
                     const data = await res.json();
                     if (res.ok && data.success) {
                         adminState.catalog = data.data;
+                        try {
+                            localStorage.setItem('raymons_catalog_override', JSON.stringify(adminState.catalog));
+                        } catch (e) {}
+                        notifyFrontendTabs();
                         renderAdminAll();
                         showToast('Ürün ve sunucudaki görselleri silindi.');
                         return;
@@ -755,6 +831,7 @@
                 catSelect.value = prod.categoryId;
                 document.getElementById('modal-product-code').value = prod.code;
                 document.getElementById('modal-product-subtitle').value = prod.subtitle || '';
+                document.getElementById('modal-product-outofstock').checked = Boolean(prod.outOfStock);
                 setModalThumbnailPreview(prod.thumbnail || '');
                 adminState.editingColors = JSON.parse(JSON.stringify(prod.colors || []));
             } else {
@@ -764,6 +841,7 @@
                 catSelect.value = (currentFilter && currentFilter !== 'ALL') ? currentFilter : cats[0].id;
                 document.getElementById('modal-product-code').value = '';
                 document.getElementById('modal-product-subtitle').value = '';
+                document.getElementById('modal-product-outofstock').checked = false;
                 setModalThumbnailPreview('');
                 adminState.editingColors = [
                     { id: 'c-' + Date.now(), name: 'Kiremit Melanj', hex: '#696858', image: '' }
@@ -959,10 +1037,6 @@
             const uploadedPath = await uploadImageToServer(file, 'products');
             if (uploadedPath && adminState.editingColors[index]) {
                 adminState.editingColors[index].image = uploadedPath;
-                // Eğer ürünün henüz kapak görseli yoksa ilk rengin fotoğrafını otomatik kapak yap
-                if (!document.getElementById('modal-thumb-path').value) {
-                    setModalThumbnailPreview(uploadedPath);
-                }
                 renderModalColorRows();
                 showToast('Renk ürün fotoğrafı yüklendi.');
             }
@@ -977,28 +1051,9 @@
 
             // 1. Sunucu aktifse /uploads klasörüne gerçek dosya olarak kaydet
             if (adminState.serverAvailable) {
+                // Önce JSON Base64 upload dene (Hem PHP hem Node.js hem Local Ruby Server ile %100 uyumlu)
                 try {
-                    const formData = new FormData();
-                    formData.append('file', file);
-                    formData.append('folder', folder);
-
-                    const res = await fetch('../api/index.php?action=upload', {
-                        method: 'POST',
-                        headers: { 'X-Admin-Token': adminState.token },
-                        body: formData
-                    });
-                    const ct = res.headers.get('content-type') || '';
-                    if (res.ok && ct.includes('application/json')) {
-                        const data = await res.json();
-                        if (data.success && data.path) {
-                            return data.path;
-                        }
-                    }
-                } catch (err) {}
-
-                // Node.js JSON Base64 upload fallback
-                try {
-                    const res = await fetch('../api/index.php?action=upload', {
+                    const res = await fetch(getApiUrl('action=upload'), {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1010,7 +1065,28 @@
                             base64: base64Data
                         })
                     });
-                    if (res.ok) {
+                    const ct = res.headers.get('content-type') || '';
+                    if (res.ok && ct.includes('application/json')) {
+                        const data = await res.json();
+                        if (data.success && data.path) {
+                            return data.path;
+                        }
+                    }
+                } catch (err) {}
+
+                // Multipart fallback
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('folder', folder);
+
+                    const res = await fetch(getApiUrl('action=upload'), {
+                        method: 'POST',
+                        headers: { 'X-Admin-Token': adminState.token },
+                        body: formData
+                    });
+                    const ct = res.headers.get('content-type') || '';
+                    if (res.ok && ct.includes('application/json')) {
                         const data = await res.json();
                         if (data.success && data.path) {
                             return data.path;
@@ -1038,6 +1114,7 @@
             const categoryId = document.getElementById('modal-product-category').value;
             const code = document.getElementById('modal-product-code').value.trim();
             const subtitle = document.getElementById('modal-product-subtitle').value.trim();
+            const outOfStock = document.getElementById('modal-product-outofstock').checked;
             let thumbnail = document.getElementById('modal-thumb-path').value.trim();
 
             if (!code) {
@@ -1066,6 +1143,7 @@
                     existing.categoryId = categoryId;
                     existing.code = code;
                     existing.subtitle = subtitle;
+                    existing.outOfStock = outOfStock;
                     existing.thumbnail = thumbnail;
                     existing.colors = cleanedColors;
                 }
@@ -1075,6 +1153,7 @@
                     categoryId,
                     code,
                     subtitle,
+                    outOfStock,
                     thumbnail,
                     order: adminState.catalog.products.length + 1,
                     colors: cleanedColors
@@ -1090,14 +1169,16 @@
            SUNUCUYA KAYIT (data.json) VE YEDEKLEME İŞLEMLERİ
         ========================================================================== */
         async function persistCatalogChanges(toastMsg = 'Değişiklikler kaydedildi.') {
-            // Her zaman tarayıcı önizlemesini de senkron tut
+            // 1. Her zaman tarayıcı önizlemesini ve açık önyüz sekmelerini anında güncelle
             try {
                 localStorage.setItem('raymons_catalog_override', JSON.stringify(adminState.catalog));
             } catch (e) {}
+            notifyFrontendTabs();
 
+            // 2. Sunucu aktifse data/data.json dosyasına (ve GitHub'a) kalıcı olarak yaz
             if (adminState.serverAvailable) {
                 try {
-                    const res = await fetch('../api/index.php?action=save_data', {
+                    const res = await fetch(getApiUrl('action=save_data'), {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1107,7 +1188,7 @@
                     });
                     const data = await res.json();
                     if (res.ok && data.success) {
-                        localStorage.removeItem('raymons_catalog_override');
+                        notifyFrontendTabs();
                         showToast(toastMsg);
                         return;
                     }
@@ -1166,7 +1247,7 @@
 
             if (adminState.serverAvailable) {
                 try {
-                    const res = await fetch('../api/index.php?action=change_password', {
+                    const res = await fetch(getApiUrl('action=change_password'), {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1178,8 +1259,9 @@
                     if (res.ok && data.success) {
                         adminState.token = data.token;
                         sessionStorage.setItem('raymons_admin_token', data.token);
+                        localStorage.setItem('raymons_admin_pwd', newPwd);
                         document.getElementById('new-admin-password').value = '';
-                        showToast('Yönetici şifresi güncellendi.');
+                        showToast('Yönetici şifresi başarıyla güncellendi.');
                         return;
                     }
                 } catch (err) {}
@@ -1201,6 +1283,11 @@
 
         // Oturum açıksa doğrudan paneli göster
         window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('login-logo-img').src = APP_ROOT + 'assets/logo-header.png';
+            document.getElementById('header-logo-img').src = APP_ROOT + 'assets/logo-header.png';
+            document.getElementById('login-back-link').href = APP_ROOT + 'index.html';
+            document.getElementById('header-catalog-link').href = APP_ROOT + 'index.html';
+
             if (adminState.token) {
                 unlockDashboard();
             }
