@@ -62,16 +62,16 @@
     {
       "id": "prod-s2011",
       "categoryId": "cat-kazak",
-      "code": "S2011",
-      "subtitle": "TEST_SUBTITLE_123",
+      "code": "Volkan",
+      "subtitle": "Sweatshirt Kazak",
       "thumbnail": "uploads/thumbnails/s2011-thumb.png",
       "order": 1,
       "colors": [
         {
           "id": "c-1",
-          "name": "Kiremit Melanj",
+          "name": "Sarıkırmızı",
           "hex": "#696858",
-          "image": "uploads/products/s2011-default.png"
+          "image": "uploads/products/siyah-1793016826-34f822.png"
         },
         {
           "id": "c-2",
@@ -138,6 +138,50 @@
           "name": "Kiremit Melanj",
           "hex": "#72363B",
           "image": "uploads/products/s2011-bordo.png"
+        }
+      ]
+    },
+    {
+      "id": "prod-m1011",
+      "categoryId": "cat-mont",
+      "code": "M1011",
+      "subtitle": "Kaşe Kışlık Mont",
+      "thumbnail": "uploads/thumbnails/s2011-thumb.png",
+      "order": 1,
+      "colors": [
+        {
+          "id": "c-701",
+          "name": "Antrasit",
+          "hex": "#4A4D50",
+          "image": "uploads/products/s2011-antrasit.png"
+        },
+        {
+          "id": "c-702",
+          "name": "Haki",
+          "hex": "#5E6B52",
+          "image": "uploads/products/s2011-haki.png"
+        }
+      ]
+    },
+    {
+      "id": "prod-c3011",
+      "categoryId": "cat-ceket",
+      "code": "C3011",
+      "subtitle": "Slim Fit Ceket",
+      "thumbnail": "uploads/thumbnails/s2011-thumb.png",
+      "order": 1,
+      "colors": [
+        {
+          "id": "c-801",
+          "name": "Lacivert",
+          "hex": "#34435E",
+          "image": "uploads/products/s2011-lacivert.png"
+        },
+        {
+          "id": "c-802",
+          "name": "Taş Bej",
+          "hex": "#696858",
+          "image": "uploads/products/s2011-default.png"
         }
       ]
     },
@@ -284,50 +328,6 @@
           "name": "Antrasit",
           "hex": "#4A4D50",
           "image": "uploads/products/s2011-antrasit.png"
-        }
-      ]
-    },
-    {
-      "id": "prod-m1011",
-      "categoryId": "cat-mont",
-      "code": "M1011",
-      "subtitle": "Kaşe Kışlık Mont",
-      "thumbnail": "uploads/thumbnails/s2011-thumb.png",
-      "order": 1,
-      "colors": [
-        {
-          "id": "c-701",
-          "name": "Antrasit",
-          "hex": "#4A4D50",
-          "image": "uploads/products/s2011-antrasit.png"
-        },
-        {
-          "id": "c-702",
-          "name": "Haki",
-          "hex": "#5E6B52",
-          "image": "uploads/products/s2011-haki.png"
-        }
-      ]
-    },
-    {
-      "id": "prod-c3011",
-      "categoryId": "cat-ceket",
-      "code": "C3011",
-      "subtitle": "Slim Fit Ceket",
-      "thumbnail": "uploads/thumbnails/s2011-thumb.png",
-      "order": 1,
-      "colors": [
-        {
-          "id": "c-801",
-          "name": "Lacivert",
-          "hex": "#34435E",
-          "image": "uploads/products/s2011-lacivert.png"
-        },
-        {
-          "id": "c-802",
-          "name": "Taş Bej",
-          "hex": "#696858",
-          "image": "uploads/products/s2011-default.png"
         }
       ]
     }
