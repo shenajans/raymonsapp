@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>raymons.life | Yönetim Paneli (/admin)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif']
+                    },
+                    colors: {
+                        raymons: {
+                            olive: '#696858',
+                            oliveDark: '#535244',
+                            bg: '#F5F5F3'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        body {
+            background-color: #F4F4F1;
+            color: #3D3C35;
+        }
+        .drop-zone-active {
+            border-color: #696858 !important;
+            background-color: rgba(105, 104, 88, 0.08) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Bildirim (Toast) Kapsayıcısı -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- =========================================================================
+         1. ŞİFRE KORUMALI GİRİŞ EKRANI (LOGIN SCREEN)
+    ========================================================================== -->
+    <div id="login-screen" class="fixed inset-0 z-40 bg-[#EAEAE6] flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-stone-200 p-8">
+            <div class="flex flex-col items-center text-center mb-6">
+                <img src="../assets/logo-header.png" alt="raymons.life" class="h-9 object-contain mb-4" />
+                <h1 class="text-xl font-bold text-[#57564B]">Katalog Yönetim Paneli</h1>
+                <p class="text-xs text-stone-500 mt-1">Kategorileri, ürünleri ve renk varyasyonlarını yönetmek için giriş yapın.</p>
+            </div>
+
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-stone-600 mb-1.5">Yönetici Şifresi</label>
+                    <input
+                        type="password"
+                        id="admin-password-input"
+                        placeholder="••••••••"
+                        required
+                        class="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:border-[#696858] focus:ring-2 focus:ring-[#696858]/20 outline-none text-sm transition"
+                    />
+                    <p class="text-[11px] text-stone-400 mt-1.5">Varsayılan ilk kurulum şifresi: <code class="bg-stone-100 px-1.5 py-0.5 rounded text-stone-600 font-semibold">raymons2026</code></p>
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full py-3 rounded-xl bg-[#696858] hover:bg-[#535244] text-white font-semibold text-sm shadow-sm transition flex items-center justify-center gap-2"
+                >
+                    <span>Panele Giriş Yap</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                </button>
+            </form>
+
+            <div class="mt-6 pt-5 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
+                <a href="../index.html" class="hover:text-[#696858] font-medium flex items-center gap-1">
+                    ← Katalog Önyüzüne Dön
+                </a>
+                <span>v1.0 • raymons.life</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         2. YÖNETİM PANELİ ANA EKRANI (DASHBOARD)
+    ========================================================================== -->
+    <div id="admin-dashboard" class="hidden flex-1 flex flex-col">
+
+        <!-- Üst Bar -->
+        <header class="bg-white border-b border-stone-200 sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <img src="../assets/logo-header.png" alt="raymons.life" class="h-7 w-auto object-contain" />
+                    <span class="hidden sm:inline-block h-5 w-[1px] bg-stone-200"></span>
+                    <div class="hidden sm:flex items-center gap-2">
+                        <span class="text-sm font-bold text-[#696858]">Admin Paneli</span>
+                        <span id="server-mode-badge" class="text-[11px] px-2.5 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            Sunucu Hazır
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <a
+                        href="../index.html"
+                        target="_blank"
+                        class="px-3.5 py-2 rounded-xl border border-stone-300 hover:border-[#696858] text-xs font-semibold text-[#57564B] flex items-center gap-1.5 transition"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        <span>Kataloğu Gör</span>
+                    </a>
+
+                    <button
+                        type="button"
+                        onclick="saveAllToServer()"
+                        id="btn-save-all"
+                        class="px-4 py-2 rounded-xl bg-[#696858] hover:bg-[#535244] text-white text-xs font-semibold shadow-sm flex items-center gap-1.5 transition"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Değişiklikleri Kaydet</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="handleLogout()"
+                        title="Çıkış Yap"
+                        class="p-2 rounded-xl border border-stone-200 hover:bg-rose-50 hover:text-rose-600 text-stone-500 transition"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Ana İçerik Alanı -->
+        <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex-1 flex flex-col lg:flex-row gap-6">
+
+            <!-- SOL SÜTUN: KATEGORİ YÖNETİMİ VE HIZLI AYARLAR -->
+            <aside class="w-full lg:w-80 shrink-0 space-y-6">
+
+                <!-- 1. KATEGORİ YÖNETİMİ KARTI -->
+                <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 class="text-sm font-bold text-[#57564B]">1. Kategori Yönetimi</h2>
+                            <p class="text-[11px] text-stone-500">Ekle, isim düzenle, sırala veya sil</p>
+                        </div>
+                        <span id="category-count-badge" class="text-xs font-bold bg-stone-100 text-[#696858] px-2.5 py-0.5 rounded-full">0</span>
+                    </div>
+
+                    <!-- Yeni Kategori Ekleme Formu -->
+                    <form onsubmit="handleAddCategory(event)" class="flex gap-2 mb-4">
+                        <input
+                            type="text"
+                            id="new-category-name"
+                            placeholder="Yeni kategori adı (Örn: Triko)"
+                            required
+                            class="flex-1 px-3 py-2 rounded-xl border border-stone-300 focus:border-[#696858] outline-none text-xs"
+                        />
+                        <button
+                            type="submit"
+                            class="px-3.5 py-2 rounded-xl bg-[#696858] hover:bg-[#535244] text-white text-xs font-semibold shrink-0 transition"
+                        >
+                            + Ekle
+                        </button>
+                    </form>
+
+                    <!-- Kategori Listesi -->
+                    <div id="admin-category-list" class="space-y-1.5 max-h-[380px] overflow-y-auto pr-1">
+                        <!-- JS ile doldurulur -->
+                    </div>
+                </div>
+
+                <!-- YEDEKLEME & ŞİFRE AYARLARI KARTI -->
+                <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-5 space-y-4">
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500">Veri Yedekleme (data.json)</h3>
+                        <p class="text-[11px] text-stone-400 mt-0.5">JSON dosyasını bilgisayarınıza indirebilir veya geri yükleyebilirsiniz.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button
+                            type="button"
+                            onclick="downloadDataJson()"
+                            class="py-2 px-3 rounded-xl border border-stone-300 hover:border-[#696858] text-xs font-semibold text-stone-700 flex items-center justify-center gap-1.5 transition"
+                        >
+                            <span>↓ JSON İndir</span>
+                        </button>
+                        <label class="py-2 px-3 rounded-xl border border-stone-300 hover:border-[#696858] text-xs font-semibold text-stone-700 flex items-center justify-center gap-1.5 cursor-pointer transition">
+                            <span>↑ JSON Yükle</span>
+                            <input type="file" accept=".json" class="hidden" onchange="importDataJson(event)" />
+                        </label>
+                    </div>
+
+                    <div class="pt-3 border-t border-stone-100">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">Admin Şifresini Değiştir</h3>
+                        <form onsubmit="handleChangePassword(event)" class="flex gap-2">
+                            <input
+                                type="password"
+                                id="new-admin-password"
+                                placeholder="Yeni şifre..."
+                                class="flex-1 px-3 py-1.5 rounded-xl border border-stone-300 text-xs outline-none focus:border-[#696858]"
+                            />
+                            <button type="submit" class="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium">
+                                Güncelle
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- SAĞ SÜTUN: ÜRÜN YÖNETİMİ VE RENK VARYASYONLARI -->
+            <section class="flex-1 space-y-6">
+
+                <!-- Üst Bar: Kategori Filtresi & Yeni Ürün Ekle Butonu -->
+                <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-base font-bold text-[#57564B]">2. Ürün ve Renk Varyasyonları Yönetimi</h2>
+                        <p class="text-xs text-stone-500">Ürün kodlarını, kapak görsellerini ve sınırsız renk/fotoğraf eşleştirmelerini yönetin.</p>
+                    </div>
+
+                    <div class="flex items-center gap-2.5">
+                        <select
+                            id="filter-category-select"
+                            onchange="renderAdminProducts()"
+                            class="px-3 py-2 rounded-xl border border-stone-300 text-xs font-medium bg-white outline-none focus:border-[#696858]"
+                        >
+                            <option value="ALL">Tüm Kategoriler</option>
+                        </select>
+
+                        <button
+                            type="button"
+                            onclick="openProductModal(null)"
+                            class="px-4 py-2.5 rounded-xl bg-[#696858] hover:bg-[#535244] text-white text-xs font-semibold shadow-sm flex items-center gap-1.5 shrink-0 transition"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                            </svg>
+                            <span>Yeni Ürün Ekle</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ürün Kartları Grid Listesi -->
+                <div id="admin-product-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    <!-- JS ile doldurulur -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- =========================================================================
+         3. ÜRÜN & DİNAMİK RENK VARYASYONU EKLEME / DÜZENLEME MODALI
+    ========================================================================== -->
+    <div id="product-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl border border-stone-200 overflow-hidden my-auto max-h-[92vh] flex flex-col">
+
+            <!-- Modal Üst Başlık -->
+            <div class="px-6 py-4 bg-[#F7F7F5] border-b border-stone-200 flex items-center justify-between shrink-0">
+                <div>
+                    <h3 id="modal-title" class="text-base font-bold text-[#57564B]">Yeni Ürün Ekle</h3>
+                    <p class="text-xs text-stone-500">Ürün bilgilerini ve renk seçeneklerine ait büyük boy fotoğrafları tanımlayın.</p>
+                </div>
+                <button type="button" onclick="closeProductModal()" class="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-200/60">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Kaydırılabilir İçerik -->
+            <form id="product-form" onsubmit="handleSaveProductModal(event)" class="p-6 overflow-y-auto space-y-6 flex-1">
+                <input type="hidden" id="modal-product-id" />
+
+                <!-- Temel Ürün Bilgileri + Kapak Görseli -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div class="md:col-span-2 space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">Kategori Seçimi *</label>
+                            <select
+                                id="modal-product-category"
+                                required
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-[#696858] outline-none text-sm bg-white"
+                            ></select>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                            <div>
+                                <label class="block text-xs font-bold text-stone-700 mb-1">Ürün Kodu * <span class="font-normal text-stone-400">(Örn: S2011)</span></label>
+                                <input
+                                    type="text"
+                                    id="modal-product-code"
+                                    placeholder="S2011"
+                                    required
+                                    class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-[#696858] outline-none text-sm font-bold"
+                                />
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-stone-700 mb-1">Ürün Alt Başlığı * <span class="font-normal text-stone-400">(Örn: Sweatshirt Kazak)</span></label>
+                                <input
+                                    type="text"
+                                    id="modal-product-subtitle"
+                                    placeholder="Sweatshirt Kazak"
+                                    required
+                                    class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-[#696858] outline-none text-sm"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ürün Kapak (Thumbnail) Görseli Yükleme Alanı -->
+                    <div>
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Ürün Kapak (Thumbnail) Görseli</label>
+                        <div
+                            id="thumb-dropzone"
+                            class="relative h-36 rounded-xl border-2 border-dashed border-stone-300 hover:border-[#696858] bg-stone-50 flex flex-col items-center justify-center p-2 text-center cursor-pointer transition overflow-hidden"
+                            onclick="document.getElementById('modal-thumb-file').click()"
+                            ondragover="handleDragOver(event, this)"
+                            ondragleave="handleDragLeave(event, this)"
+                            ondrop="handleDropThumbnail(event, this)"
+                        >
+                            <img id="modal-thumb-preview" src="" alt="Kapak Önizleme" class="hidden h-full w-auto object-contain rounded" />
+                            <div id="modal-thumb-placeholder" class="flex flex-col items-center">
+                                <svg class="w-6 h-6 text-stone-400 mb-1" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span class="text-[11px] font-medium text-stone-600">Tıkla veya Sürükle Bırak</span>
+                                <span class="text-[10px] text-stone-400 mt-0.5">/uploads/thumbnails</span>
+                            </div>
+                            <input type="file" id="modal-thumb-file" accept="image/*" class="hidden" onchange="handleThumbFileSelect(event)" />
+                        </div>
+                        <input type="hidden" id="modal-thumb-path" />
+                    </div>
+                </div>
+
+                <!-- 3. RENK VE GÖRSEL EŞLEŞTİRME (DİNAMİK VARYASYON EKLEME) -->
+                <div class="pt-4 border-t border-stone-200">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                        <div>
+                            <h4 class="text-sm font-bold text-[#57564B]">3. Renk ve Görsel Eşleştirme (Dinamik Varyasyonlar)</h4>
+                            <p class="text-[11px] text-stone-500">Her renk için Renk Adı, Renk Kodu (Color Picker) ve büyük boy Ürün Fotoğrafı ekleyin.</p>
+                        </div>
+                        <button
+                            type="button"
+                            onclick="addColorVariationRow()"
+                            class="px-3.5 py-2 rounded-xl bg-[#696858]/10 hover:bg-[#696858]/20 text-[#696858] text-xs font-bold flex items-center gap-1.5 shrink-0 transition"
+                        >
+                            <span>+ Yeni Renk Seçeneği Ekle</span>
+                        </button>
+                    </div>
+
+                    <!-- Dinamik Renk Satırları Listesi -->
+                    <div id="modal-colors-container" class="space-y-3">
+                        <!-- JS ile dinamik satırlar eklenir -->
+                    </div>
+                </div>
+
+                <!-- Modal Alt Kaydet / İptal Butonları -->
+                <div class="pt-4 border-t border-stone-200 flex items-center justify-end gap-3 shrink-0">
+                    <button
+                        type="button"
+                        onclick="closeProductModal()"
+                        class="px-4 py-2.5 rounded-xl border border-stone-300 text-xs font-semibold text-stone-600 hover:bg-stone-100 transition"
+                    >
+                        İptal
+                    </button>
+                    <button
+                        type="submit"
+                        class="px-6 py-2.5 rounded-xl bg-[#696858] hover:bg-[#535244] text-white text-xs font-semibold shadow-sm transition"
+                    >
+                        Ürünü ve Renkleri Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         ADMİN PANELİ JAVASCRIPT MANTIĞI
+    ========================================================================== -->
+    <script>
+        let adminState = {
+            token: sessionStorage.getItem('raymons_admin_token') || '',
+            serverAvailable: false,
+            catalog: {
+                brand: {},
+                categories: [],
+                products: []
+            },
+            editingColors: []
+        };
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgClass = type === 'error' ? 'bg-rose-600' : 'bg-[#696858]';
+            toast.className = `${bgClass} text-white px-4 py-3 rounded-xl shadow-lg text-xs font-semibold flex items-center justify-between gap-3 pointer-events-auto transition-all`;
+            toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 250);
+            }, 3200);
+        }
+
+        function resolveAssetUrl(relPath) {
+            if (!relPath) return '../uploads/products/s2011-default.png';
+            if (relPath.startsWith('data:') || relPath.startsWith('http://') || relPath.startsWith('https://') || relPath.startsWith('../')) {
+                return relPath;
+            }
+            return '../' + relPath.replace(/^\/+/, '');
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const pwd = document.getElementById('admin-password-input').value;
+
+            // 1. Önce sunucu API üzerinden giriş dene
+            try {
+                const res = await fetch('../api/index.php?action=login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: pwd })
+                });
+                const ct = res.headers.get('content-type') || '';
+                if (ct.includes('application/json')) {
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        adminState.token = data.token;
+                        adminState.serverAvailable = true;
+                        sessionStorage.setItem('raymons_admin_token', data.token);
+                        unlockDashboard();
+                        return;
+                    } else {
+                        showToast(data.message || 'Hatalı yönetici şifresi!', 'error');
+                        return;
+                    }
+                }
+            } catch (err) {
+                // Statik/yerel önizleme moduna geç
+            }
+
+            // 2. Statik test ortamı için şifre kontrolü
+            const savedLocalPwd = localStorage.getItem('raymons_admin_pwd') || 'raymons2026';
+            if (pwd === savedLocalPwd || pwd === 'raymons2026') {
+                adminState.token = 'local-preview-token';
+                adminState.serverAvailable = false;
+                sessionStorage.setItem('raymons_admin_token', adminState.token);
+                unlockDashboard();
+            } else {
+                showToast('Hatalı yönetici şifresi! (Varsayılan: raymons2026)', 'error');
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('raymons_admin_token');
+            adminState.token = '';
+            fetch('../api/index.php?action=logout').catch(() => {});
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        async function unlockDashboard() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('admin-dashboard').classList.remove('hidden');
+            await loadAdminCatalogData();
+        }
+
+        async function loadAdminCatalogData() {
+            let loaded = null;
+
+            try {
+                const apiRes = await fetch('../api/index.php?action=get_data&t=' + Date.now(), { cache: 'no-store' });
+                const ct = apiRes.headers.get('content-type') || '';
+                if (apiRes.ok && ct.includes('application/json')) {
+                    const json = await apiRes.json();
+                    if (json && json.success && json.data) {
+                        loaded = json.data;
+                        adminState.serverAvailable = true;
+                    }
+                }
+            } catch (e) {}
+
+            if (!loaded) {
+                try {
+                    const res = await fetch('../data/data.json?t=' + Date.now(), { cache: 'no-store' });
+                    if (res.ok) {
+                        loaded = await res.json();
+                    }
+                } catch (e) {}
+            }
+
+            const localOverride = localStorage.getItem('raymons_catalog_override');
+            if (!adminState.serverAvailable && localOverride) {
+                try {
+                    loaded = JSON.parse(localOverride);
+                } catch (e) {}
+            }
+
+            const badge = document.getElementById('server-mode-badge');
+            if (adminState.serverAvailable) {
+                badge.textContent = 'Sunucu Aktif (/uploads & data.json)';
+                badge.className = 'text-[11px] px-2.5 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700 border border-emerald-200';
+            } else {
+                badge.textContent = 'Statik Önizleme Modu (Anlık Tarayıcı + JSON İndir)';
+                badge.className = 'text-[11px] px-2.5 py-0.5 rounded-full font-medium bg-amber-50 text-amber-700 border border-amber-200';
+            }
+
+            if (loaded) {
+                adminState.catalog = loaded;
+                adminState.catalog.categories.sort((a, b) => (a.order || 0) - (b.order || 0));
+                adminState.catalog.products.sort((a, b) => (a.order || 0) - (b.order || 0));
+                renderAdminAll();
+            }
+        }
+
+        function renderAdminAll() {
+            renderAdminCategories();
+            renderCategoryFilterOptions();
+            renderAdminProducts();
+        }
+
+        /* =========================================================================
+           1. KATEGORİ YÖNETİMİ İŞLEMLERİ
+        ========================================================================== */
+        function renderAdminCategories() {
+            const listEl = document.getElementById('admin-category-list');
+            const cats = adminState.catalog.categories || [];
+            document.getElementById('category-count-badge').textContent = cats.length;
+
+            listEl.innerHTML = cats.map((cat, idx) => {
+                const prodCount = (adminState.catalog.products || []).filter(p => p.categoryId === cat.id).length;
+                return `
+                    <div class="flex items-center justify-between gap-2 p-2 rounded-xl border border-stone-200 bg-stone-50/60 hover:bg-stone-100/70 transition">
+                        <div class="flex items-center gap-2 min-w-0 flex-1">
+                            <span class="text-[10px] font-bold text-stone-400 w-4 text-center">${idx + 1}</span>
+                            <input
+                                type="text"
+                                value="${escapeHtml(cat.name)}"
+                                onchange="handleRenameCategory('${cat.id}', this.value)"
+                                class="bg-transparent font-semibold text-xs text-[#57564B] focus:bg-white focus:px-2 py-0.5 rounded border border-transparent focus:border-[#696858] outline-none w-full truncate"
+                            />
+                            <span class="text-[10px] text-stone-400 shrink-0">(${prodCount} ürün)</span>
+                        </div>
+                        <div class="flex items-center gap-1 shrink-0">
+                            <button type="button" onclick="moveCategory(${idx}, -1)" title="Yukarı Taşı" class="p-1 text-stone-400 hover:text-stone-700" ${idx === 0 ? 'disabled' : ''}>↑</button>
+                            <button type="button" onclick="moveCategory(${idx}, 1)" title="Aşağı Taşı" class="p-1 text-stone-400 hover:text-stone-700" ${idx === cats.length - 1 ? 'disabled' : ''}>↓</button>
+                            <button type="button" onclick="handleDeleteCategory('${cat.id}')" title="Kategoriyi Sil" class="p-1 text-stone-400 hover:text-rose-600">✕</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function handleAddCategory(e) {
+            e.preventDefault();
+            const input = document.getElementById('new-category-name');
+            const name = input.value.trim();
+            if (!name) return;
+
+            const newCat = {
+                id: 'cat-' + Date.now(),
+                name: name,
+                order: adminState.catalog.categories.length + 1
+            };
+            adminState.catalog.categories.push(newCat);
+            input.value = '';
+            renderAdminAll();
+            persistCatalogChanges('Yeni kategori eklendi: ' + name);
+        }
+
+        function handleRenameCategory(catId, newName) {
+            const trimmed = newName.trim();
+            if (!trimmed) return;
+            const cat = adminState.catalog.categories.find(c => c.id === catId);
+            if (cat) {
+                cat.name = trimmed;
+                renderCategoryFilterOptions();
+                renderAdminProducts();
+                persistCatalogChanges('Kategori adı güncellendi.');
+            }
+        }
+
+        function moveCategory(index, delta) {
+            const cats = adminState.catalog.categories;
+            const targetIdx = index + delta;
+            if (targetIdx < 0 || targetIdx >= cats.length) return;
+            const temp = cats[index];
+            cats[index] = cats[targetIdx];
+            cats[targetIdx] = temp;
+            cats.forEach((c, i) => c.order = i + 1);
+            renderAdminAll();
+            persistCatalogChanges('Kategori sıralaması güncellendi.');
+        }
+
+        function handleDeleteCategory(catId) {
+            const prodCount = adminState.catalog.products.filter(p => p.categoryId === catId).length;
+            const msg = prodCount > 0
+                ? `Bu kategoride ${prodCount} adet ürün bulunuyor. Kategoriyi sildiğinizde içindeki ürünler de silinecektir. Onaylıyor musunuz?`
+                : 'Bu kategoriyi silmek istediğinize emin misiniz?';
+            if (!confirm(msg)) return;
+
+            adminState.catalog.categories = adminState.catalog.categories.filter(c => c.id !== catId);
+            adminState.catalog.products = adminState.catalog.products.filter(p => p.categoryId !== catId);
+            renderAdminAll();
+            persistCatalogChanges('Kategori silindi.');
+        }
+
+        function renderCategoryFilterOptions() {
+            const select = document.getElementById('filter-category-select');
+            const currentVal = select.value || 'ALL';
+            const cats = adminState.catalog.categories || [];
+            select.innerHTML = `<option value="ALL">Tüm Kategoriler (${adminState.catalog.products.length})</option>` +
+                cats.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+            select.value = cats.some(c => c.id === currentVal) ? currentVal : 'ALL';
+        }
+
+        /* =========================================================================
+           2. ÜRÜN LİSTELEME VE SİLME İŞLEMLERİ
+        ========================================================================== */
+        function renderAdminProducts() {
+            const grid = document.getElementById('admin-product-grid');
+            const filterCat = document.getElementById('filter-category-select').value;
+            let products = adminState.catalog.products || [];
+
+            if (filterCat && filterCat !== 'ALL') {
+                products = products.filter(p => p.categoryId === filterCat);
+            }
+
+            if (products.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full bg-white rounded-2xl border border-stone-200 p-10 text-center text-stone-400 text-sm">
+                        Seçili kriterde ürün bulunamadı. Sağ üstteki <b>"Yeni Ürün Ekle"</b> butonunu kullanarak ilk ürünü ekleyebilirsiniz.
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = products.map(prod => {
+                const catObj = adminState.catalog.categories.find(c => c.id === prod.categoryId);
+                const catName = catObj ? catObj.name : 'Kategorisiz';
+                const thumbUrl = resolveAssetUrl(prod.thumbnail || (prod.colors && prod.colors[0] ? prod.colors[0].image : ''));
+                const colors = prod.colors || [];
+
+                return `
+                    <div class="bg-white rounded-2xl border border-stone-200 shadow-xs hover:shadow-md transition p-4 flex flex-col justify-between gap-4">
+                        <div class="flex items-start gap-3.5">
+                            <img src="${escapeHtml(thumbUrl)}" alt="${escapeHtml(prod.code)}" class="w-16 h-24 object-cover rounded-xl border border-stone-200 bg-stone-100 shrink-0" />
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-stone-100 text-[#696858]">${escapeHtml(catName)}</span>
+                                    <span class="text-[11px] text-stone-400">${colors.length} Renk</span>
+                                </div>
+                                <h3 class="text-base font-extrabold text-[#57564B] mt-1 truncate">${escapeHtml(prod.code)}</h3>
+                                <p class="text-xs text-stone-500 truncate">${escapeHtml(prod.subtitle || '')}</p>
+
+                                <!-- Renk Yuvarlakları Önizleme -->
+                                <div class="flex flex-wrap items-center gap-1 mt-2.5">
+                                    ${colors.slice(0, 8).map(c => `
+                                        <span
+                                            title="${escapeHtml(c.name)}"
+                                            class="w-4 h-4 rounded-full border border-black/20 inline-block"
+                                            style="background-color: ${escapeHtml(c.hex || '#696858')};"
+                                        ></span>
+                                    `).join('')}
+                                    ${colors.length > 8 ? `<span class="text-[10px] text-stone-400 font-semibold">+${colors.length - 8}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-stone-100 flex items-center justify-between gap-2">
+                            <button
+                                type="button"
+                                onclick="openProductModal('${prod.id}')"
+                                class="flex-1 py-2 px-3 rounded-xl bg-stone-100 hover:bg-[#696858] hover:text-white text-[#57564B] text-xs font-semibold transition"
+                            >
+                                Düzenle / Renkler
+                            </button>
+                            <button
+                                type="button"
+                                onclick="handleDeleteProduct('${prod.id}')"
+                                class="py-2 px-3 rounded-xl border border-stone-200 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 text-stone-500 text-xs font-semibold transition"
+                            >
+                                Sil
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function handleDeleteProduct(productId) {
+            const prod = adminState.catalog.products.find(p => p.id === productId);
+            if (!prod) return;
+            if (!confirm(`"${prod.code}" kodlu ürünü ve sunucudaki (/uploads) ilişkili görsellerini tamamen silmek istediğinize emin misiniz?`)) {
+                return;
+            }
+
+            if (adminState.serverAvailable) {
+                try {
+                    const res = await fetch('../api/index.php?action=delete_product', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Admin-Token': adminState.token
+                        },
+                        body: JSON.stringify({ id: productId })
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        adminState.catalog = data.data;
+                        renderAdminAll();
+                        showToast('Ürün ve sunucudaki görselleri silindi.');
+                        return;
+                    }
+                } catch (e) {}
+            }
+
+            adminState.catalog.products = adminState.catalog.products.filter(p => p.id !== productId);
+            renderAdminAll();
+            persistCatalogChanges('Ürün silindi.');
+        }
+
+        /* =========================================================================
+           3. ÜRÜN & DİNAMİK RENK VARYASYONU MODALI İŞLEMLERİ
+        ========================================================================== */
+        function openProductModal(productId = null) {
+            const modal = document.getElementById('product-modal');
+            const catSelect = document.getElementById('modal-product-category');
+            const cats = adminState.catalog.categories || [];
+
+            if (cats.length === 0) {
+                showToast('Önce en az bir kategori eklemelisiniz!', 'error');
+                return;
+            }
+
+            catSelect.innerHTML = cats.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+
+            if (productId) {
+                const prod = adminState.catalog.products.find(p => p.id === productId);
+                if (!prod) return;
+                document.getElementById('modal-title').textContent = `Ürünü Düzenle: ${prod.code}`;
+                document.getElementById('modal-product-id').value = prod.id;
+                catSelect.value = prod.categoryId;
+                document.getElementById('modal-product-code').value = prod.code;
+                document.getElementById('modal-product-subtitle').value = prod.subtitle || '';
+                setModalThumbnailPreview(prod.thumbnail || '');
+                adminState.editingColors = JSON.parse(JSON.stringify(prod.colors || []));
+            } else {
+                document.getElementById('modal-title').textContent = 'Yeni Ürün Ekle';
+                document.getElementById('modal-product-id').value = '';
+                const currentFilter = document.getElementById('filter-category-select').value;
+                catSelect.value = (currentFilter && currentFilter !== 'ALL') ? currentFilter : cats[0].id;
+                document.getElementById('modal-product-code').value = '';
+                document.getElementById('modal-product-subtitle').value = '';
+                setModalThumbnailPreview('');
+                adminState.editingColors = [
+                    { id: 'c-' + Date.now(), name: 'Kiremit Melanj', hex: '#696858', image: '' }
+                ];
+            }
+
+            renderModalColorRows();
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeProductModal() {
+            const modal = document.getElementById('product-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function setModalThumbnailPreview(relPath) {
+            document.getElementById('modal-thumb-path').value = relPath || '';
+            const img = document.getElementById('modal-thumb-preview');
+            const ph = document.getElementById('modal-thumb-placeholder');
+            if (relPath) {
+                img.src = resolveAssetUrl(relPath);
+                img.classList.remove('hidden');
+                ph.classList.add('hidden');
+            } else {
+                img.src = '';
+                img.classList.add('hidden');
+                ph.classList.remove('hidden');
+            }
+        }
+
+        function renderModalColorRows() {
+            const container = document.getElementById('modal-colors-container');
+            if (adminState.editingColors.length === 0) {
+                container.innerHTML = `
+                    <div class="p-4 rounded-xl border border-dashed border-stone-300 text-center text-xs text-stone-400">
+                        Henüz renk varyasyonu eklenmedi. "+ Yeni Renk Seçeneği Ekle" butonuna tıklayın.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = adminState.editingColors.map((c, index) => {
+                const hasImg = Boolean(c.image);
+                const previewUrl = hasImg ? resolveAssetUrl(c.image) : '';
+
+                return `
+                    <div class="p-3.5 rounded-xl border border-stone-200 bg-stone-50/70 grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                        <!-- 1. Renk Adı -->
+                        <div class="sm:col-span-4">
+                            <label class="block text-[10px] font-bold uppercase text-stone-500 mb-1">1. Renk Adı *</label>
+                            <input
+                                type="text"
+                                value="${escapeHtml(c.name)}"
+                                placeholder="Örn: Kiremit Melanj"
+                                required
+                                oninput="updateColorField(${index}, 'name', this.value)"
+                                class="w-full px-3 py-2 rounded-lg border border-stone-300 bg-white text-xs font-medium outline-none focus:border-[#696858]"
+                            />
+                        </div>
+
+                        <!-- 2. Renk Kodu (Color Picker + Hex) -->
+                        <div class="sm:col-span-3">
+                            <label class="block text-[10px] font-bold uppercase text-stone-500 mb-1">2. Renk Kodu (Hex)</label>
+                            <div class="flex items-center gap-1.5 bg-white px-2 py-1.5 rounded-lg border border-stone-300">
+                                <input
+                                    type="color"
+                                    value="${escapeHtml(c.hex || '#696858')}"
+                                    oninput="updateColorField(${index}, 'hex', this.value); this.nextElementSibling.value = this.value;"
+                                    class="w-6 h-6 rounded cursor-pointer border-0 bg-transparent p-0"
+                                />
+                                <input
+                                    type="text"
+                                    value="${escapeHtml(c.hex || '#696858')}"
+                                    oninput="updateColorField(${index}, 'hex', this.value); this.previousElementSibling.value = this.value;"
+                                    class="w-full text-xs font-mono text-stone-700 outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- 3. Renk Ürün Görseli (Dosya Yükleme / Drag & Drop) -->
+                        <div class="sm:col-span-4">
+                            <label class="block text-[10px] font-bold uppercase text-stone-500 mb-1">3. Ana Ürün Fotoğrafı</label>
+                            <div
+                                class="h-11 rounded-lg border border-dashed border-stone-300 hover:border-[#696858] bg-white px-2.5 flex items-center justify-between gap-2 cursor-pointer transition"
+                                onclick="document.getElementById('color-file-${index}').click()"
+                                ondragover="handleDragOver(event, this)"
+                                ondragleave="handleDragLeave(event, this)"
+                                ondrop="handleDropColorImage(event, ${index}, this)"
+                            >
+                                <div class="flex items-center gap-2 min-w-0">
+                                    ${hasImg
+                                        ? `<img src="${escapeHtml(previewUrl)}" class="w-7 h-9 object-cover rounded border border-stone-200 shrink-0" />
+                                           <span class="text-[11px] text-emerald-700 font-medium truncate">Görsel Yüklendi</span>`
+                                        : `<span class="text-[11px] text-stone-500 truncate">Fotoğraf Seç / Sürükle</span>`
+                                    }
+                                </div>
+                                <span class="text-[10px] font-bold text-[#696858] bg-stone-100 px-2 py-1 rounded shrink-0">Yükle</span>
+                                <input
+                                    type="file"
+                                    id="color-file-${index}"
+                                    accept="image/*"
+                                    class="hidden"
+                                    onchange="handleColorFileSelect(event, ${index})"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Sil Butonu -->
+                        <div class="sm:col-span-1 flex sm:justify-end pt-2 sm:pt-4">
+                            <button
+                                type="button"
+                                onclick="removeColorVariationRow(${index})"
+                                title="Bu Rengi Kaldır"
+                                class="p-2 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addColorVariationRow() {
+            adminState.editingColors.push({
+                id: 'c-' + Date.now() + '-' + Math.random().toString(36).substring(2, 5),
+                name: 'Yeni Renk',
+                hex: '#696858',
+                image: ''
+            });
+            renderModalColorRows();
+        }
+
+        function removeColorVariationRow(index) {
+            adminState.editingColors.splice(index, 1);
+            renderModalColorRows();
+        }
+
+        function updateColorField(index, field, value) {
+            if (adminState.editingColors[index]) {
+                adminState.editingColors[index][field] = value;
+            }
+        }
+
+        /* =========================================================================
+           DOSYA YÜKLEME (/uploads KLASÖRÜNE KAYIT VEYA DRAG & DROP)
+        ========================================================================== */
+        function handleDragOver(e, el) {
+            e.preventDefault();
+            el.classList.add('drop-zone-active');
+        }
+
+        function handleDragLeave(e, el) {
+            e.preventDefault();
+            el.classList.remove('drop-zone-active');
+        }
+
+        async function handleDropThumbnail(e, el) {
+            e.preventDefault();
+            el.classList.remove('drop-zone-active');
+            const file = e.dataTransfer.files && e.dataTransfer.files[0];
+            if (file) await uploadAndSetThumbnail(file);
+        }
+
+        async function handleThumbFileSelect(e) {
+            const file = e.target.files && e.target.files[0];
+            if (file) await uploadAndSetThumbnail(file);
+        }
+
+        async function uploadAndSetThumbnail(file) {
+            const uploadedPath = await uploadImageToServer(file, 'thumbnails');
+            if (uploadedPath) {
+                setModalThumbnailPreview(uploadedPath);
+                showToast('Kapak görseli yüklendi.');
+            }
+        }
+
+        async function handleDropColorImage(e, index, el) {
+            e.preventDefault();
+            el.classList.remove('drop-zone-active');
+            const file = e.dataTransfer.files && e.dataTransfer.files[0];
+            if (file) await uploadAndSetColorImage(file, index);
+        }
+
+        async function handleColorFileSelect(e, index) {
+            const file = e.target.files && e.target.files[0];
+            if (file) await uploadAndSetColorImage(file, index);
+        }
+
+        async function uploadAndSetColorImage(file, index) {
+            const uploadedPath = await uploadImageToServer(file, 'products');
+            if (uploadedPath && adminState.editingColors[index]) {
+                adminState.editingColors[index].image = uploadedPath;
+                // Eğer ürünün henüz kapak görseli yoksa ilk rengin fotoğrafını otomatik kapak yap
+                if (!document.getElementById('modal-thumb-path').value) {
+                    setModalThumbnailPreview(uploadedPath);
+                }
+                renderModalColorRows();
+                showToast('Renk ürün fotoğrafı yüklendi.');
+            }
+        }
+
+        /**
+         * Görseli sunucudaki /uploads klasörüne yükler (PHP veya Node.js).
+         * Sunucu olmayan statik test ortamında ise Base64 DataURL olarak kaydeder.
+         */
+        async function uploadImageToServer(file, folder = 'products') {
+            const base64Data = await readFileAsDataURL(file);
+
+            // 1. Sunucu aktifse /uploads klasörüne gerçek dosya olarak kaydet
+            if (adminState.serverAvailable) {
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('folder', folder);
+
+                    const res = await fetch('../api/index.php?action=upload', {
+                        method: 'POST',
+                        headers: { 'X-Admin-Token': adminState.token },
+                        body: formData
+                    });
+                    const ct = res.headers.get('content-type') || '';
+                    if (res.ok && ct.includes('application/json')) {
+                        const data = await res.json();
+                        if (data.success && data.path) {
+                            return data.path;
+                        }
+                    }
+                } catch (err) {}
+
+                // Node.js JSON Base64 upload fallback
+                try {
+                    const res = await fetch('../api/index.php?action=upload', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Admin-Token': adminState.token
+                        },
+                        body: JSON.stringify({
+                            folder: folder,
+                            name: file.name.replace(/\.[^.]+$/, ''),
+                            base64: base64Data
+                        })
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.success && data.path) {
+                            return data.path;
+                        }
+                    }
+                } catch (err) {}
+            }
+
+            // 2. Statik test modunda doğrudan Base64 döndür
+            return base64Data;
+        }
+
+        function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function handleSaveProductModal(e) {
+            e.preventDefault();
+            const prodId = document.getElementById('modal-product-id').value;
+            const categoryId = document.getElementById('modal-product-category').value;
+            const code = document.getElementById('modal-product-code').value.trim();
+            const subtitle = document.getElementById('modal-product-subtitle').value.trim();
+            let thumbnail = document.getElementById('modal-thumb-path').value.trim();
+
+            if (!code) {
+                showToast('Lütfen ürün kodunu girin.', 'error');
+                return;
+            }
+
+            // Renklerden boş olanları temizle veya varsayılan görsel ata
+            const cleanedColors = adminState.editingColors.map((c, i) => ({
+                id: c.id || ('c-' + Date.now() + '-' + i),
+                name: (c.name || 'Standart').trim(),
+                hex: c.hex || '#696858',
+                image: c.image || thumbnail || 'uploads/products/s2011-default.png'
+            }));
+
+            if (!thumbnail && cleanedColors.length > 0) {
+                thumbnail = cleanedColors[0].image;
+            }
+            if (!thumbnail) {
+                thumbnail = 'uploads/thumbnails/s2011-thumb.png';
+            }
+
+            if (prodId) {
+                const existing = adminState.catalog.products.find(p => p.id === prodId);
+                if (existing) {
+                    existing.categoryId = categoryId;
+                    existing.code = code;
+                    existing.subtitle = subtitle;
+                    existing.thumbnail = thumbnail;
+                    existing.colors = cleanedColors;
+                }
+            } else {
+                adminState.catalog.products.push({
+                    id: 'prod-' + Date.now(),
+                    categoryId,
+                    code,
+                    subtitle,
+                    thumbnail,
+                    order: adminState.catalog.products.length + 1,
+                    colors: cleanedColors
+                });
+            }
+
+            closeProductModal();
+            renderAdminAll();
+            persistCatalogChanges(`"${code}" ürünü başarıyla kaydedildi.`);
+        }
+
+        /* =========================================================================
+           SUNUCUYA KAYIT (data.json) VE YEDEKLEME İŞLEMLERİ
+        ========================================================================== */
+        async function persistCatalogChanges(toastMsg = 'Değişiklikler kaydedildi.') {
+            // Her zaman tarayıcı önizlemesini de senkron tut
+            try {
+                localStorage.setItem('raymons_catalog_override', JSON.stringify(adminState.catalog));
+            } catch (e) {}
+
+            if (adminState.serverAvailable) {
+                try {
+                    const res = await fetch('../api/index.php?action=save_data', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Admin-Token': adminState.token
+                        },
+                        body: JSON.stringify(adminState.catalog)
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        localStorage.removeItem('raymons_catalog_override');
+                        showToast(toastMsg);
+                        return;
+                    }
+                } catch (err) {}
+            }
+
+            showToast(toastMsg);
+        }
+
+        async function saveAllToServer() {
+            await persistCatalogChanges('Tüm katalog verileri başarıyla kaydedildi!');
+        }
+
+        function downloadDataJson() {
+            const jsonStr = JSON.stringify(adminState.catalog, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.json';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            showToast('data.json dosyası indirildi.');
+        }
+
+        function importDataJson(e) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async () => {
+                try {
+                    const parsed = JSON.parse(reader.result);
+                    if (Array.isArray(parsed.categories) && Array.isArray(parsed.products)) {
+                        adminState.catalog = parsed;
+                        renderAdminAll();
+                        await persistCatalogChanges('JSON verisi başarıyla içe aktarıldı!');
+                    } else {
+                        showToast('Geçersiz data.json formatı!', 'error');
+                    }
+                } catch (err) {
+                    showToast('JSON dosyası okunamadı!', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        async function handleChangePassword(e) {
+            e.preventDefault();
+            const newPwd = document.getElementById('new-admin-password').value.trim();
+            if (newPwd.length < 4) {
+                showToast('Yeni şifre en az 4 karakter olmalıdır.', 'error');
+                return;
+            }
+
+            if (adminState.serverAvailable) {
+                try {
+                    const res = await fetch('../api/index.php?action=change_password', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Admin-Token': adminState.token
+                        },
+                        body: JSON.stringify({ newPassword: newPwd })
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        adminState.token = data.token;
+                        sessionStorage.setItem('raymons_admin_token', data.token);
+                        document.getElementById('new-admin-password').value = '';
+                        showToast('Yönetici şifresi güncellendi.');
+                        return;
+                    }
+                } catch (err) {}
+            }
+
+            localStorage.setItem('raymons_admin_pwd', newPwd);
+            document.getElementById('new-admin-password').value = '';
+            showToast('Yönetici şifresi güncellendi.');
+        }
+
+        function escapeHtml(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Oturum açıksa doğrudan paneli göster
+        window.addEventListener('DOMContentLoaded', () => {
+            if (adminState.token) {
+                unlockDashboard();
+            }
+        });
+    </script>
+</body>
+</html>
