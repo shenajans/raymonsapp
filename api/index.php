@@ -111,7 +111,7 @@ switch ($action) {
         $input = json_decode(file_get_contents('php://input'), true) ?? $_POST;
         $password = $input['password'] ?? '';
         $config = getAdminConfig();
-        if (password_verify($password, $config['passwordHash']) || $password === 'raymons2026') {
+        if (password_verify($password, $config['passwordHash'])) {
             $_SESSION['raymons_admin_logged_in'] = true;
             echo json_encode([
                 'success' => true,
