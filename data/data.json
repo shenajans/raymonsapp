@@ -13,13 +13,13 @@
   },
   "categories": [
     {
-      "id": "cat-kazak",
-      "name": "Kazak",
+      "id": "cat-mont",
+      "name": "Mont",
       "order": 1
     },
     {
-      "id": "cat-mont",
-      "name": "Mont",
+      "id": "cat-kazak",
+      "name": "Kazak",
       "order": 2
     },
     {
