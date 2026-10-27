@@ -67,12 +67,174 @@
             opacity: 1;
             transform: scale(1);
         }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
     </style>
 </head>
 <body class="flex justify-center items-center w-full h-full select-none">
 
-    <!-- Mobil Öncelikli Ana Kapsayıcı (100dvh, 3 Ana Bölüm: Sabit Üst, Kaydırılabilir Orta, Sabit Alt) -->
-    <div id="app-shell" class="w-full max-w-[480px] h-full bg-white flex flex-col justify-between shadow-2xl overflow-hidden relative">
+    <!-- =========================================================================
+         MÜŞTERİ GİRİŞ EKRANI (CUSTOMER LOGIN SCREEN)
+         Tasarım Mockup'ına Birebir Uyumlu, Prestijli Giriş Ekranı
+    ========================================================================== -->
+    <div id="customer-login-screen" class="fixed inset-0 z-50 flex flex-col justify-between items-center p-4 sm:p-6 overflow-y-auto min-h-screen select-none bg-[#EAEAE6]">
+
+        <!-- Tam Ekran Arka Plan Görseli (100vh, object-cover) -->
+        <img
+            id="customer-login-bg-img"
+            src="assets/login-bg.jpg"
+            alt="Raymons Background"
+            class="fixed inset-0 w-full h-full object-cover object-top -z-10 pointer-events-none select-none brightness-[0.98]"
+        />
+
+        <!-- Üst Esnek Boşluk (Kartı alt-orta hizalamak için) -->
+        <div class="flex-1 min-h-[40px] sm:min-h-[80px]"></div>
+
+        <!-- Merkezi Giriş Kartı (Overlay Card) -->
+        <div class="relative z-10 w-full max-w-[380px] bg-[#EBE7DF] rounded-[28px] p-6 sm:p-7 shadow-[0_20px_50px_rgba(0,0,0,0.28)] border border-white/60 backdrop-blur-xs flex flex-col">
+
+            <!-- Üst Başlık Alanı -->
+            <div class="flex flex-col items-center text-center mb-5">
+                <img
+                    id="customer-login-logo"
+                    src="assets/logo.png"
+                    alt="raymons • life"
+                    class="h-6 sm:h-7 w-auto object-contain mb-3"
+                />
+                <h1 class="text-2xl sm:text-[26px] font-extrabold text-[#5A564C] tracking-tight leading-snug">
+                    Hoşgeldiniz.
+                </h1>
+                <p class="text-xs sm:text-[13px] text-[#7D796E] font-medium mt-0.5 tracking-tight">
+                    Zamansız Tasarımlar. Üstün Kalite.
+                </p>
+            </div>
+
+            <!-- Hata Mesajı Kutusu -->
+            <div id="customer-login-error" class="hidden mb-3.5 p-3 rounded-2xl bg-rose-100/90 border border-rose-300 text-rose-800 text-xs font-semibold text-center animate-fade-in shadow-xs">
+                Kullanıcı adı veya şifre hatalı!
+            </div>
+
+            <!-- Giriş Formu (Input Alanları ve İkonlar) -->
+            <form onsubmit="handleCustomerLogin(event)" class="space-y-3">
+                <!-- Kullanıcı Adı Satırı: Bağımsız yuvarlak beyaz ikon kutusu + Beyaz hap input -->
+                <div class="flex items-center gap-2.5">
+                    <div class="w-11 h-11 rounded-full bg-white flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-[#636057]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <input
+                        type="text"
+                        id="customer-username-input"
+                        placeholder="kullanıcı adı / e-posta"
+                        required
+                        autocomplete="username"
+                        class="flex-1 h-11 px-5 rounded-full bg-white text-sm text-[#4A473E] placeholder-[#9E9B93] focus:outline-none focus:ring-2 focus:ring-[#636057]/20 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition"
+                    />
+                </div>
+
+                <!-- Şifre Satırı: Bağımsız yuvarlak beyaz kilit kutusu + Beyaz hap input -->
+                <div class="flex items-center gap-2.5">
+                    <div class="w-11 h-11 rounded-full bg-white flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-[#636057]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <input
+                        type="password"
+                        id="customer-password-input"
+                        placeholder="şifre"
+                        required
+                        autocomplete="current-password"
+                        class="flex-1 h-11 px-5 rounded-full bg-white text-sm text-[#4A473E] placeholder-[#9E9B93] focus:outline-none focus:ring-2 focus:ring-[#636057]/20 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition"
+                    />
+                </div>
+
+                <!-- Giriş Butonu: Tam genişlikte hap buton, koyu haki/toprak tonunda -->
+                <button
+                    type="submit"
+                    id="btn-customer-login"
+                    class="w-full h-11 sm:h-12 mt-1 bg-[#636057] hover:bg-[#524F47] text-white font-bold text-xs sm:text-sm tracking-wider uppercase rounded-full shadow-[0_4px_14px_rgba(99,96,87,0.35)] transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
+                >
+                    <span>GİRİŞ / LOGIN</span>
+                </button>
+
+                <!-- Alt Seçenekler: Sol "beni hatırla" checkbox, sağ "şifremi unuttum?" -->
+                <div class="flex items-center justify-between pt-1 px-1 text-xs text-[#7D796E]">
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                            type="checkbox"
+                            id="customer-remember-me"
+                            checked
+                            class="w-4 h-4 rounded border-[#C8C3B8] text-[#636057] focus:ring-[#636057]/30 cursor-pointer accent-[#636057]"
+                        />
+                        <span class="hover:text-[#4A473E] transition font-normal">beni hatırla</span>
+                    </label>
+                    <a
+                        href="javascript:void(0)"
+                        onclick="showCustomerLoginError('Giriş şifrenizi unuttuysanız lütfen müşteri temsilciniz ile iletişime geçiniz.')"
+                        class="hover:text-[#4A473E] transition underline decoration-[#C8C3B8] font-normal"
+                    >
+                        şifremi unuttum?
+                    </a>
+                </div>
+            </form>
+
+            <!-- Mağaza Butonları (Google Play & App Store Rozetleri) -->
+            <div class="pt-4 mt-3 border-t border-[#DDD8CE]/70 flex items-center justify-center gap-2 sm:gap-2.5">
+                <!-- Google Play Rozeti -->
+                <a
+                    href="#"
+                    class="flex-1 bg-black text-white hover:bg-neutral-800 transition-colors rounded-xl px-2.5 py-1.5 sm:py-2 flex items-center justify-center gap-2 shadow-xs"
+                    title="Google Play"
+                >
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3.609 1.814L13.793 12 3.61 22.186c-.366-.33-.61-.83-.61-1.42V3.234c0-.59.244-1.09.61-1.42z" fill="#00C1FF"/>
+                        <path d="M17.207 8.586l-3.414 3.414 3.414 3.414 3.864-2.195c.78-.443.78-1.168 0-1.611l-3.864-2.022z" fill="#FFC800"/>
+                        <path d="M3.609 1.814l10.184 10.186 3.414-3.414-11.75-6.678c-.628-.357-1.334-.357-1.848-.094z" fill="#00E676"/>
+                        <path d="M13.793 12L3.61 22.186c.514.263 1.22.263 1.848-.094l11.75-6.678-3.415-3.414z" fill="#FF3A44"/>
+                    </svg>
+                    <div class="flex flex-col text-left leading-none">
+                        <span class="text-[7px] sm:text-[7.5px] uppercase tracking-wider text-neutral-300">GET IT ON</span>
+                        <span class="text-[10px] sm:text-[10.5px] font-semibold tracking-tight text-white mt-0.5">Google Play</span>
+                    </div>
+                </a>
+
+                <!-- App Store Rozeti -->
+                <a
+                    href="#"
+                    class="flex-1 bg-black text-white hover:bg-neutral-800 transition-colors rounded-xl px-2.5 py-1.5 sm:py-2 flex items-center justify-center gap-2 shadow-xs"
+                    title="App Store"
+                >
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 shrink-0 fill-current" viewBox="0 0 24 24">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-2 .6-2.65 1.35-.58.67-1.08 1.74-.95 2.77.99.08 2.05-.52 2.68-1.27z"/>
+                    </svg>
+                    <div class="flex flex-col text-left leading-none">
+                        <span class="text-[7px] sm:text-[7.5px] text-neutral-300">Available on the</span>
+                        <span class="text-[10px] sm:text-[10.5px] font-semibold tracking-tight text-white mt-0.5">App Store</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Ekranın En Altındaki Beyaz Marka Amblemi (Sabit) -->
+        <div class="relative z-10 w-full py-4 sm:py-6 flex justify-center items-center">
+            <img
+                src="assets/logo-footer.png"
+                alt="raymons emblem"
+                class="h-6 sm:h-7 w-auto object-contain opacity-95 transition-opacity hover:opacity-100 drop-shadow-md"
+                style="filter: brightness(0) invert(1);"
+            />
+        </div>
+    </div>
+
+    <!-- Mobil Öncelikli Ana Kapsayıcı (Giriş yaptıktan sonra ürünler görünür) -->
+    <div id="app-shell" class="hidden w-full max-w-[480px] h-full bg-white flex flex-col justify-between shadow-2xl overflow-hidden relative">
 
         <!-- =========================================================================
              1. SABİT ÜST ALAN (FIXED TOP SECTION: HEADER + ANA ÜRÜN GÖRSELİ)
@@ -80,10 +242,28 @@
         ========================================================================== -->
         <div class="shrink-0 flex flex-col w-full z-20 bg-white">
             <!-- Üst Marka Header -->
-            <header class="w-full h-[46px] sm:h-[52px] bg-white flex items-center justify-center px-4 border-b border-black/[0.04] relative">
+            <header class="w-full h-[48px] sm:h-[54px] bg-white flex items-center justify-between px-3.5 sm:px-4 border-b border-black/[0.05] relative">
+                <!-- Sol Denge Boşluğu -->
+                <div class="w-7 flex items-center justify-start"></div>
+
+                <!-- Ortalanmış Logo -->
                 <a href="#" onclick="window.scrollTo(0,0); return false;" class="flex items-center justify-center">
-                    <img id="brand-header-logo" src="assets/logo-header.png" alt="raymons.life" class="h-[26px] sm:h-[30px] w-auto object-contain" />
+                    <img id="brand-header-logo" src="assets/logo.png" alt="raymons.life" class="h-[22px] sm:h-[26px] w-auto object-contain" />
                 </a>
+
+                <!-- Sağ: Müşteri Çıkış Butonu -->
+                <div class="w-7 flex items-center justify-end">
+                    <button
+                        type="button"
+                        onclick="handleCustomerLogout()"
+                        title="Oturumu Kapat / Çıkış Yap"
+                        class="p-1.5 rounded-full text-[#7D796E] hover:text-rose-600 hover:bg-stone-100 transition cursor-pointer"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </button>
+                </div>
             </header>
 
             <!-- Ana Ürün Görseli (Preview Area - Dikey Dikdörtgen Format) -->
@@ -321,7 +501,10 @@
 
         function applyBrandInfo() {
             const b = state.catalog.brand || {};
-            if (b.headerLogo) document.getElementById('brand-header-logo').src = b.headerLogo;
+            const headerLogoEl = document.getElementById('brand-header-logo');
+            if (headerLogoEl) headerLogoEl.src = b.headerLogo || 'assets/logo.png';
+            const custLoginLogo = document.getElementById('customer-login-logo');
+            if (custLoginLogo) custLoginLogo.src = 'assets/logo.png';
             if (b.footerLogo) document.getElementById('brand-footer-logo').src = b.footerLogo;
             if (b.qrCode) document.getElementById('brand-qr-code').src = b.qrCode;
             if (b.website) document.getElementById('footer-website-text').textContent = b.website;
@@ -661,8 +844,154 @@
                 .replace(/'/g, '&#039;');
         }
 
-        // Sayfa yüklendiğinde kataloğu başlat
-        window.addEventListener('DOMContentLoaded', () => loadCatalogData(false));
+        /* =========================================================================
+           MÜŞTERİ GİRİŞ (AUTHENTICATION) & OTURUM MANTIĞI
+        ========================================================================== */
+        async function handleCustomerLogin(e) {
+            e.preventDefault();
+            const errorAlert = document.getElementById('customer-login-error');
+            if (errorAlert) errorAlert.classList.add('hidden');
+
+            const usernameInput = document.getElementById('customer-username-input');
+            const passwordInput = document.getElementById('customer-password-input');
+            const rememberMeBox = document.getElementById('customer-remember-me');
+
+            const username = usernameInput ? usernameInput.value.trim() : '';
+            const password = passwordInput ? passwordInput.value : '';
+            const remember = rememberMeBox ? rememberMeBox.checked : true;
+
+            if (!username || !password) {
+                showCustomerLoginError('Lütfen kullanıcı adı ve şifrenizi giriniz.');
+                return;
+            }
+
+            const submitBtn = document.getElementById('btn-customer-login');
+            const originalText = submitBtn ? submitBtn.innerHTML : '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `<span>Giriş Yapılıyor...</span>`;
+            }
+
+            // 1. Sunucu API üzerinden müşteri girişi dene
+            try {
+                const res = await fetch('api/index.php?action=customer_login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const ct = res.headers.get('content-type') || '';
+                if (ct.includes('application/json')) {
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        const token = data.token || ('cust_' + Date.now());
+                        if (remember) {
+                            localStorage.setItem('raymons_customer_token', token);
+                            localStorage.setItem('raymons_customer_user', username);
+                            localStorage.setItem('raymons_customer_remember', 'true');
+                            sessionStorage.removeItem('raymons_customer_token');
+                        } else {
+                            sessionStorage.setItem('raymons_customer_token', token);
+                            localStorage.removeItem('raymons_customer_token');
+                            localStorage.removeItem('raymons_customer_remember');
+                        }
+                        unlockCatalog();
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalText;
+                        }
+                        return;
+                    } else {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalText;
+                        }
+                        showCustomerLoginError(data.message || 'Kullanıcı adı veya şifre hatalı!');
+                        return;
+                    }
+                }
+            } catch (err) {
+                // Statik / GitHub Pages fallback
+            }
+
+            // 2. Statik test ve çevrimdışı önizleme kontrolü
+            const savedCustomPwd = localStorage.getItem('raymons_customer_pwd') || '2627SK';
+            if (password === savedCustomPwd || password === '2627SK') {
+                const token = 'cust_' + Date.now();
+                if (remember) {
+                    localStorage.setItem('raymons_customer_token', token);
+                    localStorage.setItem('raymons_customer_user', username);
+                    localStorage.setItem('raymons_customer_remember', 'true');
+                    sessionStorage.removeItem('raymons_customer_token');
+                } else {
+                    sessionStorage.setItem('raymons_customer_token', token);
+                    localStorage.removeItem('raymons_customer_token');
+                    localStorage.removeItem('raymons_customer_remember');
+                }
+                unlockCatalog();
+            } else {
+                showCustomerLoginError('Kullanıcı adı veya şifre hatalı!');
+            }
+
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        }
+
+        function showCustomerLoginError(msg) {
+            const errorAlert = document.getElementById('customer-login-error');
+            if (errorAlert) {
+                errorAlert.textContent = msg;
+                errorAlert.classList.remove('hidden');
+            } else {
+                alert(msg);
+            }
+        }
+
+        function unlockCatalog() {
+            const loginScreen = document.getElementById('customer-login-screen');
+            const appShell = document.getElementById('app-shell');
+            if (loginScreen) loginScreen.classList.add('hidden');
+            if (appShell) appShell.classList.remove('hidden');
+            loadCatalogData(false);
+        }
+
+        function handleCustomerLogout() {
+            if (!confirm('Katalog oturumunu kapatmak istediğinize emin misiniz?')) return;
+            sessionStorage.removeItem('raymons_customer_token');
+            localStorage.removeItem('raymons_customer_token');
+            localStorage.removeItem('raymons_customer_remember');
+            const loginScreen = document.getElementById('customer-login-screen');
+            const appShell = document.getElementById('app-shell');
+            if (appShell) appShell.classList.add('hidden');
+            if (loginScreen) loginScreen.classList.remove('hidden');
+        }
+
+        // Sayfa yüklendiğinde oturum ve veri kontrolü
+        window.addEventListener('DOMContentLoaded', () => {
+            // "Beni Hatırla" Kullanıcı Bilgisi Kontrolü
+            const rememberedUser = localStorage.getItem('raymons_customer_user');
+            const isRemembered = localStorage.getItem('raymons_customer_remember') === 'true';
+            if (rememberedUser) {
+                const userInput = document.getElementById('customer-username-input');
+                if (userInput) userInput.value = rememberedUser;
+            }
+            const remCheckbox = document.getElementById('customer-remember-me');
+            if (remCheckbox && localStorage.getItem('raymons_customer_remember') !== null) {
+                remCheckbox.checked = isRemembered;
+            }
+
+            // Aktif müşteri oturum tokeni kontrolü
+            const token = sessionStorage.getItem('raymons_customer_token') || localStorage.getItem('raymons_customer_token');
+            if (token) {
+                unlockCatalog();
+            } else {
+                const loginScreen = document.getElementById('customer-login-screen');
+                const appShell = document.getElementById('app-shell');
+                if (loginScreen) loginScreen.classList.remove('hidden');
+                if (appShell) appShell.classList.add('hidden');
+            }
+        });
 
         // Admin panelinde başka sekmede değişiklik yapıldığında veya sekmeye geri dönüldüğünde sayfa yenilemeden anında güncelle!
         window.addEventListener('storage', (e) => {

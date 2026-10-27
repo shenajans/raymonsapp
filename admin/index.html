@@ -80,9 +80,9 @@
             <div class="flex flex-col items-center text-center mb-5">
                 <img
                     id="login-logo-img"
-                    src="../assets/logo-text.png"
+                    src="../assets/logo.png"
                     alt="raymons • life"
-                    class="h-5 sm:h-5.5 w-auto object-contain mb-3"
+                    class="h-6 sm:h-7 w-auto object-contain mb-3"
                 />
                 <h1 class="text-2xl sm:text-[26px] font-extrabold text-[#5A564C] tracking-tight leading-snug">
                     Hoşgeldiniz.
@@ -221,7 +221,7 @@
         <header class="bg-[#EBE7DF] border-b border-[#DDD8CE] sticky top-0 z-30 shadow-xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                    <img id="header-logo-img" src="../assets/logo-header.png" alt="raymons.life" class="h-7 w-auto object-contain" />
+                    <img id="header-logo-img" src="../assets/logo.png" alt="raymons.life" class="h-7 w-auto object-contain" />
                     <span class="hidden sm:inline-block h-5 w-[1px] bg-[#DDD8CE]"></span>
                     <div class="hidden sm:flex items-center gap-2">
                         <span class="text-sm font-bold text-[#4A473E]">Admin Paneli</span>
@@ -337,6 +337,22 @@
                                 type="password"
                                 id="new-admin-password"
                                 placeholder="Yeni şifre..."
+                                class="flex-1 px-4 py-2 rounded-full border border-[#DDD8CE] bg-white text-xs text-[#4A473E] outline-none focus:ring-2 focus:ring-[#636057]/20 shadow-xs"
+                            />
+                            <button type="submit" class="px-4 py-2 rounded-full bg-[#636057] hover:bg-[#524F47] text-white text-xs font-bold shrink-0 transition active:scale-95 shadow-xs cursor-pointer">
+                                Güncelle
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="pt-3 border-t border-[#DDD8CE]/70">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-[#4A473E] mb-1">Müşteri Giriş Şifresini Değiştir</h3>
+                        <p class="text-[11px] text-[#7D796E] mb-2">Önyüzdeki müşterilerin kataloğu görmek için gireceği şifre (Varsayılan: <code class="font-bold text-[#636057]">2627SK</code>).</p>
+                        <form onsubmit="handleChangeCustomerPassword(event)" class="flex gap-2">
+                            <input
+                                type="password"
+                                id="new-customer-password"
+                                placeholder="Yeni müşteri şifresi..."
                                 class="flex-1 px-4 py-2 rounded-full border border-[#DDD8CE] bg-white text-xs text-[#4A473E] outline-none focus:ring-2 focus:ring-[#636057]/20 shadow-xs"
                             />
                             <button type="submit" class="px-4 py-2 rounded-full bg-[#636057] hover:bg-[#524F47] text-white text-xs font-bold shrink-0 transition active:scale-95 shadow-xs cursor-pointer">
@@ -1467,6 +1483,39 @@
             showToast('Yönetici şifresi güncellendi.');
         }
 
+        async function handleChangeCustomerPassword(e) {
+            e.preventDefault();
+            const newPwd = document.getElementById('new-customer-password').value.trim();
+            if (newPwd.length < 4) {
+                showToast('Müşteri şifresi en az 4 karakter olmalıdır.', 'error');
+                return;
+            }
+
+            if (adminState.serverAvailable) {
+                try {
+                    const res = await fetch(getApiUrl('action=change_customer_password'), {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Admin-Token': adminState.token
+                        },
+                        body: JSON.stringify({ newPassword: newPwd })
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        localStorage.setItem('raymons_customer_pwd', newPwd);
+                        document.getElementById('new-customer-password').value = '';
+                        showToast('Müşteri giriş şifresi başarıyla güncellendi.');
+                        return;
+                    }
+                } catch (err) {}
+            }
+
+            localStorage.setItem('raymons_customer_pwd', newPwd);
+            document.getElementById('new-customer-password').value = '';
+            showToast('Müşteri giriş şifresi güncellendi.');
+        }
+
         function escapeHtml(str) {
             return String(str ?? '')
                 .replace(/&/g, '&amp;')
@@ -1481,12 +1530,12 @@
             const loginBg = document.getElementById('login-bg-img');
             if (loginBg) loginBg.src = APP_ROOT + 'assets/login-bg.jpg';
             const loginLogo = document.getElementById('login-logo-img');
-            if (loginLogo) loginLogo.src = APP_ROOT + 'assets/logo-text.png';
+            if (loginLogo) loginLogo.src = APP_ROOT + 'assets/logo.png';
             const loginEmblem = document.getElementById('login-bottom-emblem');
             if (loginEmblem) loginEmblem.src = APP_ROOT + 'assets/logo-footer.png';
 
             const headerLogo = document.getElementById('header-logo-img');
-            if (headerLogo) headerLogo.src = APP_ROOT + 'assets/logo-header.png';
+            if (headerLogo) headerLogo.src = APP_ROOT + 'assets/logo.png';
             const headerCatLink = document.getElementById('header-catalog-link');
             if (headerCatLink) headerCatLink.href = APP_ROOT + 'index.html';
 

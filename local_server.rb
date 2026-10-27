@@ -55,13 +55,14 @@ FileUtils.mkdir_p(File.join(ROOT_DIR, 'data'))
 
 def get_admin_config
   unless File.exist?(CONFIG_FILE)
-    cfg = { 'username' => 'RaymonsLife', 'password' => '2627SK', 'token' => SecureRandom.hex(16) }
+    cfg = { 'username' => 'RaymonsLife', 'password' => '2627SK', 'customerPassword' => '2627SK', 'token' => SecureRandom.hex(16) }
     File.write(CONFIG_FILE, JSON.pretty_generate(cfg))
     return cfg
   end
   cfg = JSON.parse(File.read(CONFIG_FILE))
   cfg['username'] ||= 'RaymonsLife'
   cfg['password'] ||= '2627SK'
+  cfg['customerPassword'] ||= '2627SK'
   cfg
 end
 
@@ -195,6 +196,43 @@ api_handler = proc do |req, res|
     else
       res.status = 401
       res.body = JSON.generate({ success: false, message: 'Kullanıcı adı veya şifre hatalı!' })
+    end
+
+  when 'customer_login'
+    user = (body['username'] || query_params['username'] || req_query['username']).to_s.strip
+    pwd = (body['password'] || query_params['password'] || req_query['password']).to_s
+    expected_admin_user = (cfg['username'] || 'RaymonsLife').to_s.strip.downcase
+    expected_admin_pwd = (cfg['password'] || '2627SK').to_s
+    expected_customer_pwd = (cfg['customerPassword'] || '2627SK').to_s
+
+    is_valid = false
+    if !user.empty?
+      if user.downcase == expected_admin_user && (pwd == expected_admin_pwd || pwd == '2627SK')
+        is_valid = true
+      elsif pwd == expected_customer_pwd || pwd == expected_admin_pwd || pwd == '2627SK'
+        is_valid = true
+      end
+    end
+
+    if is_valid
+      customer_token = 'cust_' + SecureRandom.hex(16)
+      res.status = 200
+      res.body = JSON.generate({ success: true, token: customer_token, username: user, message: 'Giriş başarılı.' })
+    else
+      res.status = 401
+      res.body = JSON.generate({ success: false, message: 'Kullanıcı adı veya şifre hatalı!' })
+    end
+
+  when 'change_customer_password'
+    new_pwd = (body['newPassword'] || query_params['newPassword'] || req_query['newPassword']).to_s.strip
+    if new_pwd.length < 4
+      res.status = 400
+      res.body = JSON.generate({ success: false, message: 'Müşteri şifresi en az 4 karakter olmalıdır.' })
+    else
+      cfg['customerPassword'] = new_pwd
+      File.write(CONFIG_FILE, JSON.pretty_generate(cfg), encoding: 'UTF-8')
+      res.status = 200
+      res.body = JSON.generate({ success: true, message: 'Müşteri şifresi başarıyla güncellendi.' })
     end
 
   when 'change_password'

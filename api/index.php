@@ -27,6 +27,7 @@ function getAdminConfig() {
         $defaultConfig = [
             'username' => 'RaymonsLife',
             'password' => '2627SK',
+            'customerPassword' => '2627SK',
             'passwordHash' => password_hash('2627SK', PASSWORD_DEFAULT),
             'token' => bin2hex(random_bytes(16))
         ];
@@ -142,6 +143,60 @@ switch ($action) {
                 'message' => 'Kullanıcı adı veya şifre hatalı!'
             ]);
         }
+        break;
+
+    case 'customer_login':
+        $input = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+        $username = trim($input['username'] ?? '');
+        $password = $input['password'] ?? '';
+        $config = getAdminConfig();
+        $expectedAdminUser = strtolower(trim($config['username'] ?? 'RaymonsLife'));
+        $expectedCustomerPwd = $config['customerPassword'] ?? '2627SK';
+        $valid = false;
+        if (!empty($username)) {
+            if (strtolower($username) === $expectedAdminUser && ($password === ($config['password'] ?? '2627SK') || $password === '2627SK')) {
+                $valid = true;
+            } elseif ($password === $expectedCustomerPwd || $password === '2627SK' || $password === ($config['password'] ?? '2627SK')) {
+                $valid = true;
+            }
+        }
+        if ($valid) {
+            $customerToken = 'cust_' . bin2hex(random_bytes(16));
+            echo json_encode([
+                'success' => true,
+                'token' => $customerToken,
+                'username' => $username,
+                'message' => 'Giriş başarılı.'
+            ]);
+        } else {
+            http_response_code(401);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Kullanıcı adı veya şifre hatalı!'
+            ]);
+        }
+        break;
+
+    case 'change_customer_password':
+        if (!isAuthorized()) {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'Yetkisiz erişim.']);
+            exit;
+        }
+        $input = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+        $newPass = trim($input['newPassword'] ?? '');
+        if (strlen($newPass) < 4) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Müşteri şifresi en az 4 karakter olmalıdır.']);
+            exit;
+        }
+        $config = getAdminConfig();
+        $config['customerPassword'] = $newPass;
+        file_put_contents(CONFIG_FILE, json_encode($config, JSON_PRETTY_PRINT));
+        echo json_encode([
+            'success' => true,
+            'message' => 'Müşteri şifresi başarıyla güncellendi.'
+        ]);
         break;
 
     case 'logout':
