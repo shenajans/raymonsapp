@@ -497,7 +497,7 @@
       "categoryId": "cat-yelek",
       "code": "Y9007",
       "subtitle": "",
-      "outOfStock": true,
+      "outOfStock": false,
       "thumbnail": "uploads/thumbnails/y9007-tas--i-maj-1793088984-60b0fe.png",
       "order": 12,
       "colors": [
