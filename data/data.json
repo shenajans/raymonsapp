@@ -179,18 +179,67 @@
     {
       "id": "prod-1793017956932",
       "categoryId": "cat-gomlek",
-      "code": "gmlkekk",
-      "subtitle": "Sweatshirt Kazak",
-      "thumbnail": "uploads/thumbnails/si-yah-1793017944-0d5b73.jpg",
+      "code": "G5047",
+      "subtitle": "Gömlek",
+      "thumbnail": "uploads/thumbnails/g5043-gri--i-maj-1793088129-9df93a.png",
       "order": 10,
       "colors": [
         {
           "id": "c-1793017934078",
-          "name": "antrasit",
-          "hex": "#696858",
-          "image": "uploads/products/antrasit-1793017952-a95a8d.png"
+          "name": "Gri",
+          "hex": "#a9a7b0",
+          "image": "uploads/products/g5043-gri--model-o-n-1793088139-276608.png"
+        },
+        {
+          "id": "c-1793088088615-vyt",
+          "name": "Ekru",
+          "hex": "#f3eae3",
+          "image": "uploads/products/ekru-1793088148-e87afb.png"
+        },
+        {
+          "id": "c-1793088092115-ow8",
+          "name": "Haki",
+          "hex": "#7d6c63",
+          "image": "uploads/products/haki--1793088156-db67d1.png"
+        },
+        {
+          "id": "c-1793088094115-fwj",
+          "name": "Kahve",
+          "hex": "#7e4f4f",
+          "image": "uploads/products/kahve-1793088162-c3fd6e.png"
+        },
+        {
+          "id": "c-1793088094682-zyn",
+          "name": "Lacivert",
+          "hex": "#393553",
+          "image": "uploads/products/laci-vert-1793088168-8e54a6.png"
+        },
+        {
+          "id": "c-1793088095249-m61",
+          "name": "Mavi",
+          "hex": "#c2d1e4",
+          "image": "uploads/products/mavi--1793088175-8a40fc.png"
+        },
+        {
+          "id": "c-1793088095848-l46",
+          "name": "Siyah",
+          "hex": "#372f3a",
+          "image": "uploads/products/si-yah-1793088183-4a48f4.png"
+        },
+        {
+          "id": "c-1793088188314-ikf",
+          "name": "Taş",
+          "hex": "#a69591",
+          "image": "uploads/products/tas--1793088197-fa6b31.png"
+        },
+        {
+          "id": "c-1793088189115-64b",
+          "name": "Vizon",
+          "hex": "#87745c",
+          "image": "uploads/products/vi-zon-1793088202-157c3c.png"
         }
-      ]
+      ],
+      "outOfStock": false
     },
     {
       "id": "prod-1793022616194",
