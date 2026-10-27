@@ -290,6 +290,47 @@
           "image": "uploads/products/si-yah-1793023016-26e805.png"
         }
       ]
+    },
+    {
+      "id": "prod-1793087682541",
+      "categoryId": "cat-kot",
+      "code": "Leo Tencel",
+      "subtitle": "Kot / Jeans",
+      "outOfStock": false,
+      "thumbnail": "uploads/thumbnails/leo-tencel-tas--i-maj-1793087562-743604.png",
+      "order": 8,
+      "colors": [
+        {
+          "id": "c-1793087482085",
+          "name": "Taş",
+          "hex": "#ada398",
+          "image": "uploads/products/leo-tencel-tas--model-o-n-1793087614-326b2d.png"
+        },
+        {
+          "id": "c-1793087578417-1m8",
+          "name": "Bej",
+          "hex": "#9b8160",
+          "image": "uploads/products/bej-1793087633-0aedb3.png"
+        },
+        {
+          "id": "c-1793087584487-4al",
+          "name": "Gri",
+          "hex": "#95979a",
+          "image": "uploads/products/gri--1793087651-f12626.png"
+        },
+        {
+          "id": "c-1793087589087-ua2",
+          "name": "Lacivert",
+          "hex": "#1b1d2c",
+          "image": "uploads/products/laci-vert-1793087661-af8a8d.png"
+        },
+        {
+          "id": "c-1793087596202-6tn",
+          "name": "Siyah",
+          "hex": "#191819",
+          "image": "uploads/products/si-yah-1793087671-a08e65.png"
+        }
+      ]
     }
   ]
 }
