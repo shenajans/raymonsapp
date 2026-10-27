@@ -491,6 +491,29 @@
           "image": "uploads/products/siyah-1793088786-93f1e9.png"
         }
       ]
+    },
+    {
+      "id": "prod-1793089057624",
+      "categoryId": "cat-yelek",
+      "code": "Y9007",
+      "subtitle": "",
+      "outOfStock": false,
+      "thumbnail": "uploads/thumbnails/y9007-tas--i-maj-1793088984-60b0fe.png",
+      "order": 12,
+      "colors": [
+        {
+          "id": "c-1793088926655",
+          "name": "Taş",
+          "hex": "#a89c92",
+          "image": "uploads/products/y9007-tas--model-o-n-1793089020-df254d.png"
+        },
+        {
+          "id": "c-1793089030939-xmc",
+          "name": "Lacivert",
+          "hex": "#2a3040",
+          "image": "uploads/products/lacivert-1793089033-8821f9.png"
+        }
+      ]
     }
   ]
 }
