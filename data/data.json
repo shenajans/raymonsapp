@@ -456,6 +456,41 @@
           "image": "uploads/products/tkm8022-kahve-model-o-n-1793088471-34ce79.jpg"
         }
       ]
+    },
+    {
+      "id": "prod-1793088873568",
+      "categoryId": "cat-esofman",
+      "code": "E2000",
+      "subtitle": "Eşofman",
+      "outOfStock": false,
+      "thumbnail": "uploads/thumbnails/e2000-lacivert-imaj-1793088868-5b500c.png",
+      "order": 11,
+      "colors": [
+        {
+          "id": "c-1793088530817",
+          "name": "Gri",
+          "hex": "#a9a29c",
+          "image": "uploads/products/gri-1793088774-6c5a2c.png"
+        },
+        {
+          "id": "c-1793088775684-vyh",
+          "name": "Kahve",
+          "hex": "#614948",
+          "image": "uploads/products/kahve-1793088784-ca5884.png"
+        },
+        {
+          "id": "c-1793088776681-jxz",
+          "name": "Lacivert",
+          "hex": "#2d2e40",
+          "image": "uploads/products/e2000-lacivert-ghost-o-n-1793088848-5c03f8.png"
+        },
+        {
+          "id": "c-1793088777333-hvi",
+          "name": "Siyah",
+          "hex": "#535159",
+          "image": "uploads/products/siyah-1793088786-93f1e9.png"
+        }
+      ]
     }
   ]
 }
