@@ -421,6 +421,41 @@
           "image": "uploads/products/yes-i-l-1793087854-f056f1.png"
         }
       ]
+    },
+    {
+      "id": "prod-1793088513051",
+      "categoryId": "cat-takim",
+      "code": "TKM8022",
+      "subtitle": "",
+      "outOfStock": false,
+      "thumbnail": "uploads/thumbnails/tkm8022-si-yah-i-maj-1793088423-f33d22.jpg",
+      "order": 10,
+      "colors": [
+        {
+          "id": "c-1793088321734",
+          "name": "Siyah",
+          "hex": "#303033",
+          "image": "uploads/products/tkm8022-si-yah-model-o-n-1793088442-a10156.jpg"
+        },
+        {
+          "id": "c-1793088447000-bic",
+          "name": "Bej",
+          "hex": "#746864",
+          "image": "uploads/products/tkm8022-bej-model-o-n-1793088455-2ba56b.jpg"
+        },
+        {
+          "id": "c-1793088447916-9gs",
+          "name": "Füme",
+          "hex": "#2a2a29",
+          "image": "uploads/products/tkm8022-fu-me-model-o-n-1793088459-3c0c25.jpg"
+        },
+        {
+          "id": "c-1793088468897-t5b",
+          "name": "Kahve",
+          "hex": "#312622",
+          "image": "uploads/products/tkm8022-kahve-model-o-n-1793088471-34ce79.jpg"
+        }
+      ]
     }
   ]
 }
