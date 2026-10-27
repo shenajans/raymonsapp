@@ -460,7 +460,7 @@
         }
 
         function resolveAssetUrl(relPath) {
-            if (!relPath) return APP_ROOT + 'uploads/products/s2011-default.png';
+            if (!relPath) return APP_ROOT + 'uploads/products/s2011-default.webp';
             if (relPath.startsWith('data:') || relPath.startsWith('http://') || relPath.startsWith('https://')) {
                 return relPath;
             }
@@ -1127,14 +1127,14 @@
                 id: c.id || ('c-' + Date.now() + '-' + i),
                 name: (c.name || 'Standart').trim(),
                 hex: c.hex || '#696858',
-                image: c.image || thumbnail || 'uploads/products/s2011-default.png'
+                image: c.image || thumbnail || 'uploads/products/s2011-default.webp'
             }));
 
             if (!thumbnail && cleanedColors.length > 0) {
                 thumbnail = cleanedColors[0].image;
             }
             if (!thumbnail) {
-                thumbnail = 'uploads/thumbnails/s2011-thumb.png';
+                thumbnail = 'uploads/thumbnails/s2011-thumb.webp';
             }
 
             if (prodId) {

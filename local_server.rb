@@ -12,6 +12,8 @@ require 'securerandom'
 require 'uri'
 require 'net/http'
 
+WEBrick::HTTPUtils::DefaultMimeTypes['webp'] = 'image/webp'
+
 # Apple macOS Ruby 2.6 WEBrick Türkçe/Unicode Klasör Yolu Düzeltmesi (Monkey Patch)
 module WEBrick
   module HTTPServlet

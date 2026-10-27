@@ -64,32 +64,32 @@
       "categoryId": "cat-ceket",
       "code": "C8012",
       "subtitle": "Ceket",
-      "thumbnail": "uploads/thumbnails/c8012-vi-zon-i-maj-1793023229-426e66.png",
+      "thumbnail": "uploads/thumbnails/c8012-vi-zon-i-maj-1793023229-426e66.webp",
       "order": 1,
       "colors": [
         {
           "id": "c-1",
           "name": "Antrasit",
           "hex": "#625a66",
-          "image": "uploads/products/c8012-antrasit-1.png"
+          "image": "uploads/products/c8012-antrasit-1.webp"
         },
         {
           "id": "c-2",
           "name": "Vizon",
           "hex": "#a48e8e",
-          "image": "uploads/products/c8012-vizon-2.png"
+          "image": "uploads/products/c8012-vizon-2.webp"
         },
         {
           "id": "c-3",
           "name": "Lacivert",
           "hex": "#525d79",
-          "image": "uploads/products/c8012-lacivert-3.png"
+          "image": "uploads/products/c8012-lacivert-3.webp"
         },
         {
           "id": "c-1793023252140-qsf",
           "name": "Siyah",
           "hex": "#696858",
-          "image": "uploads/products/c8012-siyah-4.png"
+          "image": "uploads/products/c8012-siyah-4.webp"
         }
       ],
       "outOfStock": false
@@ -99,26 +99,26 @@
       "categoryId": "cat-mont",
       "code": "M9012",
       "subtitle": "Mont",
-      "thumbnail": "uploads/thumbnails/m9012-tas--i-maj-1793022230-5eba8a.png",
+      "thumbnail": "uploads/thumbnails/m9012-tas--i-maj-1793022230-5eba8a.webp",
       "order": 1,
       "colors": [
         {
           "id": "c-701",
           "name": "Taş",
           "hex": "#cdc8c5",
-          "image": "uploads/products/m9012-tas--model-o-n-1793022289-64cedb.png"
+          "image": "uploads/products/m9012-tas--model-o-n-1793022289-64cedb.webp"
         },
         {
           "id": "c-702",
           "name": "Lacivert",
           "hex": "#2a3141",
-          "image": "uploads/products/laci-vert-1793022334-8f869b.png"
+          "image": "uploads/products/laci-vert-1793022334-8f869b.webp"
         },
         {
           "id": "c-1793022313206-gkv",
           "name": "Siyah",
           "hex": "#211f22",
-          "image": "uploads/products/si-yah-1793022344-f551ac.png"
+          "image": "uploads/products/si-yah-1793022344-f551ac.webp"
         }
       ],
       "outOfStock": false
@@ -128,50 +128,50 @@
       "categoryId": "cat-kazak",
       "code": "S2011",
       "subtitle": "Sweatshirt / Kazak",
-      "thumbnail": "uploads/thumbnails/s2011-bej-i-maj-1793023727-61e175.png",
+      "thumbnail": "uploads/thumbnails/s2011-bej-i-maj-1793023727-61e175.webp",
       "order": 2,
       "colors": [
         {
           "id": "c-201",
           "name": "Bej",
           "hex": "#afa9a0",
-          "image": "uploads/products/s2011-bej-model-o-n-1793023863-f9b6cd.png"
+          "image": "uploads/products/s2011-bej-model-o-n-1793023863-f9b6cd.webp"
         },
         {
           "id": "c-202",
           "name": "Ekru",
           "hex": "#f2eeea",
-          "image": "uploads/products/ekru-1793023879-2daa03.png"
+          "image": "uploads/products/ekru-1793023879-2daa03.webp"
         },
         {
           "id": "c-203",
           "name": "Haki",
           "hex": "#4f4742",
-          "image": "uploads/products/haki--1793023891-c71c22.png"
+          "image": "uploads/products/haki--1793023891-c71c22.webp"
         },
         {
           "id": "c-204",
           "name": "Kahve",
           "hex": "#534042",
-          "image": "uploads/products/kahve-1793023901-c71f27.png"
+          "image": "uploads/products/kahve-1793023901-c71f27.webp"
         },
         {
           "id": "c-1793023773789-53z",
           "name": "K.Bordo",
           "hex": "#562e36",
-          "image": "uploads/products/k-bordo-1793023913-ea41c1.png"
+          "image": "uploads/products/k-bordo-1793023913-ea41c1.webp"
         },
         {
           "id": "c-1793023779903-99s",
           "name": "Lacivert",
           "hex": "#2b2c3d",
-          "image": "uploads/products/laci-vert-1793023923-3c6774.png"
+          "image": "uploads/products/laci-vert-1793023923-3c6774.webp"
         },
         {
           "id": "c-1793023788287-vp2",
           "name": "Siyah",
           "hex": "#282327",
-          "image": "uploads/products/si-yah-1793023935-db008d.png"
+          "image": "uploads/products/si-yah-1793023935-db008d.webp"
         }
       ],
       "outOfStock": false
@@ -181,62 +181,62 @@
       "categoryId": "cat-gomlek",
       "code": "G5047",
       "subtitle": "Gömlek",
-      "thumbnail": "uploads/thumbnails/g5043-gri--i-maj-1793088129-9df93a.png",
+      "thumbnail": "uploads/thumbnails/g5043-gri--i-maj-1793088129-9df93a.webp",
       "order": 10,
       "colors": [
         {
           "id": "c-1793017934078",
           "name": "Gri",
           "hex": "#a9a7b0",
-          "image": "uploads/products/g5043-gri--model-o-n-1793088139-276608.png"
+          "image": "uploads/products/g5043-gri--model-o-n-1793088139-276608.webp"
         },
         {
           "id": "c-1793088088615-vyt",
           "name": "Ekru",
           "hex": "#f3eae3",
-          "image": "uploads/products/ekru-1793088148-e87afb.png"
+          "image": "uploads/products/ekru-1793088148-e87afb.webp"
         },
         {
           "id": "c-1793088092115-ow8",
           "name": "Haki",
           "hex": "#7d6c63",
-          "image": "uploads/products/haki--1793088156-db67d1.png"
+          "image": "uploads/products/haki--1793088156-db67d1.webp"
         },
         {
           "id": "c-1793088094115-fwj",
           "name": "Kahve",
           "hex": "#7e4f4f",
-          "image": "uploads/products/kahve-1793088162-c3fd6e.png"
+          "image": "uploads/products/kahve-1793088162-c3fd6e.webp"
         },
         {
           "id": "c-1793088094682-zyn",
           "name": "Lacivert",
           "hex": "#393553",
-          "image": "uploads/products/laci-vert-1793088168-8e54a6.png"
+          "image": "uploads/products/laci-vert-1793088168-8e54a6.webp"
         },
         {
           "id": "c-1793088095249-m61",
           "name": "Mavi",
           "hex": "#c2d1e4",
-          "image": "uploads/products/mavi--1793088175-8a40fc.png"
+          "image": "uploads/products/mavi--1793088175-8a40fc.webp"
         },
         {
           "id": "c-1793088095848-l46",
           "name": "Siyah",
           "hex": "#372f3a",
-          "image": "uploads/products/si-yah-1793088183-4a48f4.png"
+          "image": "uploads/products/si-yah-1793088183-4a48f4.webp"
         },
         {
           "id": "c-1793088188314-ikf",
           "name": "Taş",
           "hex": "#a69591",
-          "image": "uploads/products/tas--1793088197-fa6b31.png"
+          "image": "uploads/products/tas--1793088197-fa6b31.webp"
         },
         {
           "id": "c-1793088189115-64b",
           "name": "Vizon",
           "hex": "#87745c",
-          "image": "uploads/products/vi-zon-1793088202-157c3c.png"
+          "image": "uploads/products/vi-zon-1793088202-157c3c.webp"
         }
       ],
       "outOfStock": false
@@ -247,26 +247,26 @@
       "code": "M9013",
       "subtitle": "Mont",
       "outOfStock": false,
-      "thumbnail": "uploads/thumbnails/m9013-laci-vert-i-maj-1793022476-b219cd.png",
+      "thumbnail": "uploads/thumbnails/m9013-laci-vert-i-maj-1793022476-b219cd.webp",
       "order": 11,
       "colors": [
         {
           "id": "c-1793022443950",
           "name": "Taş",
           "hex": "#b0a39f",
-          "image": "uploads/products/tas--1793022578-3d87d8.png"
+          "image": "uploads/products/tas--1793022578-3d87d8.webp"
         },
         {
           "id": "c-1793022533059-d6q",
           "name": "Lacivert",
           "hex": "#3b4053",
-          "image": "uploads/products/m9013-laci-vert-model-o-n-1793022592-595632.png"
+          "image": "uploads/products/m9013-laci-vert-model-o-n-1793022592-595632.webp"
         },
         {
           "id": "c-1793022537925-x5o",
           "name": "Siyah",
           "hex": "#322d2e",
-          "image": "uploads/products/si-yah-1793022605-0d8cbd.png"
+          "image": "uploads/products/si-yah-1793022605-0d8cbd.webp"
         }
       ]
     },
@@ -276,26 +276,26 @@
       "code": "M9014",
       "subtitle": "Mont",
       "outOfStock": false,
-      "thumbnail": "uploads/thumbnails/m9014-si-yah-i-maj-1793022673-094709.png",
+      "thumbnail": "uploads/thumbnails/m9014-si-yah-i-maj-1793022673-094709.webp",
       "order": 12,
       "colors": [
         {
           "id": "c-1793022630526",
           "name": "Taş",
           "hex": "#d6ccc4",
-          "image": "uploads/products/tas--1793022758-0816cf.png"
+          "image": "uploads/products/tas--1793022758-0816cf.webp"
         },
         {
           "id": "c-1793022682642-9jq",
           "name": "Lacivert",
           "hex": "#3b3c4d",
-          "image": "uploads/products/laci-vert-1793022770-fde31a.png"
+          "image": "uploads/products/laci-vert-1793022770-fde31a.webp"
         },
         {
           "id": "c-1793022688692-mg9",
           "name": "Siyah",
           "hex": "#303030",
-          "image": "uploads/products/m9014-si-yah-model-o-n-1793022788-5931c2.png"
+          "image": "uploads/products/m9014-si-yah-model-o-n-1793022788-5931c2.webp"
         }
       ]
     },
@@ -305,38 +305,38 @@
       "code": "M9015",
       "subtitle": "Mont",
       "outOfStock": false,
-      "thumbnail": "uploads/thumbnails/m9015-laci-vert-i-maj-1793022932-ec5698.png",
+      "thumbnail": "uploads/thumbnails/m9015-laci-vert-i-maj-1793022932-ec5698.webp",
       "order": 13,
       "colors": [
         {
           "id": "c-1793022898543",
           "name": "Beyaz",
           "hex": "#f6f5f9",
-          "image": "uploads/products/beyaz-1793022969-69d882.png"
+          "image": "uploads/products/beyaz-1793022969-69d882.webp"
         },
         {
           "id": "c-1793022941676-87p",
           "name": "Gri",
           "hex": "#aba9aa",
-          "image": "uploads/products/gri--1793022978-f16e9b.png"
+          "image": "uploads/products/gri--1793022978-f16e9b.webp"
         },
         {
           "id": "c-1793022946508-bdf",
           "name": "Haki",
           "hex": "#5c4641",
-          "image": "uploads/products/haki--1793022987-1b46eb.png"
+          "image": "uploads/products/haki--1793022987-1b46eb.webp"
         },
         {
           "id": "c-1793022953193-jji",
           "name": "Lacivert",
           "hex": "#393a4a",
-          "image": "uploads/products/m9015-laci-vert-model-o-n-1793023003-4159f6.png"
+          "image": "uploads/products/m9015-laci-vert-model-o-n-1793023003-4159f6.webp"
         },
         {
           "id": "c-1793022959342-8gl",
           "name": "Siyah",
           "hex": "#3c383b",
-          "image": "uploads/products/si-yah-1793023016-26e805.png"
+          "image": "uploads/products/si-yah-1793023016-26e805.webp"
         }
       ]
     },
@@ -346,38 +346,38 @@
       "code": "Leo Tencel",
       "subtitle": "Kot / Jeans",
       "outOfStock": false,
-      "thumbnail": "uploads/thumbnails/leo-tencel-tas--i-maj-1793087562-743604.png",
+      "thumbnail": "uploads/thumbnails/leo-tencel-tas--i-maj-1793087562-743604.webp",
       "order": 8,
       "colors": [
         {
           "id": "c-1793087482085",
           "name": "Taş",
           "hex": "#ada398",
-          "image": "uploads/products/leo-tencel-tas--ghost-o-n-1793087719-0c9e28.png"
+          "image": "uploads/products/leo-tencel-tas--ghost-o-n-1793087719-0c9e28.webp"
         },
         {
           "id": "c-1793087578417-1m8",
           "name": "Bej",
           "hex": "#9b8160",
-          "image": "uploads/products/bej-1793087633-0aedb3.png"
+          "image": "uploads/products/bej-1793087633-0aedb3.webp"
         },
         {
           "id": "c-1793087584487-4al",
           "name": "Gri",
           "hex": "#95979a",
-          "image": "uploads/products/gri--1793087651-f12626.png"
+          "image": "uploads/products/gri--1793087651-f12626.webp"
         },
         {
           "id": "c-1793087589087-ua2",
           "name": "Lacivert",
           "hex": "#1b1d2c",
-          "image": "uploads/products/laci-vert-1793087661-af8a8d.png"
+          "image": "uploads/products/laci-vert-1793087661-af8a8d.webp"
         },
         {
           "id": "c-1793087596202-6tn",
           "name": "Siyah",
           "hex": "#191819",
-          "image": "uploads/products/si-yah-1793087671-a08e65.png"
+          "image": "uploads/products/si-yah-1793087671-a08e65.webp"
         }
       ]
     },
@@ -387,38 +387,38 @@
       "code": "P1000",
       "subtitle": "Pantolon",
       "outOfStock": false,
-      "thumbnail": "uploads/thumbnails/p1000-a-gri--i-maj-1793087788-bfbdd3.png",
+      "thumbnail": "uploads/thumbnails/p1000-a-gri--i-maj-1793087788-bfbdd3.webp",
       "order": 9,
       "colors": [
         {
           "id": "c-1793087752623",
           "name": "A.Gri",
           "hex": "#696858",
-          "image": "uploads/products/p1000-a-gri--ghost-o-n-1793087797-4add08.png"
+          "image": "uploads/products/p1000-a-gri--ghost-o-n-1793087797-4add08.webp"
         },
         {
           "id": "c-1793087799508-a1d",
           "name": "Gri",
           "hex": "#4a484f",
-          "image": "uploads/products/gri--1793087840-ce5e20.png"
+          "image": "uploads/products/gri--1793087840-ce5e20.webp"
         },
         {
           "id": "c-1793087807389-apr",
           "name": "Füme",
           "hex": "#242424",
-          "image": "uploads/products/fu-me-1793087844-a76260.png"
+          "image": "uploads/products/fu-me-1793087844-a76260.webp"
         },
         {
           "id": "c-1793087808022-s19",
           "name": "Taba",
           "hex": "#8b7759",
-          "image": "uploads/products/taba-1793087850-610f96.png"
+          "image": "uploads/products/taba-1793087850-610f96.webp"
         },
         {
           "id": "c-1793087808672-3ev",
           "name": "Yeşil",
           "hex": "#4a453a",
-          "image": "uploads/products/yes-i-l-1793087854-f056f1.png"
+          "image": "uploads/products/yes-i-l-1793087854-f056f1.webp"
         }
       ]
     },
@@ -428,32 +428,32 @@
       "code": "TKM8022",
       "subtitle": "",
       "outOfStock": false,
-      "thumbnail": "uploads/thumbnails/tkm8022-si-yah-i-maj-1793088423-f33d22.jpg",
+      "thumbnail": "uploads/thumbnails/tkm8022-si-yah-i-maj-1793088423-f33d22.webp",
       "order": 10,
       "colors": [
         {
           "id": "c-1793088321734",
           "name": "Siyah",
           "hex": "#303033",
-          "image": "uploads/products/tkm8022-si-yah-model-o-n-1793088442-a10156.jpg"
+          "image": "uploads/products/tkm8022-si-yah-model-o-n-1793088442-a10156.webp"
         },
         {
           "id": "c-1793088447000-bic",
           "name": "Bej",
           "hex": "#746864",
-          "image": "uploads/products/tkm8022-bej-model-o-n-1793088455-2ba56b.jpg"
+          "image": "uploads/products/tkm8022-bej-model-o-n-1793088455-2ba56b.webp"
         },
         {
           "id": "c-1793088447916-9gs",
           "name": "Füme",
           "hex": "#2a2a29",
-          "image": "uploads/products/tkm8022-fu-me-model-o-n-1793088459-3c0c25.jpg"
+          "image": "uploads/products/tkm8022-fu-me-model-o-n-1793088459-3c0c25.webp"
         },
         {
           "id": "c-1793088468897-t5b",
           "name": "Kahve",
           "hex": "#312622",
-          "image": "uploads/products/tkm8022-kahve-model-o-n-1793088471-34ce79.jpg"
+          "image": "uploads/products/tkm8022-kahve-model-o-n-1793088471-34ce79.webp"
         }
       ]
     },
@@ -463,32 +463,32 @@
       "code": "E2000",
       "subtitle": "Eşofman",
       "outOfStock": false,
-      "thumbnail": "uploads/thumbnails/e2000-lacivert-imaj-1793088868-5b500c.png",
+      "thumbnail": "uploads/thumbnails/e2000-lacivert-imaj-1793088868-5b500c.webp",
       "order": 11,
       "colors": [
         {
           "id": "c-1793088530817",
           "name": "Gri",
           "hex": "#a9a29c",
-          "image": "uploads/products/gri-1793088774-6c5a2c.png"
+          "image": "uploads/products/gri-1793088774-6c5a2c.webp"
         },
         {
           "id": "c-1793088775684-vyh",
           "name": "Kahve",
           "hex": "#614948",
-          "image": "uploads/products/kahve-1793088784-ca5884.png"
+          "image": "uploads/products/kahve-1793088784-ca5884.webp"
         },
         {
           "id": "c-1793088776681-jxz",
           "name": "Lacivert",
           "hex": "#2d2e40",
-          "image": "uploads/products/e2000-lacivert-ghost-o-n-1793088848-5c03f8.png"
+          "image": "uploads/products/e2000-lacivert-ghost-o-n-1793088848-5c03f8.webp"
         },
         {
           "id": "c-1793088777333-hvi",
           "name": "Siyah",
           "hex": "#535159",
-          "image": "uploads/products/siyah-1793088786-93f1e9.png"
+          "image": "uploads/products/siyah-1793088786-93f1e9.webp"
         }
       ]
     },
@@ -498,20 +498,20 @@
       "code": "Y9007",
       "subtitle": "",
       "outOfStock": false,
-      "thumbnail": "uploads/thumbnails/y9007-tas--i-maj-1793088984-60b0fe.png",
+      "thumbnail": "uploads/thumbnails/y9007-tas--i-maj-1793088984-60b0fe.webp",
       "order": 12,
       "colors": [
         {
           "id": "c-1793088926655",
           "name": "Taş",
           "hex": "#a89c92",
-          "image": "uploads/products/y9007-tas--model-o-n-1793089020-df254d.png"
+          "image": "uploads/products/y9007-tas--model-o-n-1793089020-df254d.webp"
         },
         {
           "id": "c-1793089030939-xmc",
           "name": "Lacivert",
           "hex": "#2a3040",
-          "image": "uploads/products/lacivert-1793089033-8821f9.png"
+          "image": "uploads/products/lacivert-1793089033-8821f9.webp"
         }
       ]
     }

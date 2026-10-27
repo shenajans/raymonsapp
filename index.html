@@ -91,7 +91,7 @@
                 <div class="relative h-full aspect-[9/16] flex items-center justify-center overflow-hidden shadow-sm bg-[#dcdad7]">
                     <img
                         id="main-preview-image"
-                        src="uploads/products/s2011-default.png"
+                        src="uploads/products/s2011-default.webp"
                         alt="Ürün Önizleme"
                         class="w-full h-full object-cover preview-img-transition preview-fade-in cursor-zoom-in"
                         onclick="openLightbox()"
@@ -306,7 +306,7 @@
                         state.activeColorId = sameColor ? sameColor.id : null;
                         const coverOrColorImg = sameColor
                             ? (sameColor.image || sameProd.thumbnail)
-                            : (sameProd.thumbnail || (sameProd.colors && sameProd.colors[0] ? sameProd.colors[0].image : 'uploads/products/s2011-default.png'));
+                            : (sameProd.thumbnail || (sameProd.colors && sameProd.colors[0] ? sameProd.colors[0].image : 'uploads/products/s2011-default.webp'));
                         updateMainPreviewImage(coverOrColorImg, true);
                         updateOutOfStockPreviewBadge(sameProd);
                     } else {
@@ -347,7 +347,7 @@
                 state.activeProductId = firstProd.id;
                 // Ürün seçildiğinde önce ürünün kendi Kapak (Thumbnail) görseli gösterilir; renk seçilince renk görseline geçer
                 state.activeColorId = null;
-                const coverImg = firstProd.thumbnail || (firstProd.colors && firstProd.colors[0] ? firstProd.colors[0].image : 'uploads/products/s2011-default.png');
+                const coverImg = firstProd.thumbnail || (firstProd.colors && firstProd.colors[0] ? firstProd.colors[0].image : 'uploads/products/s2011-default.webp');
                 updateMainPreviewImage(coverImg);
                 updateOutOfStockPreviewBadge(firstProd);
             } else {
@@ -383,7 +383,7 @@
 
             state.activeProductId = prod.id;
             state.activeColorId = null;
-            const coverImg = prod.thumbnail || (prod.colors && prod.colors[0] ? prod.colors[0].image : 'uploads/products/s2011-default.png');
+            const coverImg = prod.thumbnail || (prod.colors && prod.colors[0] ? prod.colors[0].image : 'uploads/products/s2011-default.webp');
             updateMainPreviewImage(coverImg);
             updateOutOfStockPreviewBadge(prod);
             renderProducts();
@@ -542,7 +542,7 @@
 
                 const subtitleColor = isActive ? 'text-white/90' : 'text-[#696858]';
                 const chevronColor = isActive ? 'text-white' : 'text-[#696858]';
-                const thumbSrc = prod.thumbnail || (prod.colors && prod.colors[0] ? prod.colors[0].image : 'uploads/products/s2011-default.png');
+                const thumbSrc = prod.thumbnail || (prod.colors && prod.colors[0] ? prod.colors[0].image : 'uploads/products/s2011-default.webp');
                 const hasSubtitle = Boolean((prod.subtitle || '').trim());
 
                 return `
