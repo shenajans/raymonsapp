@@ -331,6 +331,47 @@
           "image": "uploads/products/si-yah-1793087671-a08e65.png"
         }
       ]
+    },
+    {
+      "id": "prod-1793087890876",
+      "categoryId": "cat-pantolon",
+      "code": "P1000",
+      "subtitle": "Pantolon",
+      "outOfStock": false,
+      "thumbnail": "uploads/thumbnails/p1000-a-gri--i-maj-1793087788-bfbdd3.png",
+      "order": 9,
+      "colors": [
+        {
+          "id": "c-1793087752623",
+          "name": "A.Gri",
+          "hex": "#696858",
+          "image": "uploads/products/p1000-a-gri--ghost-o-n-1793087797-4add08.png"
+        },
+        {
+          "id": "c-1793087799508-a1d",
+          "name": "Gri",
+          "hex": "#4a484f",
+          "image": "uploads/products/gri--1793087840-ce5e20.png"
+        },
+        {
+          "id": "c-1793087807389-apr",
+          "name": "Füme",
+          "hex": "#242424",
+          "image": "uploads/products/fu-me-1793087844-a76260.png"
+        },
+        {
+          "id": "c-1793087808022-s19",
+          "name": "Taba",
+          "hex": "#8b7759",
+          "image": "uploads/products/taba-1793087850-610f96.png"
+        },
+        {
+          "id": "c-1793087808672-3ev",
+          "name": "Yeşil",
+          "hex": "#4a453a",
+          "image": "uploads/products/yes-i-l-1793087854-f056f1.png"
+        }
+      ]
     }
   ]
 }
