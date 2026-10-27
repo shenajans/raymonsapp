@@ -55,11 +55,14 @@ FileUtils.mkdir_p(File.join(ROOT_DIR, 'data'))
 
 def get_admin_config
   unless File.exist?(CONFIG_FILE)
-    cfg = { 'password' => 'raymons2026', 'token' => SecureRandom.hex(16) }
+    cfg = { 'username' => 'RaymonsLife', 'password' => '2627SK', 'token' => SecureRandom.hex(16) }
     File.write(CONFIG_FILE, JSON.pretty_generate(cfg))
     return cfg
   end
-  JSON.parse(File.read(CONFIG_FILE))
+  cfg = JSON.parse(File.read(CONFIG_FILE))
+  cfg['username'] ||= 'RaymonsLife'
+  cfg['password'] ||= '2627SK'
+  cfg
 end
 
 def read_catalog_data
@@ -181,13 +184,17 @@ api_handler = proc do |req, res|
 
   case action
   when 'login'
+    user = (body['username'] || query_params['username'] || req_query['username']).to_s.strip.downcase
     pwd = (body['password'] || query_params['password'] || req_query['password']).to_s
-    if pwd == cfg['password']
+    expected_user = (cfg['username'] || 'RaymonsLife').to_s.strip.downcase
+    expected_pwd = (cfg['password'] || '2627SK').to_s
+
+    if user == expected_user && pwd == expected_pwd
       res.status = 200
       res.body = JSON.generate({ success: true, token: cfg['token'], message: 'Giriş başarılı.' })
     else
       res.status = 401
-      res.body = JSON.generate({ success: false, message: 'Hatalı yönetici şifresi!' })
+      res.body = JSON.generate({ success: false, message: 'Kullanıcı adı veya şifre hatalı!' })
     end
 
   when 'change_password'

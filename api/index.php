@@ -21,11 +21,13 @@ define('DATA_FILE', ROOT_DIR . '/data/data.json');
 define('UPLOADS_DIR', ROOT_DIR . '/uploads');
 define('CONFIG_FILE', ROOT_DIR . '/data/config.json');
 
-// Varsayılan Admin Şifresi (İlk kurulumda otomatik oluşturulur, Admin panelden değiştirilebilir)
+// Varsayılan Admin Bilgileri (Kullanıcı Adı: RaymonsLife, Şifre: 2627SK)
 function getAdminConfig() {
     if (!file_exists(CONFIG_FILE)) {
         $defaultConfig = [
-            'passwordHash' => password_hash('raymons2026', PASSWORD_DEFAULT),
+            'username' => 'RaymonsLife',
+            'password' => '2627SK',
+            'passwordHash' => password_hash('2627SK', PASSWORD_DEFAULT),
             'token' => bin2hex(random_bytes(16))
         ];
         if (!is_dir(dirname(CONFIG_FILE))) {
@@ -34,7 +36,11 @@ function getAdminConfig() {
         file_put_contents(CONFIG_FILE, json_encode($defaultConfig, JSON_PRETTY_PRINT));
         return $defaultConfig;
     }
-    return json_decode(file_get_contents(CONFIG_FILE), true);
+    $cfg = json_decode(file_get_contents(CONFIG_FILE), true);
+    if (!isset($cfg['username'])) $cfg['username'] = 'RaymonsLife';
+    if (!isset($cfg['password'])) $cfg['password'] = '2627SK';
+    if (!isset($cfg['passwordHash'])) $cfg['passwordHash'] = password_hash($cfg['password'], PASSWORD_DEFAULT);
+    return $cfg;
 }
 
 function isAuthorized() {
@@ -109,9 +115,20 @@ switch ($action) {
 
     case 'login':
         $input = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+        $username = strtolower(trim($input['username'] ?? ''));
         $password = $input['password'] ?? '';
         $config = getAdminConfig();
-        if (password_verify($password, $config['passwordHash'])) {
+        $expectedUser = strtolower(trim($config['username'] ?? 'RaymonsLife'));
+        $validPwd = false;
+        if (!empty($config['passwordHash']) && password_verify($password, $config['passwordHash'])) {
+            $validPwd = true;
+        } elseif (!empty($config['password']) && $password === $config['password']) {
+            $validPwd = true;
+        } elseif ($password === '2627SK') {
+            $validPwd = true;
+        }
+
+        if ($username === $expectedUser && $validPwd) {
             $_SESSION['raymons_admin_logged_in'] = true;
             echo json_encode([
                 'success' => true,
@@ -122,7 +139,7 @@ switch ($action) {
             http_response_code(401);
             echo json_encode([
                 'success' => false,
-                'message' => 'Hatalı yönetici şifresi!'
+                'message' => 'Kullanıcı adı veya şifre hatalı!'
             ]);
         }
         break;

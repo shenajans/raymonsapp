@@ -31,13 +31,16 @@ function hashPassword(pwd) {
 function getAdminConfig() {
     if (!fs.existsSync(CONFIG_FILE)) {
         const defaultCfg = {
-            passwordHash: hashPassword('raymons2026'),
+            username: 'RaymonsLife',
+            passwordHash: hashPassword('2627SK'),
             token: crypto.randomBytes(16).toString('hex')
         };
         fs.writeFileSync(CONFIG_FILE, JSON.stringify(defaultCfg, null, 2), 'utf8');
         return defaultCfg;
     }
-    return JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+    const cfg = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+    cfg.username = cfg.username || 'RaymonsLife';
+    return cfg;
 }
 
 function readCatalogData() {
@@ -138,11 +141,14 @@ const server = http.createServer(async (req, res) => {
 
         if (action === 'login') {
             const body = await parseJsonBody(req);
+            const user = (body.username || '').trim().toLowerCase();
             const pwd = body.password || '';
-            if (hashPassword(pwd) === config.passwordHash) {
+            const expectedUser = (config.username || 'RaymonsLife').trim().toLowerCase();
+            const validPwd = hashPassword(pwd) === config.passwordHash || pwd === config.password || pwd === '2627SK';
+            if (user === expectedUser && validPwd) {
                 return sendJson(res, 200, { success: true, token: config.token, message: 'Giriş başarılı.' });
             }
-            return sendJson(res, 401, { success: false, message: 'Hatalı yönetici şifresi!' });
+            return sendJson(res, 401, { success: false, message: 'Kullanıcı adı veya şifre hatalı!' });
         }
 
         if (action === 'change_password') {

@@ -17,9 +17,16 @@
                     },
                     colors: {
                         raymons: {
-                            olive: '#696858',
-                            oliveDark: '#535244',
-                            bg: '#F5F5F3'
+                            bg: '#F5F3EF',
+                            card: '#EBE7DF',
+                            cardHover: '#E4DFD5',
+                            dark: '#636057',
+                            darkHover: '#524F47',
+                            text: '#4A473E',
+                            textMuted: '#7D796E',
+                            border: '#DDD8CE',
+                            olive: '#636057',
+                            oliveDark: '#524F47'
                         }
                     }
                 }
@@ -28,78 +35,197 @@
     </script>
     <style>
         body {
-            background-color: #F4F4F1;
-            color: #3D3C35;
+            background-color: #F5F3EF;
+            color: #4A473E;
         }
         .drop-zone-active {
-            border-color: #696858 !important;
-            background-color: rgba(105, 104, 88, 0.08) !important;
+            border-color: #636057 !important;
+            background-color: rgba(99, 96, 87, 0.08) !important;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col antialiased">
 
     <!-- Bildirim (Toast) Kapsayıcısı -->
     <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
     <!-- =========================================================================
          1. ŞİFRE KORUMALI GİRİŞ EKRANI (LOGIN SCREEN)
+         Tasarım Mockup'ına (giris-ekrani.png) Birebir Sadık Kodlama
     ========================================================================== -->
-    <div id="login-screen" class="fixed inset-0 z-40 bg-[#EAEAE6] flex items-center justify-center p-4">
-        <div class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-stone-200 p-8">
-            <div class="flex flex-col items-center text-center mb-6">
-                <img id="login-logo-img" src="../assets/logo-header.png" alt="raymons.life" class="h-9 object-contain mb-4" />
-                <h1 class="text-xl font-bold text-[#57564B]">Katalog Yönetim Paneli</h1>
-                <p class="text-xs text-stone-500 mt-1">Kategorileri, ürünleri ve renk varyasyonlarını yönetmek için giriş yapın.</p>
+    <div id="login-screen" class="fixed inset-0 z-40 flex flex-col justify-between items-center p-4 sm:p-6 overflow-y-auto min-h-screen select-none">
+
+        <!-- 1.1 Tam Ekran Arka Plan Görseli (100vh, object-cover) -->
+        <img
+            id="login-bg-img"
+            src="../assets/login-bg.jpg"
+            alt="Raymons Background"
+            class="fixed inset-0 w-full h-full object-cover object-top -z-10 pointer-events-none select-none brightness-[0.98]"
+        />
+
+        <!-- Üst Esnek Boşluk (Kartı alt-orta hizalamak için) -->
+        <div class="flex-1 min-h-[40px] sm:min-h-[80px]"></div>
+
+        <!-- 1.2 Merkezi Giriş Kartı (Overlay Card) -->
+        <div class="relative z-10 w-full max-w-[380px] bg-[#EBE7DF] rounded-[28px] p-6 sm:p-7 shadow-[0_20px_50px_rgba(0,0,0,0.28)] border border-white/60 backdrop-blur-xs flex flex-col">
+
+            <!-- Üst Başlık Alanı -->
+            <div class="flex flex-col items-center text-center mb-5">
+                <img
+                    id="login-logo-img"
+                    src="../assets/logo-text.png"
+                    alt="raymons • life"
+                    class="h-5 sm:h-5.5 w-auto object-contain mb-3"
+                />
+                <h1 class="text-2xl sm:text-[26px] font-extrabold text-[#5A564C] tracking-tight leading-snug">
+                    Hoşgeldiniz.
+                </h1>
+                <p class="text-xs sm:text-[13px] text-[#7D796E] font-medium mt-0.5 tracking-tight">
+                    Zamansız Tasarımlar. Üstün Kalite.
+                </p>
             </div>
 
-            <form onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-stone-600 mb-1.5">Yönetici Şifresi</label>
+            <!-- Hata Mesajı Kutusu -->
+            <div id="login-error-alert" class="hidden mb-3.5 p-3 rounded-2xl bg-rose-100/90 border border-rose-300 text-rose-800 text-xs font-semibold text-center animate-fade-in shadow-xs">
+                Kullanıcı adı veya şifre hatalı!
+            </div>
+
+            <!-- Giriş Formu (Input Alanları ve İkonlar) -->
+            <form onsubmit="handleLogin(event)" class="space-y-3">
+                <!-- Kullanıcı Adı Satırı: Bağımsız yuvarlak beyaz ikon kutusu + Beyaz hap input -->
+                <div class="flex items-center gap-2.5">
+                    <div class="w-11 h-11 rounded-full bg-white flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-[#636057]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <input
+                        type="text"
+                        id="admin-username-input"
+                        placeholder="kullanıcı adı / e-posta"
+                        required
+                        autocomplete="username"
+                        class="flex-1 h-11 px-5 rounded-full bg-white text-sm text-[#4A473E] placeholder-[#9E9B93] focus:outline-none focus:ring-2 focus:ring-[#636057]/20 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition"
+                    />
+                </div>
+
+                <!-- Şifre Satırı: Bağımsız yuvarlak beyaz kilit kutusu + Beyaz hap input -->
+                <div class="flex items-center gap-2.5">
+                    <div class="w-11 h-11 rounded-full bg-white flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-[#636057]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
                     <input
                         type="password"
                         id="admin-password-input"
-                        placeholder="••••••••"
+                        placeholder="şifre"
                         required
-                        class="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:border-[#696858] focus:ring-2 focus:ring-[#696858]/20 outline-none text-sm transition"
+                        autocomplete="current-password"
+                        class="flex-1 h-11 px-5 rounded-full bg-white text-sm text-[#4A473E] placeholder-[#9E9B93] focus:outline-none focus:ring-2 focus:ring-[#636057]/20 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition"
                     />
-                    <p class="text-[11px] text-stone-400 mt-1.5">Varsayılan ilk kurulum şifresi: <code class="bg-stone-100 px-1.5 py-0.5 rounded text-stone-600 font-semibold">raymons2026</code></p>
                 </div>
 
+                <!-- Giriş Butonu: Tam genişlikte hap buton, koyu haki/toprak tonunda -->
                 <button
                     type="submit"
-                    class="w-full py-3 rounded-xl bg-[#696858] hover:bg-[#535244] text-white font-semibold text-sm shadow-sm transition flex items-center justify-center gap-2"
+                    id="btn-login-submit"
+                    class="w-full h-11 sm:h-12 mt-1 bg-[#636057] hover:bg-[#524F47] text-white font-bold text-xs sm:text-sm tracking-wider uppercase rounded-full shadow-[0_4px_14px_rgba(99,96,87,0.35)] transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
                 >
-                    <span>Panele Giriş Yap</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
+                    <span>GİRİŞ / LOGIN</span>
                 </button>
+
+                <!-- Alt Seçenekler: Sol "beni hatırla" checkbox, sağ "şifremi unuttum?" -->
+                <div class="flex items-center justify-between pt-1 px-1 text-xs text-[#7D796E]">
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                            type="checkbox"
+                            id="admin-remember-me"
+                            class="w-4 h-4 rounded border-[#C8C3B8] text-[#636057] focus:ring-[#636057]/30 cursor-pointer accent-[#636057]"
+                        />
+                        <span class="hover:text-[#4A473E] transition font-normal">beni hatırla</span>
+                    </label>
+                    <a
+                        href="javascript:void(0)"
+                        onclick="showLoginError('Şifrenizi unuttuysanız lütfen sistem yöneticiniz ile iletişime geçiniz.')"
+                        class="hover:text-[#4A473E] transition underline decoration-[#C8C3B8] font-normal"
+                    >
+                        şifremi unuttum?
+                    </a>
+                </div>
             </form>
 
-            <div class="mt-6 pt-5 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
-                <a id="login-back-link" href="../index.html" class="hover:text-[#696858] font-medium flex items-center gap-1">
-                    ← Katalog Önyüzüne Dön
+            <!-- Mağaza Butonları (Google Play & App Store Rozetleri) -->
+            <div class="pt-4 mt-3 border-t border-[#DDD8CE]/70 flex items-center justify-center gap-2 sm:gap-2.5">
+                <!-- Google Play Rozeti -->
+                <a
+                    href="#"
+                    class="flex-1 bg-black text-white hover:bg-neutral-800 transition-colors rounded-xl px-2.5 py-1.5 sm:py-2 flex items-center justify-center gap-2 shadow-xs"
+                    title="Google Play"
+                >
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3.609 1.814L13.793 12 3.61 22.186c-.366-.33-.61-.83-.61-1.42V3.234c0-.59.244-1.09.61-1.42z" fill="#00C1FF"/>
+                        <path d="M17.207 8.586l-3.414 3.414 3.414 3.414 3.864-2.195c.78-.443.78-1.168 0-1.611l-3.864-2.022z" fill="#FFC800"/>
+                        <path d="M3.609 1.814l10.184 10.186 3.414-3.414-11.75-6.678c-.628-.357-1.334-.357-1.848-.094z" fill="#00E676"/>
+                        <path d="M13.793 12L3.61 22.186c.514.263 1.22.263 1.848-.094l11.75-6.678-3.415-3.414z" fill="#FF3A44"/>
+                    </svg>
+                    <div class="flex flex-col text-left leading-none">
+                        <span class="text-[7px] sm:text-[7.5px] uppercase tracking-wider text-neutral-300">GET IT ON</span>
+                        <span class="text-[10px] sm:text-[10.5px] font-semibold tracking-tight text-white mt-0.5">Google Play</span>
+                    </div>
                 </a>
-                <span>v1.0 • raymons.life</span>
+
+                <!-- App Store Rozeti -->
+                <a
+                    href="#"
+                    class="flex-1 bg-black text-white hover:bg-neutral-800 transition-colors rounded-xl px-2.5 py-1.5 sm:py-2 flex items-center justify-center gap-2 shadow-xs"
+                    title="App Store"
+                >
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 shrink-0 fill-current" viewBox="0 0 24 24">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-2 .6-2.65 1.35-.58.67-1.08 1.74-.95 2.77.99.08 2.05-.52 2.68-1.27z"/>
+                    </svg>
+                    <div class="flex flex-col text-left leading-none">
+                        <span class="text-[7px] sm:text-[7.5px] text-neutral-300">Available on the</span>
+                        <span class="text-[10px] sm:text-[10.5px] font-semibold tracking-tight text-white mt-0.5">App Store</span>
+                    </div>
+                </a>
             </div>
+        </div>
+
+        <!-- 1.3 Ekranın En Altındaki Beyaz Renkli Marka Amblemi (İkon Logo) Sabit -->
+        <div class="relative z-10 w-full py-4 sm:py-6 flex justify-center items-center">
+            <img
+                id="login-bottom-emblem"
+                src="../assets/logo-footer.png"
+                alt="raymons emblem"
+                class="h-6 sm:h-7 w-auto object-contain opacity-95 transition-opacity hover:opacity-100 drop-shadow-md"
+                style="filter: brightness(0) invert(1);"
+            />
         </div>
     </div>
 
     <!-- =========================================================================
          2. YÖNETİM PANELİ ANA EKRANI (DASHBOARD)
+         Sıcak Taş/Krem Renk Paleti ve Yuvarlatılmış Hatlar (#EBE7DF, #F5F3EF, #636057)
     ========================================================================== -->
     <div id="admin-dashboard" class="hidden flex-1 flex flex-col">
 
-        <!-- Üst Bar -->
-        <header class="bg-white border-b border-stone-200 sticky top-0 z-30">
+        <!-- Üst Bar (Header) -->
+        <header class="bg-[#EBE7DF] border-b border-[#DDD8CE] sticky top-0 z-30 shadow-xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <img id="header-logo-img" src="../assets/logo-header.png" alt="raymons.life" class="h-7 w-auto object-contain" />
-                    <span class="hidden sm:inline-block h-5 w-[1px] bg-stone-200"></span>
+                    <span class="hidden sm:inline-block h-5 w-[1px] bg-[#DDD8CE]"></span>
                     <div class="hidden sm:flex items-center gap-2">
-                        <span class="text-sm font-bold text-[#696858]">Admin Paneli</span>
-                        <span id="server-mode-badge" class="text-[11px] px-2.5 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span class="text-sm font-bold text-[#4A473E]">Admin Paneli</span>
+                        <span id="server-mode-badge" class="text-[11px] px-3 py-0.5 rounded-full font-medium bg-emerald-100/80 text-emerald-800 border border-emerald-300">
                             Sunucu Hazır
                         </span>
                     </div>
@@ -110,7 +236,7 @@
                         id="header-catalog-link"
                         href="../index.html"
                         target="_blank"
-                        class="px-3.5 py-2 rounded-xl border border-stone-300 hover:border-[#696858] text-xs font-semibold text-[#57564B] flex items-center gap-1.5 transition"
+                        class="px-4 py-2 rounded-full border border-[#DDD8CE] bg-white/70 hover:bg-white text-xs font-semibold text-[#4A473E] flex items-center gap-1.5 transition shadow-xs"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -123,7 +249,7 @@
                         type="button"
                         onclick="saveAllToServer()"
                         id="btn-save-all"
-                        class="px-4 py-2 rounded-xl bg-[#696858] hover:bg-[#535244] text-white text-xs font-semibold shadow-sm flex items-center gap-1.5 transition"
+                        class="px-5 py-2 rounded-full bg-[#636057] hover:bg-[#524F47] text-white text-xs font-bold shadow-sm flex items-center gap-1.5 transition active:scale-[0.99] cursor-pointer"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
@@ -135,7 +261,7 @@
                         type="button"
                         onclick="handleLogout()"
                         title="Çıkış Yap"
-                        class="p-2 rounded-xl border border-stone-200 hover:bg-rose-50 hover:text-rose-600 text-stone-500 transition"
+                        class="p-2.5 rounded-full border border-[#DDD8CE] bg-white/70 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 text-[#7D796E] transition cursor-pointer shadow-xs"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -152,13 +278,13 @@
             <aside class="w-full lg:w-80 shrink-0 space-y-6">
 
                 <!-- 1. KATEGORİ YÖNETİMİ KARTI -->
-                <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-5">
+                <div class="bg-[#EBE7DF] rounded-3xl border border-[#DDD8CE] shadow-sm p-5 sm:p-6">
                     <div class="flex items-center justify-between mb-4">
                         <div>
-                            <h2 class="text-sm font-bold text-[#57564B]">1. Kategori Yönetimi</h2>
-                            <p class="text-[11px] text-stone-500">Ekle, isim düzenle, sırala veya sil</p>
+                            <h2 class="text-sm font-bold text-[#4A473E]">1. Kategori Yönetimi</h2>
+                            <p class="text-[11px] text-[#7D796E]">Ekle, isim düzenle, sırala veya sil</p>
                         </div>
-                        <span id="category-count-badge" class="text-xs font-bold bg-stone-100 text-[#696858] px-2.5 py-0.5 rounded-full">0</span>
+                        <span id="category-count-badge" class="text-xs font-bold bg-white text-[#636057] px-3 py-0.5 rounded-full shadow-xs">0</span>
                     </div>
 
                     <!-- Yeni Kategori Ekleme Formu -->
@@ -168,52 +294,52 @@
                             id="new-category-name"
                             placeholder="Yeni kategori adı (Örn: Triko)"
                             required
-                            class="flex-1 px-3 py-2 rounded-xl border border-stone-300 focus:border-[#696858] outline-none text-xs"
+                            class="flex-1 px-4 py-2.5 rounded-full border border-[#DDD8CE] bg-white focus:outline-none focus:ring-2 focus:ring-[#636057]/20 text-xs text-[#4A473E] shadow-xs"
                         />
                         <button
                             type="submit"
-                            class="px-3.5 py-2 rounded-xl bg-[#696858] hover:bg-[#535244] text-white text-xs font-semibold shrink-0 transition"
+                            class="px-4 py-2.5 rounded-full bg-[#636057] hover:bg-[#524F47] text-white text-xs font-bold shrink-0 transition active:scale-95 shadow-xs cursor-pointer"
                         >
                             + Ekle
                         </button>
                     </form>
 
                     <!-- Kategori Listesi -->
-                    <div id="admin-category-list" class="space-y-1.5 max-h-[380px] overflow-y-auto pr-1">
+                    <div id="admin-category-list" class="space-y-2 max-h-[380px] overflow-y-auto pr-1">
                         <!-- JS ile doldurulur -->
                     </div>
                 </div>
 
                 <!-- YEDEKLEME & ŞİFRE AYARLARI KARTI -->
-                <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-5 space-y-4">
+                <div class="bg-[#EBE7DF] rounded-3xl border border-[#DDD8CE] shadow-sm p-5 sm:p-6 space-y-4">
                     <div>
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500">Veri Yedekleme (data.json)</h3>
-                        <p class="text-[11px] text-stone-400 mt-0.5">JSON dosyasını bilgisayarınıza indirebilir veya geri yükleyebilirsiniz.</p>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-[#4A473E]">Veri Yedekleme (data.json)</h3>
+                        <p class="text-[11px] text-[#7D796E] mt-0.5">JSON dosyasını bilgisayarınıza indirebilir veya geri yükleyebilirsiniz.</p>
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <button
                             type="button"
                             onclick="downloadDataJson()"
-                            class="py-2 px-3 rounded-xl border border-stone-300 hover:border-[#696858] text-xs font-semibold text-stone-700 flex items-center justify-center gap-1.5 transition"
+                            class="py-2.5 px-3 rounded-full border border-[#DDD8CE] bg-white/80 hover:bg-white text-xs font-semibold text-[#4A473E] flex items-center justify-center gap-1.5 transition shadow-xs cursor-pointer"
                         >
                             <span>↓ JSON İndir</span>
                         </button>
-                        <label class="py-2 px-3 rounded-xl border border-stone-300 hover:border-[#696858] text-xs font-semibold text-stone-700 flex items-center justify-center gap-1.5 cursor-pointer transition">
+                        <label class="py-2.5 px-3 rounded-full border border-[#DDD8CE] bg-white/80 hover:bg-white text-xs font-semibold text-[#4A473E] flex items-center justify-center gap-1.5 cursor-pointer transition shadow-xs">
                             <span>↑ JSON Yükle</span>
                             <input type="file" accept=".json" class="hidden" onchange="importDataJson(event)" />
                         </label>
                     </div>
 
-                    <div class="pt-3 border-t border-stone-100">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">Admin Şifresini Değiştir</h3>
+                    <div class="pt-3 border-t border-[#DDD8CE]/70">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-[#4A473E] mb-2">Admin Şifresini Değiştir</h3>
                         <form onsubmit="handleChangePassword(event)" class="flex gap-2">
                             <input
                                 type="password"
                                 id="new-admin-password"
                                 placeholder="Yeni şifre..."
-                                class="flex-1 px-3 py-1.5 rounded-xl border border-stone-300 text-xs outline-none focus:border-[#696858]"
+                                class="flex-1 px-4 py-2 rounded-full border border-[#DDD8CE] bg-white text-xs text-[#4A473E] outline-none focus:ring-2 focus:ring-[#636057]/20 shadow-xs"
                             />
-                            <button type="submit" class="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium">
+                            <button type="submit" class="px-4 py-2 rounded-full bg-[#636057] hover:bg-[#524F47] text-white text-xs font-bold shrink-0 transition active:scale-95 shadow-xs cursor-pointer">
                                 Güncelle
                             </button>
                         </form>
@@ -225,17 +351,17 @@
             <section class="flex-1 space-y-6">
 
                 <!-- Üst Bar: Kategori Filtresi & Yeni Ürün Ekle Butonu -->
-                <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="bg-[#EBE7DF] rounded-3xl border border-[#DDD8CE] shadow-sm p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-base font-bold text-[#57564B]">2. Ürün ve Renk Varyasyonları Yönetimi</h2>
-                        <p class="text-xs text-stone-500">Ürün kodlarını, kapak görsellerini ve sınırsız renk/fotoğraf eşleştirmelerini yönetin.</p>
+                        <h2 class="text-base font-bold text-[#4A473E]">2. Ürün ve Renk Varyasyonları Yönetimi</h2>
+                        <p class="text-xs text-[#7D796E]">Ürün kodlarını, kapak görsellerini ve sınırsız renk/fotoğraf eşleştirmelerini yönetin.</p>
                     </div>
 
                     <div class="flex items-center gap-2.5">
                         <select
                             id="filter-category-select"
                             onchange="renderAdminProducts()"
-                            class="px-3 py-2 rounded-xl border border-stone-300 text-xs font-medium bg-white outline-none focus:border-[#696858]"
+                            class="px-4 py-2.5 rounded-full border border-[#DDD8CE] text-xs font-medium bg-white text-[#4A473E] outline-none focus:ring-2 focus:ring-[#636057]/20 shadow-xs cursor-pointer"
                         >
                             <option value="ALL">Tüm Kategoriler</option>
                         </select>
@@ -243,7 +369,7 @@
                         <button
                             type="button"
                             onclick="openProductModal(null)"
-                            class="px-4 py-2.5 rounded-xl bg-[#696858] hover:bg-[#535244] text-white text-xs font-semibold shadow-sm flex items-center gap-1.5 shrink-0 transition"
+                            class="px-5 py-2.5 rounded-full bg-[#636057] hover:bg-[#524F47] text-white text-xs font-bold shadow-sm flex items-center gap-1.5 shrink-0 transition active:scale-95 cursor-pointer"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -265,15 +391,15 @@
          3. ÜRÜN & DİNAMİK RENK VARYASYONU EKLEME / DÜZENLEME MODALI
     ========================================================================== -->
     <div id="product-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
-        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl border border-stone-200 overflow-hidden my-auto max-h-[92vh] flex flex-col">
+        <div class="bg-[#F5F3EF] w-full max-w-3xl rounded-[28px] shadow-2xl border border-[#DDD8CE] overflow-hidden my-auto max-h-[92vh] flex flex-col">
 
             <!-- Modal Üst Başlık -->
-            <div class="px-6 py-4 bg-[#F7F7F5] border-b border-stone-200 flex items-center justify-between shrink-0">
+            <div class="px-6 py-4 bg-[#EBE7DF] border-b border-[#DDD8CE] flex items-center justify-between shrink-0">
                 <div>
-                    <h3 id="modal-title" class="text-base font-bold text-[#57564B]">Yeni Ürün Ekle</h3>
-                    <p class="text-xs text-stone-500">Ürün bilgilerini ve renk seçeneklerine ait büyük boy fotoğrafları tanımlayın.</p>
+                    <h3 id="modal-title" class="text-base font-bold text-[#4A473E]">Yeni Ürün Ekle</h3>
+                    <p class="text-xs text-[#7D796E]">Ürün bilgilerini ve renk seçeneklerine ait büyük boy fotoğrafları tanımlayın.</p>
                 </div>
-                <button type="button" onclick="closeProductModal()" class="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-200/60">
+                <button type="button" onclick="closeProductModal()" class="p-2 rounded-full text-[#7D796E] hover:text-[#4A473E] hover:bg-white/80 transition cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -288,42 +414,42 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <div class="md:col-span-2 space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-stone-700 mb-1">Kategori Seçimi *</label>
+                            <label class="block text-xs font-bold text-[#4A473E] mb-1.5">Kategori Seçimi *</label>
                             <select
                                 id="modal-product-category"
                                 required
-                                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-[#696858] outline-none text-sm bg-white"
+                                class="w-full px-4 py-2.5 rounded-2xl border border-[#DDD8CE] focus:ring-2 focus:ring-[#636057]/20 outline-none text-sm bg-white text-[#4A473E] shadow-xs"
                             ></select>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                             <div>
-                                <label class="block text-xs font-bold text-stone-700 mb-1">Ürün Kodu * <span class="font-normal text-stone-400">(Örn: S2011)</span></label>
+                                <label class="block text-xs font-bold text-[#4A473E] mb-1.5">Ürün Kodu * <span class="font-normal text-[#7D796E]">(Örn: S2011)</span></label>
                                 <input
                                     type="text"
                                     id="modal-product-code"
                                     placeholder="S2011"
                                     required
-                                    class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-[#696858] outline-none text-sm font-bold"
+                                    class="w-full px-4 py-2.5 rounded-2xl border border-[#DDD8CE] focus:ring-2 focus:ring-[#636057]/20 outline-none text-sm font-bold text-[#4A473E] bg-white shadow-xs"
                                 />
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-stone-700 mb-1">Ürün Alt Başlığı <span class="font-normal text-stone-400">(İsteğe Bağlı)</span></label>
+                                <label class="block text-xs font-bold text-[#4A473E] mb-1.5">Ürün Alt Başlığı <span class="font-normal text-[#7D796E]">(İsteğe Bağlı)</span></label>
                                 <input
                                     type="text"
                                     id="modal-product-subtitle"
                                     placeholder="Örn: Sweatshirt Kazak (Boş bırakılabilir)"
-                                    class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-[#696858] outline-none text-sm"
+                                    class="w-full px-4 py-2.5 rounded-2xl border border-[#DDD8CE] focus:ring-2 focus:ring-[#636057]/20 outline-none text-sm text-[#4A473E] bg-white shadow-xs"
                                 />
                             </div>
                         </div>
 
                         <!-- Stok Durumu (Aktif / Stok Tükendi Deaktif Seçeneği) -->
                         <div class="pt-1">
-                            <label class="flex items-center justify-between p-3 rounded-xl border border-stone-200 bg-stone-50 cursor-pointer hover:border-[#696858] transition">
+                            <label class="flex items-center justify-between p-3.5 rounded-2xl border border-[#DDD8CE] bg-white/70 cursor-pointer hover:border-[#636057] transition shadow-xs">
                                 <div>
-                                    <span class="block text-xs font-bold text-stone-700">Stok Durumu (Stokta Yok / Tükendi Olarak İşaretle)</span>
-                                    <span class="block text-[11px] text-stone-500 mt-0.5">İşaretlendiğinde ürün pasif görünür ve tıklayan müşteriye "Stok Tükendi" uyarısı gösterilir.</span>
+                                    <span class="block text-xs font-bold text-[#4A473E]">Stok Durumu (Stokta Yok / Tükendi Olarak İşaretle)</span>
+                                    <span class="block text-[11px] text-[#7D796E] mt-0.5">İşaretlendiğinde ürün pasif görünür ve tıklayan müşteriye "Stok Tükendi" uyarısı gösterilir.</span>
                                 </div>
                                 <input
                                     type="checkbox"
@@ -336,22 +462,22 @@
 
                     <!-- Ürün Kapak (Thumbnail & Varsayılan Ana Görsel) Yükleme Alanı -->
                     <div>
-                        <label class="block text-xs font-bold text-stone-700 mb-1">Ürün Kapak & Ana Görseli</label>
+                        <label class="block text-xs font-bold text-[#4A473E] mb-1.5">Ürün Kapak & Ana Görseli</label>
                         <div
                             id="thumb-dropzone"
-                            class="relative h-36 rounded-xl border-2 border-dashed border-stone-300 hover:border-[#696858] bg-stone-50 flex flex-col items-center justify-center p-2 text-center cursor-pointer transition overflow-hidden"
+                            class="relative h-36 rounded-2xl border-2 border-dashed border-[#DDD8CE] hover:border-[#636057] bg-white/80 flex flex-col items-center justify-center p-2 text-center cursor-pointer transition overflow-hidden shadow-xs"
                             onclick="document.getElementById('modal-thumb-file').click()"
                             ondragover="handleDragOver(event, this)"
                             ondragleave="handleDragLeave(event, this)"
                             ondrop="handleDropThumbnail(event, this)"
                         >
-                            <img id="modal-thumb-preview" src="" alt="Kapak Önizleme" class="hidden h-full w-auto object-contain rounded" />
+                            <img id="modal-thumb-preview" src="" alt="Kapak Önizleme" class="hidden h-full w-auto object-contain rounded-xl" />
                             <div id="modal-thumb-placeholder" class="flex flex-col items-center">
-                                <svg class="w-6 h-6 text-stone-400 mb-1" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                <svg class="w-6 h-6 text-[#7D796E] mb-1" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
-                                <span class="text-[11px] font-medium text-stone-600">Tıkla veya Sürükle Bırak</span>
-                                <span class="text-[10px] text-stone-400 mt-0.5">/uploads/thumbnails</span>
+                                <span class="text-[11px] font-medium text-[#4A473E]">Tıkla veya Sürükle Bırak</span>
+                                <span class="text-[10px] text-[#7D796E] mt-0.5">/uploads/thumbnails</span>
                             </div>
                             <input type="file" id="modal-thumb-file" accept="image/*" class="hidden" onchange="handleThumbFileSelect(event)" />
                         </div>
@@ -360,16 +486,16 @@
                 </div>
 
                 <!-- 3. RENK VE GÖRSEL EŞLEŞTİRME (DİNAMİK VARYASYON EKLEME) -->
-                <div class="pt-4 border-t border-stone-200">
+                <div class="pt-4 border-t border-[#DDD8CE]">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                         <div>
-                            <h4 class="text-sm font-bold text-[#57564B]">3. Renk ve Görsel Eşleştirme (Dinamik Varyasyonlar)</h4>
-                            <p class="text-[11px] text-stone-500">Her renk için Renk Adı, Renk Kodu (Color Picker) ve büyük boy Ürün Fotoğrafı ekleyin.</p>
+                            <h4 class="text-sm font-bold text-[#4A473E]">3. Renk ve Görsel Eşleştirme (Dinamik Varyasyonlar)</h4>
+                            <p class="text-[11px] text-[#7D796E]">Her renk için Renk Adı, Renk Kodu (Color Picker) ve büyük boy Ürün Fotoğrafı ekleyin.</p>
                         </div>
                         <button
                             type="button"
                             onclick="addColorVariationRow()"
-                            class="px-3.5 py-2 rounded-xl bg-[#696858]/10 hover:bg-[#696858]/20 text-[#696858] text-xs font-bold flex items-center gap-1.5 shrink-0 transition"
+                            class="px-4 py-2 rounded-full bg-[#636057] hover:bg-[#524F47] text-white text-xs font-bold flex items-center gap-1.5 shrink-0 transition shadow-xs cursor-pointer active:scale-95"
                         >
                             <span>+ Yeni Renk Seçeneği Ekle</span>
                         </button>
@@ -382,17 +508,17 @@
                 </div>
 
                 <!-- Modal Alt Kaydet / İptal Butonları -->
-                <div class="pt-4 border-t border-stone-200 flex items-center justify-end gap-3 shrink-0">
+                <div class="pt-4 border-t border-[#DDD8CE] flex items-center justify-end gap-3 shrink-0">
                     <button
                         type="button"
                         onclick="closeProductModal()"
-                        class="px-4 py-2.5 rounded-xl border border-stone-300 text-xs font-semibold text-stone-600 hover:bg-stone-100 transition"
+                        class="px-5 py-2.5 rounded-full border border-[#DDD8CE] text-xs font-semibold text-[#4A473E] bg-white hover:bg-stone-100 transition cursor-pointer"
                     >
                         İptal
                     </button>
                     <button
                         type="submit"
-                        class="px-6 py-2.5 rounded-xl bg-[#696858] hover:bg-[#535244] text-white text-xs font-semibold shadow-sm transition"
+                        class="px-6 py-2.5 rounded-full bg-[#636057] hover:bg-[#524F47] text-white text-xs font-bold shadow-sm transition active:scale-95 cursor-pointer"
                     >
                         Ürünü ve Renkleri Kaydet
                     </button>
@@ -424,7 +550,7 @@
         }
 
         let adminState = {
-            token: sessionStorage.getItem('raymons_admin_token') || '',
+            token: sessionStorage.getItem('raymons_admin_token') || localStorage.getItem('raymons_admin_token') || '',
             serverAvailable: false,
             catalog: {
                 brand: {},
@@ -449,14 +575,24 @@
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            const bgClass = type === 'error' ? 'bg-rose-600' : 'bg-[#696858]';
-            toast.className = `${bgClass} text-white px-4 py-3 rounded-xl shadow-lg text-xs font-semibold flex items-center justify-between gap-3 pointer-events-auto transition-all`;
+            const bgClass = type === 'error' ? 'bg-rose-600' : 'bg-[#636057]';
+            toast.className = `${bgClass} text-white px-4 py-3 rounded-2xl shadow-lg text-xs font-semibold flex items-center justify-between gap-3 pointer-events-auto transition-all animate-fade-in`;
             toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
             container.appendChild(toast);
             setTimeout(() => {
                 toast.style.opacity = '0';
                 setTimeout(() => toast.remove(), 250);
             }, 3200);
+        }
+
+        function showLoginError(msg) {
+            const errorAlert = document.getElementById('login-error-alert');
+            if (errorAlert) {
+                errorAlert.textContent = msg;
+                errorAlert.classList.remove('hidden');
+            } else {
+                showToast(msg, 'error');
+            }
         }
 
         function resolveAssetUrl(relPath) {
@@ -470,14 +606,35 @@
 
         async function handleLogin(e) {
             e.preventDefault();
-            const pwd = document.getElementById('admin-password-input').value;
+            const errorAlert = document.getElementById('login-error-alert');
+            if (errorAlert) errorAlert.classList.add('hidden');
+
+            const usernameInput = document.getElementById('admin-username-input');
+            const passwordInput = document.getElementById('admin-password-input');
+            const rememberMeBox = document.getElementById('admin-remember-me');
+
+            const username = usernameInput ? usernameInput.value.trim() : '';
+            const password = passwordInput ? passwordInput.value : '';
+            const remember = rememberMeBox ? rememberMeBox.checked : false;
+
+            if (!username || !password) {
+                showLoginError('Lütfen kullanıcı adı ve şifrenizi giriniz.');
+                return;
+            }
+
+            const submitBtn = document.getElementById('btn-login-submit');
+            const originalBtnText = submitBtn ? submitBtn.innerHTML : '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `<span>Giriş Yapılıyor...</span>`;
+            }
 
             // 1. Önce sunucu API üzerinden giriş dene
             try {
                 const res = await fetch(getApiUrl('action=login'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password: pwd })
+                    body: JSON.stringify({ username: username, password: password })
                 });
                 const ct = res.headers.get('content-type') || '';
                 if (ct.includes('application/json')) {
@@ -485,32 +642,71 @@
                     if (res.ok && data.success) {
                         adminState.token = data.token;
                         adminState.serverAvailable = true;
-                        sessionStorage.setItem('raymons_admin_token', data.token);
+
+                        if (remember) {
+                            localStorage.setItem('raymons_admin_token', data.token);
+                            localStorage.setItem('raymons_admin_user', username);
+                            localStorage.setItem('raymons_admin_remember', 'true');
+                            sessionStorage.removeItem('raymons_admin_token');
+                        } else {
+                            sessionStorage.setItem('raymons_admin_token', data.token);
+                            localStorage.removeItem('raymons_admin_token');
+                            localStorage.removeItem('raymons_admin_remember');
+                        }
+
                         unlockDashboard();
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalBtnText;
+                        }
                         return;
                     } else {
-                        showToast(data.message || 'Hatalı yönetici şifresi!', 'error');
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalBtnText;
+                        }
+                        showLoginError(data.message || 'Kullanıcı adı veya şifre hatalı!');
                         return;
                     }
                 }
             } catch (err) {
-                // Statik/yerel önizleme moduna geç
+                // Statik/yerel önizleme moduna düş
             }
 
-            // 2. Statik test ortamı için şifre kontrolü
-            const savedLocalPwd = localStorage.getItem('raymons_admin_pwd') || 'raymons2026';
-            if (pwd === savedLocalPwd) {
-                adminState.token = 'local-preview-token';
+            // 2. Statik test ortamı için sabit kimlik kontrolü (RaymonsLife / 2627SK)
+            const staticUser = 'RaymonsLife';
+            const staticPwd = localStorage.getItem('raymons_admin_pwd') || '2627SK';
+            if (username.toLowerCase() === staticUser.toLowerCase() && password === staticPwd) {
+                const token = 'local-preview-token';
+                adminState.token = token;
                 adminState.serverAvailable = false;
-                sessionStorage.setItem('raymons_admin_token', adminState.token);
+
+                if (remember) {
+                    localStorage.setItem('raymons_admin_token', token);
+                    localStorage.setItem('raymons_admin_user', username);
+                    localStorage.setItem('raymons_admin_remember', 'true');
+                    sessionStorage.removeItem('raymons_admin_token');
+                } else {
+                    sessionStorage.setItem('raymons_admin_token', token);
+                    localStorage.removeItem('raymons_admin_token');
+                    localStorage.removeItem('raymons_admin_remember');
+                }
+
                 unlockDashboard();
             } else {
-                showToast('Hatalı yönetici şifresi!', 'error');
+                showLoginError('Kullanıcı adı veya şifre hatalı!');
+            }
+
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
             }
         }
 
         function handleLogout() {
             sessionStorage.removeItem('raymons_admin_token');
+            localStorage.removeItem('raymons_admin_token');
+            localStorage.removeItem('raymons_admin_remember');
             adminState.token = '';
             fetch(getApiUrl('action=logout')).catch(() => {});
             document.getElementById('admin-dashboard').classList.add('hidden');
@@ -549,7 +745,7 @@
                 } catch (e) {}
             }
 
-            // 3. Eğer tarayıcıda daha önce kaydedilmiş yerel değişiklik varsa ve sunucu kapalıysa onu yükle
+            // 3. Tarayıcıda yerel değişiklik varsa ve sunucu kapalıysa onu yükle
             const localOverride = localStorage.getItem('raymons_catalog_override');
             if (!adminState.serverAvailable && localOverride) {
                 try {
@@ -563,10 +759,10 @@
             const badge = document.getElementById('server-mode-badge');
             if (adminState.serverAvailable) {
                 badge.textContent = 'Sunucu Aktif (/uploads & data.json)';
-                badge.className = 'text-[11px] px-2.5 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700 border border-emerald-200';
+                badge.className = 'text-[11px] px-3 py-0.5 rounded-full font-medium bg-emerald-100/80 text-emerald-800 border border-emerald-300';
             } else {
                 badge.textContent = 'Statik Önizleme Modu (Anlık Tarayıcı + JSON İndir)';
-                badge.className = 'text-[11px] px-2.5 py-0.5 rounded-full font-medium bg-amber-50 text-amber-700 border border-amber-200';
+                badge.className = 'text-[11px] px-3 py-0.5 rounded-full font-medium bg-amber-100/80 text-amber-800 border border-amber-300';
             }
 
             if (loaded) {
@@ -594,21 +790,21 @@
             listEl.innerHTML = cats.map((cat, idx) => {
                 const prodCount = (adminState.catalog.products || []).filter(p => p.categoryId === cat.id).length;
                 return `
-                    <div class="flex items-center justify-between gap-2 p-2 rounded-xl border border-stone-200 bg-stone-50/60 hover:bg-stone-100/70 transition">
+                    <div class="flex items-center justify-between gap-2 p-2.5 rounded-2xl border border-[#DDD8CE] bg-white/80 hover:bg-white transition shadow-xs">
                         <div class="flex items-center gap-2 min-w-0 flex-1">
-                            <span class="text-[10px] font-bold text-stone-400 w-4 text-center">${idx + 1}</span>
+                            <span class="text-[10px] font-bold text-[#7D796E] w-4 text-center">${idx + 1}</span>
                             <input
                                 type="text"
                                 value="${escapeHtml(cat.name)}"
                                 onchange="handleRenameCategory('${cat.id}', this.value)"
-                                class="bg-transparent font-semibold text-xs text-[#57564B] focus:bg-white focus:px-2 py-0.5 rounded border border-transparent focus:border-[#696858] outline-none w-full truncate"
+                                class="bg-transparent font-semibold text-xs text-[#4A473E] focus:bg-white focus:px-2 py-0.5 rounded-lg border border-transparent focus:border-[#636057] outline-none w-full truncate"
                             />
-                            <span class="text-[10px] text-stone-400 shrink-0">(${prodCount} ürün)</span>
+                            <span class="text-[10px] text-[#7D796E] shrink-0">(${prodCount} ürün)</span>
                         </div>
                         <div class="flex items-center gap-1 shrink-0">
-                            <button type="button" onclick="moveCategory(${idx}, -1)" title="Yukarı Taşı" class="p-1 text-stone-400 hover:text-stone-700" ${idx === 0 ? 'disabled' : ''}>↑</button>
-                            <button type="button" onclick="moveCategory(${idx}, 1)" title="Aşağı Taşı" class="p-1 text-stone-400 hover:text-stone-700" ${idx === cats.length - 1 ? 'disabled' : ''}>↓</button>
-                            <button type="button" onclick="handleDeleteCategory('${cat.id}')" title="Kategoriyi Sil" class="p-1 text-stone-400 hover:text-rose-600">✕</button>
+                            <button type="button" onclick="moveCategory(${idx}, -1)" title="Yukarı Taşı" class="p-1 text-[#7D796E] hover:text-[#4A473E] cursor-pointer" ${idx === 0 ? 'disabled' : ''}>↑</button>
+                            <button type="button" onclick="moveCategory(${idx}, 1)" title="Aşağı Taşı" class="p-1 text-[#7D796E] hover:text-[#4A473E] cursor-pointer" ${idx === cats.length - 1 ? 'disabled' : ''}>↓</button>
+                            <button type="button" onclick="handleDeleteCategory('${cat.id}')" title="Kategoriyi Sil" class="p-1 text-[#7D796E] hover:text-rose-600 cursor-pointer">✕</button>
                         </div>
                     </div>
                 `;
@@ -692,7 +888,7 @@
 
             if (products.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full bg-white rounded-2xl border border-stone-200 p-10 text-center text-stone-400 text-sm">
+                    <div class="col-span-full bg-[#EBE7DF] rounded-3xl border border-[#DDD8CE] p-10 text-center text-[#7D796E] text-sm">
                         Seçili kriterde ürün bulunamadı. Sağ üstteki <b>"Yeni Ürün Ekle"</b> butonunu kullanarak ilk ürünü ekleyebilirsiniz.
                     </div>
                 `;
@@ -707,39 +903,39 @@
                 const isOut = Boolean(prod.outOfStock);
 
                 return `
-                    <div class="bg-white rounded-2xl border ${isOut ? 'border-rose-300 bg-rose-50/20' : 'border-stone-200'} shadow-xs hover:shadow-md transition p-4 flex flex-col justify-between gap-4">
+                    <div class="bg-[#EBE7DF] rounded-3xl border ${isOut ? 'border-rose-300 bg-rose-50/30' : 'border-[#DDD8CE]'} shadow-xs hover:shadow-md transition p-4 sm:p-5 flex flex-col justify-between gap-4">
                         <div class="flex items-start gap-3.5">
                             <div class="relative shrink-0">
-                                <img src="${escapeHtml(thumbUrl)}" alt="${escapeHtml(prod.code)}" class="w-16 h-24 object-cover rounded-xl border border-stone-200 bg-stone-100 ${isOut ? 'opacity-60 grayscale' : ''}" />
-                                ${isOut ? `<span class="absolute inset-x-0 bottom-1 mx-1 bg-rose-600 text-white text-[9px] font-bold text-center py-0.5 rounded">TÜKENDİ</span>` : ''}
+                                <img src="${escapeHtml(thumbUrl)}" alt="${escapeHtml(prod.code)}" class="w-16 h-24 object-cover rounded-2xl border border-[#DDD8CE] bg-white ${isOut ? 'opacity-60 grayscale' : ''}" />
+                                ${isOut ? `<span class="absolute inset-x-0 bottom-1 mx-1 bg-rose-600 text-white text-[9px] font-bold text-center py-0.5 rounded-full shadow-xs">TÜKENDİ</span>` : ''}
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between gap-2">
-                                    <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-stone-100 text-[#696858]">${escapeHtml(catName)}</span>
-                                    <span class="text-[11px] text-stone-400">${colors.length} Renk</span>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white text-[#636057] shadow-xs">${escapeHtml(catName)}</span>
+                                    <span class="text-[11px] text-[#7D796E] font-medium">${colors.length} Renk</span>
                                 </div>
-                                <h3 class="text-base font-extrabold text-[#57564B] mt-1 truncate">${escapeHtml(prod.code)}</h3>
-                                <p class="text-xs text-stone-500 truncate">${escapeHtml(prod.subtitle || '—')}</p>
+                                <h3 class="text-base font-extrabold text-[#4A473E] mt-1 truncate">${escapeHtml(prod.code)}</h3>
+                                <p class="text-xs text-[#7D796E] truncate">${escapeHtml(prod.subtitle || '—')}</p>
 
                                 <!-- Renk Yuvarlakları Önizleme -->
                                 <div class="flex flex-wrap items-center gap-1 mt-2.5">
                                     ${colors.slice(0, 8).map(c => `
                                         <span
                                             title="${escapeHtml(c.name)}"
-                                            class="w-4 h-4 rounded-full border border-black/20 inline-block"
-                                            style="background-color: ${escapeHtml(c.hex || '#696858')};"
+                                            class="w-4 h-4 rounded-full border border-black/20 inline-block shadow-xs"
+                                            style="background-color: ${escapeHtml(c.hex || '#636057')};"
                                         ></span>
                                     `).join('')}
-                                    ${colors.length > 8 ? `<span class="text-[10px] text-stone-400 font-semibold">+${colors.length - 8}</span>` : ''}
+                                    ${colors.length > 8 ? `<span class="text-[10px] text-[#7D796E] font-semibold">+${colors.length - 8}</span>` : ''}
                                 </div>
                             </div>
                         </div>
 
-                        <div class="pt-3 border-t border-stone-100 flex items-center justify-between gap-1.5">
+                        <div class="pt-3 border-t border-[#DDD8CE]/70 flex items-center justify-between gap-1.5">
                             <button
                                 type="button"
                                 onclick="toggleProductStock('${prod.id}')"
-                                class="py-2 px-2.5 rounded-xl border text-[11px] font-bold transition ${isOut ? 'bg-rose-600 text-white border-rose-600 hover:bg-rose-700' : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'}"
+                                class="py-2 px-3 rounded-full border text-[11px] font-bold transition shadow-xs cursor-pointer ${isOut ? 'bg-rose-600 text-white border-rose-600 hover:bg-rose-700' : 'bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100'}"
                                 title="Stok Durumunu Değiştir"
                             >
                                 ${isOut ? 'Stok Bitti (Pasif)' : 'Stokta (Aktif)'}
@@ -747,14 +943,14 @@
                             <button
                                 type="button"
                                 onclick="openProductModal('${prod.id}')"
-                                class="flex-1 py-2 px-2.5 rounded-xl bg-stone-100 hover:bg-[#696858] hover:text-white text-[#57564B] text-xs font-semibold transition"
+                                class="flex-1 py-2 px-3 rounded-full bg-white hover:bg-[#636057] hover:text-white text-[#4A473E] border border-[#DDD8CE] text-xs font-bold transition shadow-xs cursor-pointer text-center"
                             >
                                 Düzenle
                             </button>
                             <button
                                 type="button"
                                 onclick="handleDeleteProduct('${prod.id}')"
-                                class="py-2 px-2.5 rounded-xl border border-stone-200 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 text-stone-500 text-xs font-semibold transition"
+                                class="py-2 px-3 rounded-full border border-[#DDD8CE] bg-white/80 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 text-[#7D796E] text-xs font-bold transition shadow-xs cursor-pointer"
                             >
                                 Sil
                             </button>
@@ -844,7 +1040,7 @@
                 document.getElementById('modal-product-outofstock').checked = false;
                 setModalThumbnailPreview('');
                 adminState.editingColors = [
-                    { id: 'c-' + Date.now(), name: 'Kiremit Melanj', hex: '#696858', image: '' }
+                    { id: 'c-' + Date.now(), name: 'Kiremit Melanj', hex: '#636057', image: '' }
                 ];
             }
 
@@ -878,7 +1074,7 @@
             const container = document.getElementById('modal-colors-container');
             if (adminState.editingColors.length === 0) {
                 container.innerHTML = `
-                    <div class="p-4 rounded-xl border border-dashed border-stone-300 text-center text-xs text-stone-400">
+                    <div class="p-4 rounded-2xl border border-dashed border-[#DDD8CE] text-center text-xs text-[#7D796E] bg-white/50">
                         Henüz renk varyasyonu eklenmedi. "+ Yeni Renk Seçeneği Ekle" butonuna tıklayın.
                     </div>
                 `;
@@ -890,44 +1086,44 @@
                 const previewUrl = hasImg ? resolveAssetUrl(c.image) : '';
 
                 return `
-                    <div class="p-3.5 rounded-xl border border-stone-200 bg-stone-50/70 grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                    <div class="p-3.5 rounded-2xl border border-[#DDD8CE] bg-white/80 grid grid-cols-1 sm:grid-cols-12 gap-3 items-center shadow-xs">
                         <!-- 1. Renk Adı -->
                         <div class="sm:col-span-4">
-                            <label class="block text-[10px] font-bold uppercase text-stone-500 mb-1">1. Renk Adı *</label>
+                            <label class="block text-[10px] font-bold uppercase text-[#7D796E] mb-1">1. Renk Adı *</label>
                             <input
                                 type="text"
                                 value="${escapeHtml(c.name)}"
                                 placeholder="Örn: Kiremit Melanj"
                                 required
                                 oninput="updateColorField(${index}, 'name', this.value)"
-                                class="w-full px-3 py-2 rounded-lg border border-stone-300 bg-white text-xs font-medium outline-none focus:border-[#696858]"
+                                class="w-full px-3.5 py-2 rounded-xl border border-[#DDD8CE] bg-white text-xs font-semibold text-[#4A473E] outline-none focus:ring-2 focus:ring-[#636057]/20"
                             />
                         </div>
 
                         <!-- 2. Renk Kodu (Color Picker + Hex) -->
                         <div class="sm:col-span-3">
-                            <label class="block text-[10px] font-bold uppercase text-stone-500 mb-1">2. Renk Kodu (Hex)</label>
-                            <div class="flex items-center gap-1.5 bg-white px-2 py-1.5 rounded-lg border border-stone-300">
+                            <label class="block text-[10px] font-bold uppercase text-[#7D796E] mb-1">2. Renk Kodu (Hex)</label>
+                            <div class="flex items-center gap-1.5 bg-white px-2 py-1.5 rounded-xl border border-[#DDD8CE]">
                                 <input
                                     type="color"
-                                    value="${escapeHtml(c.hex || '#696858')}"
+                                    value="${escapeHtml(c.hex || '#636057')}"
                                     oninput="updateColorField(${index}, 'hex', this.value); this.nextElementSibling.value = this.value;"
                                     class="w-6 h-6 rounded cursor-pointer border-0 bg-transparent p-0"
                                 />
                                 <input
                                     type="text"
-                                    value="${escapeHtml(c.hex || '#696858')}"
+                                    value="${escapeHtml(c.hex || '#636057')}"
                                     oninput="updateColorField(${index}, 'hex', this.value); this.previousElementSibling.value = this.value;"
-                                    class="w-full text-xs font-mono text-stone-700 outline-none"
+                                    class="w-full text-xs font-mono text-[#4A473E] outline-none"
                                 />
                             </div>
                         </div>
 
                         <!-- 3. Renk Ürün Görseli (Dosya Yükleme / Drag & Drop) -->
                         <div class="sm:col-span-4">
-                            <label class="block text-[10px] font-bold uppercase text-stone-500 mb-1">3. Ana Ürün Fotoğrafı</label>
+                            <label class="block text-[10px] font-bold uppercase text-[#7D796E] mb-1">3. Ana Ürün Fotoğrafı</label>
                             <div
-                                class="h-11 rounded-lg border border-dashed border-stone-300 hover:border-[#696858] bg-white px-2.5 flex items-center justify-between gap-2 cursor-pointer transition"
+                                class="h-11 rounded-xl border border-dashed border-[#DDD8CE] hover:border-[#636057] bg-white px-2.5 flex items-center justify-between gap-2 cursor-pointer transition shadow-xs"
                                 onclick="document.getElementById('color-file-${index}').click()"
                                 ondragover="handleDragOver(event, this)"
                                 ondragleave="handleDragLeave(event, this)"
@@ -935,12 +1131,12 @@
                             >
                                 <div class="flex items-center gap-2 min-w-0">
                                     ${hasImg
-                                        ? `<img src="${escapeHtml(previewUrl)}" class="w-7 h-9 object-cover rounded border border-stone-200 shrink-0" />
-                                           <span class="text-[11px] text-emerald-700 font-medium truncate">Görsel Yüklendi</span>`
-                                        : `<span class="text-[11px] text-stone-500 truncate">Fotoğraf Seç / Sürükle</span>`
+                                        ? `<img src="${escapeHtml(previewUrl)}" class="w-7 h-9 object-cover rounded-lg border border-[#DDD8CE] shrink-0" />
+                                           <span class="text-[11px] text-emerald-700 font-semibold truncate">Görsel Yüklendi</span>`
+                                        : `<span class="text-[11px] text-[#7D796E] truncate">Fotoğraf Seç / Sürükle</span>`
                                     }
                                 </div>
-                                <span class="text-[10px] font-bold text-[#696858] bg-stone-100 px-2 py-1 rounded shrink-0">Yükle</span>
+                                <span class="text-[10px] font-bold text-[#636057] bg-stone-100 px-2.5 py-1 rounded-full shrink-0">Yükle</span>
                                 <input
                                     type="file"
                                     id="color-file-${index}"
@@ -957,7 +1153,7 @@
                                 type="button"
                                 onclick="removeColorVariationRow(${index})"
                                 title="Bu Rengi Kaldır"
-                                class="p-2 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                                class="p-2 rounded-full text-[#7D796E] hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
                             >
                                 ✕
                             </button>
@@ -971,7 +1167,7 @@
             adminState.editingColors.push({
                 id: 'c-' + Date.now() + '-' + Math.random().toString(36).substring(2, 5),
                 name: 'Yeni Renk',
-                hex: '#696858',
+                hex: '#636057',
                 image: ''
             });
             renderModalColorRows();
@@ -1043,7 +1239,7 @@
         }
 
         /**
-         * Görseli sunucudaki /uploads klasörüne yükler (PHP veya Node.js).
+         * Görseli sunucudaki /uploads klasörüne yükler (PHP veya Ruby).
          * Sunucu olmayan statik test ortamında ise Base64 DataURL olarak kaydeder.
          */
         async function uploadImageToServer(file, folder = 'products') {
@@ -1051,7 +1247,6 @@
 
             // 1. Sunucu aktifse /uploads klasörüne gerçek dosya olarak kaydet
             if (adminState.serverAvailable) {
-                // Önce JSON Base64 upload dene (Hem PHP hem Node.js hem Local Ruby Server ile %100 uyumlu)
                 try {
                     const res = await fetch(getApiUrl('action=upload'), {
                         method: 'POST',
@@ -1126,7 +1321,7 @@
             const cleanedColors = adminState.editingColors.map((c, i) => ({
                 id: c.id || ('c-' + Date.now() + '-' + i),
                 name: (c.name || 'Standart').trim(),
-                hex: c.hex || '#696858',
+                hex: c.hex || '#636057',
                 image: c.image || thumbnail || 'uploads/products/s2011-default.webp'
             }));
 
@@ -1175,7 +1370,7 @@
             } catch (e) {}
             notifyFrontendTabs();
 
-            // 2. Sunucu aktifse data/data.json dosyasına (ve GitHub'a) kalıcı olarak yaz
+            // 2. Sunucu aktifse data/data.json dosyasına kalıcı olarak yaz
             if (adminState.serverAvailable) {
                 try {
                     const res = await fetch(getApiUrl('action=save_data'), {
@@ -1281,14 +1476,36 @@
                 .replace(/'/g, '&#039;');
         }
 
-        // Oturum açıksa doğrudan paneli göster
+        // Sayfa Yüklendiğinde Oturum ve Görsel Kontrolleri
         window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('login-logo-img').src = APP_ROOT + 'assets/logo-header.png';
-            document.getElementById('header-logo-img').src = APP_ROOT + 'assets/logo-header.png';
-            document.getElementById('login-back-link').href = APP_ROOT + 'index.html';
-            document.getElementById('header-catalog-link').href = APP_ROOT + 'index.html';
+            const loginBg = document.getElementById('login-bg-img');
+            if (loginBg) loginBg.src = APP_ROOT + 'assets/login-bg.jpg';
+            const loginLogo = document.getElementById('login-logo-img');
+            if (loginLogo) loginLogo.src = APP_ROOT + 'assets/logo-text.png';
+            const loginEmblem = document.getElementById('login-bottom-emblem');
+            if (loginEmblem) loginEmblem.src = APP_ROOT + 'assets/logo-footer.png';
 
-            if (adminState.token) {
+            const headerLogo = document.getElementById('header-logo-img');
+            if (headerLogo) headerLogo.src = APP_ROOT + 'assets/logo-header.png';
+            const headerCatLink = document.getElementById('header-catalog-link');
+            if (headerCatLink) headerCatLink.href = APP_ROOT + 'index.html';
+
+            // "Beni Hatırla" Kullanıcı Bilgisi Kontrolü
+            const rememberedUser = localStorage.getItem('raymons_admin_user');
+            const isRemembered = localStorage.getItem('raymons_admin_remember') === 'true';
+            if (rememberedUser) {
+                const userInput = document.getElementById('admin-username-input');
+                if (userInput) userInput.value = rememberedUser;
+            }
+            const remCheckbox = document.getElementById('admin-remember-me');
+            if (remCheckbox) {
+                remCheckbox.checked = isRemembered;
+            }
+
+            // Aktif Oturum Token Kontrolü (sessionStorage veya kalıcı localStorage)
+            const activeToken = sessionStorage.getItem('raymons_admin_token') || localStorage.getItem('raymons_admin_token');
+            if (activeToken) {
+                adminState.token = activeToken;
                 unlockDashboard();
             }
         });
